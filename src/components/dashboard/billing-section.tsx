@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PLANS, type PlanKey } from "@/lib/stripe";
 import { Check, Loader2 } from "lucide-react";
 
-interface BillingS ectionProps {
+interface BillingSectionProps {
   currentPlan: string;
   plansUsed: number;
   plansLimit: number;
