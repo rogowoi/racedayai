@@ -1,0 +1,121 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ─── User & Auth ───────────────────────────────────────────────
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String?
+  emailVerified DateTime?
+
+  athletes Athlete[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Athlete Profile ───────────────────────────────────────────
+
+model Athlete {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Fitness platform connections
+  garminConnected Boolean @default(false)
+  garminToken     Json?
+  stravaConnected Boolean @default(false)
+  stravaToken     Json?
+
+  // Fitness metrics
+  ftpWatts         Int?    // Functional Threshold Power
+  thresholdPaceSec Int?    // per km (e.g., 285 = 4:45/km)
+  cssPer100mSec    Int?    // Critical Swim Speed (e.g., 102 = 1:42)
+  maxHr            Int?
+  restingHr        Int?
+  weightKg         Decimal? @db.Decimal(5, 1)
+  experienceLevel  String   @default("beginner") // beginner | intermediate | advanced | elite
+  sweatRateMlHr    Int?     // optional: known sweat rate
+
+  racePlans RacePlan[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ─── Race Course ───────────────────────────────────────────────
+
+model RaceCourse {
+  id               String @id @default(cuid())
+  raceName         String
+  raceYear         Int?
+  distanceCategory String // sprint | olympic | 70.3 | 140.6
+  location         String?
+  latitude         Decimal? @db.Decimal(9, 6)
+  longitude        Decimal? @db.Decimal(9, 6)
+
+  swimDistanceM      Int?
+  bikeDistanceM      Int?
+  runDistanceM       Int?
+  bikeGpxUrl         String?
+  runGpxUrl          String?
+  bikeElevationGainM Int?
+  runElevationGainM  Int?
+  courseNotes         String?
+
+  racePlans RacePlan[]
+
+  createdAt DateTime @default(now())
+
+  @@index([raceName, raceYear])
+}
+
+// ─── Race Plan ─────────────────────────────────────────────────
+
+model RacePlan {
+  id         String    @id @default(cuid())
+  athleteId  String
+  athlete    Athlete   @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  courseId   String
+  course     RaceCourse @relation(fields: [courseId], references: [id])
+  raceDate   DateTime  @db.Date
+  goalType   String    @default("finish_strong") // finish_strong | pr_attempt | just_finish
+
+  // Conditions at generation time
+  weatherData Json?    // {temp_c, humidity, wind_speed, wind_dir, dew_point}
+  altitudeM   Int?
+
+  // Generated plan
+  swimPlan       Json?  // {target_pace, total_time, strategy}
+  bikePlan       Json?  // {target_power, segments[], total_time}
+  runPlan        Json?  // {target_pace, first_half, second_half, total_time}
+  nutritionPlan  Json?  // {carbs_hr, sodium_hr, fluid_hr, timeline[]}
+  transitionPlan Json?  // {t1_target, t2_target, checklists}
+
+  // Predictions
+  predictedFinishSec Int?
+  confidenceLowSec   Int?
+  confidenceHighSec  Int?
+  predictedSplits    Json?  // {swim, t1, bike, t2, run}
+
+  // AI narrative
+  narrativePlan   String?   // Claude-generated coach advice
+  weatherWarnings String[]
+
+  // Output
+  pdfUrl     String?
+  shareToken String?  @unique @db.VarChar(12)
+
+  createdAt DateTime @default(now())
+
+  @@index([athleteId, raceDate(sort: Desc)])
+  @@index([shareToken])
+}
