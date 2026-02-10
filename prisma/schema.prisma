@@ -17,12 +17,21 @@ model User {
   image         String?
   passwordHash  String? // Optional for credentials auth
 
+  // Billing
+  stripeCustomerId       String?  // Stripe customer ID
+  plan                   String   @default("free") // free | season | unlimited
+  stripeSubscriptionId   String?  // Active subscription ID
+  seasonStartDate        DateTime? // When current season began
+  plansCreatedThisSeason Int      @default(0) // Count for limit enforcement
+
   accounts      Account[]
   sessions      Session[]
   athletes      Athlete[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([stripeCustomerId])
 }
 
 model Account {

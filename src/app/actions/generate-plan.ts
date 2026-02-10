@@ -11,10 +11,12 @@ import { parseGpx, CourseData } from "@/lib/engine/gpx";
 import { getRaceWeather } from "@/lib/weather";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { checkCanCreatePlan, incrementPlanCount, getPlanUsage } from "@/lib/plan-limits";
+import { getPlanLimits } from "@/lib/stripe";
 
 export async function generateRacePlan(formData: FormData) {
   const session = await auth();
-  const userId = session?.user?.id; // Allow anonymous for now? No, require auth or create mock user
+  const userId = session?.user?.id;
 
   // Extract data
   // Note: We expect JSON strings for complex objects or individual fields
@@ -22,12 +24,21 @@ export async function generateRacePlan(formData: FormData) {
   const raceData = JSON.parse(formData.get("raceData") as string);
   const gpxFile = formData.get("gpxFile") as File;
 
-  // 1. Create/Update User & Athlete
-  // For MVP, if no user, we might create a temporary one or fail.
-  // We'll require user to be logged in for now, OR valid email provided.
-  // As a fallback, if no session, we skip DB or create a guest user (not implemented).
+  // 1. Require authentication
   if (!userId) {
     throw new Error("User must be logged in");
+  }
+
+  // 2. Check plan limits before proceeding
+  const canCreate = await checkCanCreatePlan(userId);
+  if (!canCreate) {
+    const usage = await getPlanUsage(userId);
+    if (usage) {
+      throw new Error(
+        `Plan limit reached (${usage.plansUsed}/${usage.plansLimit} plans used). Upgrade at /dashboard/settings to create more plans.`
+      );
+    }
+    throw new Error("Unable to create plan. Please check your subscription.");
   }
 
   // Update Athlete profile
@@ -151,6 +162,9 @@ export async function generateRacePlan(formData: FormData) {
         60,
     },
   });
+
+  // 6. Increment plan count after successful creation
+  await incrementPlanCount(userId);
 
   redirect(`/plan/${plan.id}`);
 }
