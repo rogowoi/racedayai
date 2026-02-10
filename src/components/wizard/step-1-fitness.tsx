@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Activity, Smartphone } from "lucide-react";
+import { loginWithStrava } from "@/app/actions/auth-actions";
 
 export function Step1Fitness() {
   const { fitnessData, setFitnessData, setStep } = useWizardStore();
@@ -158,15 +159,18 @@ export function Step1Fitness() {
                 </div>
                 Connect Garmin
               </Button>
-              <Button
-                variant="outline"
-                className="w-full h-14 justify-start gap-4 text-base font-normal"
-              >
-                <div className="h-8 w-8 rounded-full bg-orange-500/10 flex items-center justify-center">
-                  <Smartphone className="h-5 w-5 text-orange-600" />
-                </div>
-                Connect Strava
-              </Button>
+              <form action={loginWithStrava} className="w-full">
+                <Button
+                  variant="outline"
+                  type="submit"
+                  className="w-full h-14 justify-start gap-4 text-base font-normal"
+                >
+                  <div className="h-8 w-8 rounded-full bg-orange-500/10 flex items-center justify-center">
+                    <Smartphone className="h-5 w-5 text-orange-600" />
+                  </div>
+                  Connect Strava
+                </Button>
+              </form>
               <div className="text-center text-xs text-muted-foreground mt-4">
                 We will only read your activity data. We never post to your
                 feed.
