@@ -6,6 +6,8 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Download, Share2, Printer } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from "next";
+import { generateRacePlanSchema, jsonLdScript } from "@/lib/schema";
 
 async function getRacePlan(id: string) {
   const plan = await prisma.racePlan.findUnique({
@@ -16,6 +18,62 @@ async function getRacePlan(id: string) {
     },
   });
   return plan;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const plan = await getRacePlan(id);
+
+  if (!plan) {
+    return {
+      title: "Race Plan Not Found",
+    };
+  }
+
+  const { course, bikePlan, runPlan, nutritionPlan } = plan;
+  const bike = bikePlan as any;
+  const run = runPlan as any;
+  const nutrition = nutritionPlan as any;
+
+  const finishTime = formatTime(plan.predictedFinishSec || 0);
+  const shareUrl = plan.shareToken
+    ? `https://racedayai.com/plan/${plan.shareToken}`
+    : `https://racedayai.com/plan/${id}`;
+
+  return {
+    title: `${course.raceName} Race Plan`,
+    description: `Personalized race execution plan for ${course.raceName}: ${course.distanceCategory.toUpperCase()} triathlon with AI-optimized pacing (${bike?.targetPower || "custom"}W bike, ${formatPace(run?.targetPaceSec || 0)} run pace), nutrition (${nutrition?.carbsPerHour || 60}g/hr), and weather-adjusted strategy. Predicted finish: ${finishTime}.`,
+
+    openGraph: {
+      title: `${course.raceName} Race Plan — RaceDayAI`,
+      description: `AI-generated execution plan with predicted finish time: ${finishTime}`,
+      url: shareUrl,
+      siteName: "RaceDayAI",
+      type: "article",
+      images: [
+        {
+          url: "/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: `${course.raceName} Race Plan`,
+        },
+      ],
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title: `${course.raceName} Race Plan`,
+      description: `Predicted finish: ${finishTime} | ${course.distanceCategory.toUpperCase()} triathlon`,
+    },
+
+    alternates: {
+      canonical: shareUrl,
+    },
+  };
 }
 
 export default async function PlanPage({
@@ -36,8 +94,23 @@ export default async function PlanPage({
   const swim = swimPlan as any;
   const nutrition = nutritionPlan as any;
 
+  const racePlanSchema = generateRacePlanSchema({
+    raceName: course.raceName,
+    raceDate: plan.raceDate.toISOString(),
+    location: course.location || "TBD",
+    distanceCategory: course.distanceCategory.toUpperCase(),
+    targetFinishTime: formatTime(plan.predictedFinishSec || 0),
+    shareUrl: plan.shareToken
+      ? `https://racedayai.com/plan/${plan.shareToken}`
+      : `https://racedayai.com/plan/${id}`,
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-muted/30">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLdScript(racePlanSchema)}
+      />
       <Navbar />
 
       <main className="flex-1 container mx-auto px-4 py-8">
