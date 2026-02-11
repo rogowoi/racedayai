@@ -3,6 +3,7 @@
 import { signIn, signOut } from "@/auth";
 import { prisma } from "@/lib/db";
 import { hashPassword } from "@/lib/password";
+import { sendWelcomeEmail } from "@/lib/email";
 import { redirect } from "next/navigation";
 
 export async function loginWithStrava() {
@@ -46,6 +47,7 @@ export async function signUp(formData: FormData) {
   const passwordHash = await hashPassword(password);
 
   // Create user and athlete profile in a transaction
+  let userId: string;
   await prisma.$transaction(async (tx) => {
     const user = await tx.user.create({
       data: {
@@ -54,6 +56,7 @@ export async function signUp(formData: FormData) {
         passwordHash,
       },
     });
+    userId = user.id;
 
     // Create associated Athlete profile
     await tx.athlete.create({
@@ -63,11 +66,14 @@ export async function signUp(formData: FormData) {
     });
   });
 
+  // Send welcome email (non-blocking)
+  await sendWelcomeEmail(name || email, email);
+
   // Auto sign-in after successful registration
   await signIn("credentials", {
     email,
     password,
-    redirectTo: "/wizard",
+    redirectTo: "/onboarding",
   });
 }
 

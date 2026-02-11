@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RaceDayAI — Full Website Flow Preview</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        brand: { DEFAULT: '#E8590C', light: '#FF6B1A', dark: '#C34A0A' },
+        accent: { DEFAULT: '#0EA5E9', light: '#38BDF8' },
+      }
+    }
+  }
+}
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { font-family: 'Inter', system-ui, sans-serif; }
+  .page-divider { border-top: 4px dashed #E8590C; margin: 0; padding: 24px 0 0; position: relative; }
+  .page-divider::before { content: attr(data-page); position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #E8590C; color: white; padding: 4px 16px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+  .flow-arrow { display: flex; justify-content: center; padding: 32px 0; }
+  .flow-arrow::after { content: ''; width: 3px; height: 60px; background: linear-gradient(to bottom, #E8590C, #0EA5E9); position: relative; }
+  .flow-arrow-label { text-align: center; font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-top: -8px; margin-bottom: 8px; }
+</style>
+</head>
+<body class="bg-white text-gray-900">
+
+<!-- ============================================================ -->
+<!-- PAGE LABEL: HOMEPAGE -->
+<!-- ============================================================ -->
+<div class="page-divider" data-page="Homepage — / "></div>
+
+<!-- NAVBAR -->
+<header class="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur">
+  <div class="max-w-6xl mx-auto flex h-16 items-center justify-between px-4">
+    <a href="#" class="flex items-center gap-2 font-bold text-xl">
+      <div class="h-8 w-8 rounded-lg bg-brand flex items-center justify-center">
+        <svg class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      </div>
+      <span>RaceDay<span class="text-brand">AI</span></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+      <a href="#features" class="hover:text-brand">Features</a>
+      <a href="#how-it-works" class="hover:text-brand">How it Works</a>
+      <a href="#pricing-home" class="hover:text-brand">Pricing</a>
+    </nav>
+    <div class="flex items-center gap-4">
+      <a href="#login" class="text-sm font-medium hover:text-brand hidden md:inline">Log in</a>
+      <a href="#wizard" class="inline-flex items-center gap-1.5 bg-brand text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-brand-dark transition">
+        Build My Plan <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="py-20 md:py-28">
+  <div class="max-w-4xl mx-auto px-4 text-center">
+    <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">AI-Powered Race Execution</p>
+    <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-6 leading-tight">
+      You trained for months.<br>
+      <span class="text-brand">Don't race on guesswork.</span>
+    </h1>
+    <p class="text-xl text-gray-500 mb-4 max-w-2xl mx-auto">
+      Get a complete race-day execution plan — pacing, nutrition, weather adjustments — in 3 minutes. Powered by sports science.
+    </p>
+    <p class="text-sm text-gray-400 mb-8">A coach charges $150 for this. Your first plan is free.</p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="#wizard" class="bg-brand text-white px-8 py-3.5 rounded-lg text-base font-semibold shadow-lg shadow-brand/25 hover:bg-brand-dark transition">
+        Build My Race Plan — Free
+      </a>
+      <a href="#demo" class="border border-gray-200 px-6 py-3.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition">
+        See Sample Plan
+      </a>
+    </div>
+
+    <!-- Live plan preview card -->
+    <div class="mt-12 bg-gray-50 border rounded-xl p-6 max-w-md mx-auto text-left">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-xs font-bold text-brand uppercase tracking-wider">Live Preview</span>
+        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">IRONMAN 70.3</span>
+      </div>
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between"><span class="text-gray-500">Bike Target Power</span><span class="font-semibold">185W (IF 0.72)</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">Run Target Pace</span><span class="font-semibold">5:15/km</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">Predicted Finish</span><span class="font-bold text-brand">5:12:30</span></div>
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-2 text-xs text-amber-800 flex items-center gap-2">
+          <span>⚠️</span> 32°C forecast — power reduced 7%, sodium doubled
+        </div>
+        <div class="flex gap-1.5 mt-2">
+          <span class="bg-brand/10 text-brand text-xs px-2 py-0.5 rounded font-medium">Gel @ 45min</span>
+          <span class="bg-brand/10 text-brand text-xs px-2 py-0.5 rounded font-medium">Salt @ 30min</span>
+          <span class="bg-accent/10 text-accent text-xs px-2 py-0.5 rounded font-medium">750ml/hr</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF STRIP -->
+<section class="py-8 border-y bg-gray-50">
+  <div class="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <div>
+      <p class="text-2xl font-bold text-brand">100%</p>
+      <p class="text-xs text-gray-500 mt-1">Sports Science Based</p>
+    </div>
+    <div>
+      <p class="text-2xl font-bold text-brand">$150</p>
+      <p class="text-xs text-gray-500 mt-1">Avg. Coach Plan Cost</p>
+    </div>
+    <div>
+      <p class="text-2xl font-bold text-brand">3 min</p>
+      <p class="text-xs text-gray-500 mt-1">Plan Generation Time</p>
+    </div>
+    <div>
+      <p class="text-2xl font-bold text-brand">All</p>
+      <p class="text-xs text-gray-500 mt-1">Distances Supported</p>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section class="py-20">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">Stop racing blind</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="border border-red-200 bg-red-50/50 rounded-xl p-6">
+        <h3 class="font-bold text-lg mb-4 text-red-700">❌ The Arm-Scribble Plan</h3>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li>• "Just ride by feel" → blew up at mile 40</li>
+          <li>• Forgot gels → bonked on the run</li>
+          <li>• Ignored the 35°C forecast → cramped at mile 8</li>
+          <li>• Wrong pace off the bike → walked the last 5K</li>
+        </ul>
+      </div>
+      <div class="border border-green-200 bg-green-50/50 rounded-xl p-6">
+        <h3 class="font-bold text-lg mb-4 text-green-700">✅ The Precision Plan</h3>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li>• Power targets adjusted for every hill</li>
+          <li>• Gel at 45min, salt every 30min — on schedule</li>
+          <li>• Heat protocol activated: power -7%, sodium +800mg</li>
+          <li>• Negative split run — strong finish</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="py-20 bg-gray-50">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-3">Features</p>
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Built for race-day execution</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-white border rounded-xl p-6">
+        <div class="h-10 w-10 rounded-lg bg-red-100 flex items-center justify-center mb-4"><span class="text-red-600">🔥</span></div>
+        <h3 class="font-bold mb-2">Don't blow up on the bike</h3>
+        <p class="text-sm text-gray-500">Power targets adjusted for every climb, descent, and wind direction. IF-based pacing that protects your run.</p>
+      </div>
+      <div class="bg-white border rounded-xl p-6">
+        <div class="h-10 w-10 rounded-lg bg-amber-100 flex items-center justify-center mb-4"><span class="text-amber-600">⚡</span></div>
+        <h3 class="font-bold mb-2">Don't bonk at mile 16</h3>
+        <p class="text-sm text-gray-500">Minute-by-minute nutrition timeline: when to gel, when to drink, when to take salt. Based on your body weight and race intensity.</p>
+      </div>
+      <div class="bg-white border rounded-xl p-6">
+        <div class="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center mb-4"><span class="text-blue-600">🌡️</span></div>
+        <h3 class="font-bold mb-2">Don't ignore the forecast</h3>
+        <p class="text-sm text-gray-500">Real-time weather integration adjusts your power, hydration, and sodium recommendations. Heat, wind, humidity — all accounted for.</p>
+      </div>
+      <div class="bg-white border rounded-xl p-6">
+        <div class="h-10 w-10 rounded-lg bg-green-100 flex items-center justify-center mb-4"><span class="text-green-600">🏁</span></div>
+        <h3 class="font-bold mb-2">Don't wing transitions</h3>
+        <p class="text-sm text-gray-500">Checklist-driven T1 and T2 planning. Know exactly what to grab, what to eat, and your target pace off the bike.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works" class="py-20">
+  <div class="max-w-4xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-3">How It Works</p>
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Race plan in 3 minutes</h2>
+    </div>
+    <div class="grid md:grid-cols-4 gap-8">
+      <div class="text-center">
+        <div class="h-12 w-12 rounded-full bg-brand text-white font-bold flex items-center justify-center mx-auto mb-3">1</div>
+        <h3 class="font-semibold mb-1">Enter Fitness</h3>
+        <p class="text-xs text-gray-500">FTP, run pace, swim pace — or import from Strava</p>
+        <p class="text-xs text-brand mt-1">30 seconds</p>
+      </div>
+      <div class="text-center">
+        <div class="h-12 w-12 rounded-full bg-brand text-white font-bold flex items-center justify-center mx-auto mb-3">2</div>
+        <h3 class="font-semibold mb-1">Pick Your Race</h3>
+        <p class="text-xs text-gray-500">Select from our database or enter custom race details</p>
+        <p class="text-xs text-brand mt-1">30 seconds</p>
+      </div>
+      <div class="text-center">
+        <div class="h-12 w-12 rounded-full bg-brand text-white font-bold flex items-center justify-center mx-auto mb-3">3</div>
+        <h3 class="font-semibold mb-1">Upload Course</h3>
+        <p class="text-xs text-gray-500">GPX file for elevation-adjusted pacing (optional)</p>
+        <p class="text-xs text-brand mt-1">1 minute</p>
+      </div>
+      <div class="text-center">
+        <div class="h-12 w-12 rounded-full bg-brand text-white font-bold flex items-center justify-center mx-auto mb-3">4</div>
+        <h3 class="font-semibold mb-1">Get Your Plan</h3>
+        <p class="text-xs text-gray-500">Complete execution plan with pacing, nutrition & strategy</p>
+        <p class="text-xs text-brand mt-1">Instant</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing-home" class="py-20 md:py-28">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="text-center mb-6">
+      <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-3">Pricing</p>
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">A coach charges $150 for one race plan.</h2>
+      <p class="text-lg text-gray-500">Get unlimited AI-powered plans for less than the cost of a race entry fee.</p>
+    </div>
+    <div class="text-center mb-12">
+      <span class="inline-flex items-center rounded-full bg-green-100 px-4 py-1.5 text-sm font-medium text-green-700">
+        All plans include a 7-day money-back guarantee
+      </span>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      <!-- Free -->
+      <div class="flex flex-col p-7 bg-white rounded-xl border">
+        <div class="mb-6">
+          <h3 class="text-xl font-bold mb-1">Starter</h3>
+          <div class="flex items-baseline gap-1 mb-3"><span class="text-4xl font-extrabold">$0</span></div>
+          <p class="text-sm text-gray-500">Try one race plan — see your predicted finish time</p>
+        </div>
+        <ul class="space-y-3 mb-8 flex-1 text-sm">
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> <span><strong>1 race plan</strong> (any distance)</span></li>
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> Basic pacing + nutrition</li>
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> Manual fitness entry</li>
+          <li class="flex items-start gap-2.5 text-gray-400"><span>✗</span> No PDF export</li>
+          <li class="flex items-start gap-2.5 text-gray-400"><span>✗</span> No weather adjustments</li>
+        </ul>
+        <a href="#wizard" class="w-full py-2.5 border rounded-lg text-center text-sm font-medium hover:bg-gray-50">Try Free</a>
+      </div>
+      <!-- Season Pass -->
+      <div class="flex flex-col p-7 rounded-xl border-2 border-brand relative bg-white shadow-xl shadow-brand/10">
+        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2">
+          <span class="bg-brand text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Most Popular</span>
+        </div>
+        <div class="mb-6">
+          <h3 class="text-xl font-bold mb-1">Season Pass</h3>
+          <div class="flex items-baseline gap-2 mb-1"><span class="text-4xl font-extrabold">$39</span><span class="text-sm text-gray-500">/year</span></div>
+          <div class="mb-3"><span class="text-sm text-gray-400 line-through">$150/plan with a coach</span></div>
+          <p class="text-sm font-medium text-brand">Just $6.50 per race · 6 races per season</p>
+        </div>
+        <ul class="space-y-3 mb-8 flex-1 text-sm">
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> <span><strong>6 race plans</strong> per season</span></li>
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> <span><strong>Full weather integration</strong> — heat, wind, humidity</span></li>
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> GPX course upload + elevation analysis</li>
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> PDF race-day card (print & go)</li>
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> Strava auto-import</li>
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> AI narrative strategy</li>
+        </ul>
+        <a href="#pricing-page" class="w-full py-2.5 bg-brand text-white rounded-lg text-center text-sm font-semibold shadow-lg shadow-brand/25 hover:bg-brand-dark transition flex items-center justify-center gap-1.5">
+          Get Season Pass <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <!-- Pro -->
+      <div class="flex flex-col p-7 bg-white rounded-xl border">
+        <div class="mb-6">
+          <h3 class="text-xl font-bold mb-1">Pro</h3>
+          <div class="flex items-baseline gap-2 mb-1"><span class="text-4xl font-extrabold">$99</span><span class="text-sm text-gray-500">/year</span></div>
+          <div class="mb-3"><span class="text-sm text-gray-400 line-through">$600+/year for coaching</span></div>
+          <p class="text-sm text-gray-500">For coaches, clubs, and multi-sport athletes</p>
+        </div>
+        <ul class="space-y-3 mb-8 flex-1 text-sm">
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> <span><strong>Unlimited</strong> race plans</span></li>
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> Everything in Season Pass</li>
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> Share plans via public link</li>
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> Multi-athlete support (up to 5)</li>
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> API access</li>
+          <li class="flex items-start gap-2.5"><span class="text-brand">✓</span> Priority support</li>
+        </ul>
+        <a href="#pricing-page" class="w-full py-2.5 border rounded-lg text-center text-sm font-medium hover:bg-gray-50">Get Pro</a>
+      </div>
+    </div>
+    <div class="max-w-2xl mx-auto mt-12 text-center">
+      <p class="text-sm text-gray-400">You spent $200+ on race entry, $150 on a wetsuit, and $5,000 on a bike. The plan that ties it all together costs less than two gels.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="py-20 bg-brand text-white">
+  <div class="max-w-3xl mx-auto px-4 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">Your next race deserves better than guesswork.</h2>
+    <p class="text-lg opacity-90 mb-8">Build your plan in 3 minutes. Start free — no credit card.</p>
+    <a href="#wizard" class="inline-flex items-center gap-2 bg-white text-brand px-8 py-3.5 rounded-lg text-base font-semibold hover:bg-gray-100 transition">
+      Build My Race Plan <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<div class="flow-arrow"></div>
+<p class="flow-arrow-label">User clicks "Build My Plan" or "Get Season Pass"</p>
+
+<!-- ============================================================ -->
+<!-- PAGE: PRICING -->
+<!-- ============================================================ -->
+<div class="page-divider" data-page="Pricing — /pricing" id="pricing-page"></div>
+
+<header class="w-full border-b bg-white/95">
+  <div class="max-w-6xl mx-auto flex h-16 items-center justify-between px-4">
+    <a href="#" class="flex items-center gap-2 font-bold text-xl">
+      <div class="h-8 w-8 rounded-lg bg-brand flex items-center justify-center">
+        <svg class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      </div>
+      <span>RaceDay<span class="text-brand">AI</span></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+      <a href="#features" class="hover:text-brand">Features</a>
+      <a href="#how-it-works" class="hover:text-brand">How it Works</a>
+      <a href="#pricing-home" class="hover:text-brand">Pricing</a>
+    </nav>
+    <div class="flex items-center gap-4">
+      <a href="#login" class="text-sm font-medium hover:text-brand hidden md:inline">Log in</a>
+      <a href="#wizard" class="inline-flex items-center gap-1.5 bg-brand text-white px-4 py-2 rounded-lg text-sm font-semibold">Build My Plan →</a>
+    </div>
+  </div>
+</header>
+
+<section class="pt-16 pb-8">
+  <div class="max-w-3xl mx-auto px-4 text-center">
+    <p class="text-sm font-semibold text-brand uppercase tracking-wider mb-4">Pricing</p>
+    <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">A coach charges $150 per race plan.</h1>
+    <p class="text-xl text-gray-500 mb-8">Get the same precision for less than a pair of race-day gels.</p>
+    <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
+      <span class="flex items-center gap-1.5">🛡️ 7-day money-back guarantee</span>
+      <span class="flex items-center gap-1.5">⚡ Cancel anytime</span>
+      <span class="flex items-center gap-1.5">⏱️ Plans ready in 3 minutes</span>
+    </div>
+  </div>
+</section>
+
+<section class="pb-4">
+  <div class="flex justify-center gap-3">
+    <button class="px-5 py-2.5 rounded-full text-sm font-medium bg-brand text-white shadow-lg shadow-brand/25">Annual <span class="text-xs opacity-80">(Save 33%)</span></button>
+    <button class="px-5 py-2.5 rounded-full text-sm font-medium bg-gray-100 text-gray-500">Monthly</button>
+  </div>
+</section>
+
+<section class="py-8">
+  <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-3 gap-6">
+    <!-- Pricing cards same as homepage but with monthly toggle context -->
+    <div class="flex flex-col p-7 bg-white rounded-xl border">
+      <h2 class="text-xl font-bold mb-1">Starter</h2>
+      <div class="mb-3"><span class="text-4xl font-extrabold">$0</span><span class="text-sm text-gray-500">/forever</span></div>
+      <p class="text-sm text-gray-500 mb-6">Try one race plan</p>
+      <ul class="space-y-2 text-sm mb-8 flex-1">
+        <li class="flex gap-2"><span class="text-brand">✓</span> <strong>1 race plan</strong> (any distance)</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> Basic pacing + nutrition</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> Manual fitness entry</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> View online</li>
+        <li class="flex gap-2 text-gray-400"><span>✗</span> No PDF export</li>
+        <li class="flex gap-2 text-gray-400"><span>✗</span> No weather</li>
+        <li class="flex gap-2 text-gray-400"><span>✗</span> No GPX upload</li>
+        <li class="flex gap-2 text-gray-400"><span>✗</span> No Strava</li>
+      </ul>
+      <a href="#wizard" class="w-full py-2.5 border rounded-lg text-center text-sm font-medium">Try Free</a>
+    </div>
+    <div class="flex flex-col p-7 rounded-xl border-2 border-brand relative bg-white shadow-xl shadow-brand/10">
+      <div class="absolute -top-3.5 left-1/2 -translate-x-1/2"><span class="bg-brand text-white px-4 py-1 rounded-full text-xs font-bold uppercase">Most Popular</span></div>
+      <h2 class="text-xl font-bold mb-1">Season Pass</h2>
+      <div class="mb-1"><span class="text-4xl font-extrabold">$39</span><span class="text-sm text-gray-500">/year</span></div>
+      <div class="mb-3"><span class="text-sm text-gray-400 line-through">$150/plan with a coach</span></div>
+      <p class="text-sm font-medium text-brand mb-6">Just $6.50 per race · 6 races</p>
+      <ul class="space-y-2 text-sm mb-8 flex-1">
+        <li class="flex gap-2"><span class="text-brand">✓</span> <strong>6 race plans</strong> per season</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> <strong>Full weather integration</strong></li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> GPX course + elevation</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> PDF race-day card</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> Strava auto-import</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> AI narrative strategy</li>
+      </ul>
+      <a href="#signup" class="w-full py-2.5 bg-brand text-white rounded-lg text-center text-sm font-semibold shadow-lg shadow-brand/25">Get Season Pass →</a>
+    </div>
+    <div class="flex flex-col p-7 bg-white rounded-xl border">
+      <h2 class="text-xl font-bold mb-1">Pro</h2>
+      <div class="mb-1"><span class="text-4xl font-extrabold">$99</span><span class="text-sm text-gray-500">/year</span></div>
+      <div class="mb-3"><span class="text-sm text-gray-400 line-through">$600+/yr coaching</span></div>
+      <p class="text-sm text-gray-500 mb-6">Coaches, clubs & multi-sport</p>
+      <ul class="space-y-2 text-sm mb-8 flex-1">
+        <li class="flex gap-2"><span class="text-brand">✓</span> <strong>Unlimited</strong> plans</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> Everything in Season Pass</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> Share via public link</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> Plan comparison tool</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> Multi-athlete (up to 5)</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> API access</li>
+        <li class="flex gap-2"><span class="text-brand">✓</span> Priority support</li>
+      </ul>
+      <a href="#signup" class="w-full py-2.5 border rounded-lg text-center text-sm font-medium">Get Pro</a>
+    </div>
+  </div>
+</section>
+
+<!-- Inline FAQ -->
+<section class="py-12 bg-gray-50">
+  <div class="max-w-3xl mx-auto px-4">
+    <h2 class="text-2xl font-bold mb-8 text-center">Common Questions</h2>
+    <div class="space-y-6">
+      <div><h3 class="font-semibold mb-1">Can I try before I pay?</h3><p class="text-sm text-gray-500">Yes. Starter plan is free forever. No credit card required.</p></div>
+      <div><h3 class="font-semibold mb-1">What counts as a "race plan"?</h3><p class="text-sm text-gray-500">A complete race-day strategy: pacing, nutrition, weather adjustments, and contingency plans for one race.</p></div>
+      <div><h3 class="font-semibold mb-1">What if it doesn't work for me?</h3><p class="text-sm text-gray-500">7-day money-back guarantee. Email us and we'll refund you — no questions asked.</p></div>
+      <div><h3 class="font-semibold mb-1">Can I switch plans?</h3><p class="text-sm text-gray-500">Upgrade or downgrade anytime. We prorate the difference.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="flow-arrow"></div>
+<p class="flow-arrow-label">User clicks "Get Season Pass" → Signup</p>
+
+<!-- ============================================================ -->
+<!-- PAGE: SIGNUP -->
+<!-- ============================================================ -->
+<div class="page-divider" data-page="Sign Up — /signup" id="signup"></div>
+
+<div class="min-h-[80vh] flex flex-col items-center justify-center p-4 bg-white">
+  <div class="w-full max-w-md space-y-6">
+    <div class="text-center space-y-2">
+      <a href="#" class="inline-flex items-center gap-2 font-bold text-xl mb-4">
+        <div class="h-8 w-8 rounded-lg bg-brand flex items-center justify-center">
+          <svg class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <span>RaceDay<span class="text-brand">AI</span></span>
+      </a>
+      <h1 class="text-2xl font-bold tracking-tight">Create Your Account</h1>
+      <p class="text-gray-500">Your first race plan is free — no credit card required</p>
+    </div>
+    <div class="border rounded-xl p-6 bg-white shadow-sm">
+      <div class="mb-4"><p class="font-semibold text-base mb-1">Sign Up</p><p class="text-sm text-gray-500">Enter your details to get started</p></div>
+      <div class="space-y-4">
+        <div><label class="text-sm font-medium mb-1.5 block">Name</label><input class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Your name"></div>
+        <div><label class="text-sm font-medium mb-1.5 block">Email</label><input class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="you@example.com"></div>
+        <div><label class="text-sm font-medium mb-1.5 block">Password</label><input type="password" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="At least 8 characters"></div>
+        <button class="w-full bg-brand text-white py-2.5 rounded-lg text-sm font-semibold">Create Free Account</button>
+      </div>
+      <p class="mt-4 text-center text-sm text-gray-500">Already have an account? <a href="#login" class="text-brand font-medium">Sign in</a></p>
+    </div>
+    <p class="text-center text-xs text-gray-400">By creating an account, you agree to our <a href="#" class="text-brand underline">Terms of Service</a> and <a href="#" class="text-brand underline">Privacy Policy</a></p>
+    <div class="text-center"><a href="#" class="text-sm text-gray-400 hover:text-brand">← Back to Home</a></div>
+  </div>
+</div>
+
+<div class="flow-arrow"></div>
+<p class="flow-arrow-label">User creates account → Wizard</p>
+
+<!-- ============================================================ -->
+<!-- PAGE: LOGIN -->
+<!-- ============================================================ -->
+<div class="page-divider" data-page="Login — /login" id="login"></div>
+
+<div class="min-h-[80vh] flex flex-col items-center justify-center p-4 bg-white">
+  <div class="w-full max-w-md space-y-6">
+    <div class="text-center space-y-2">
+      <a href="#" class="inline-flex items-center gap-2 font-bold text-xl mb-4">
+        <div class="h-8 w-8 rounded-lg bg-brand flex items-center justify-center">
+          <svg class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <span>RaceDay<span class="text-brand">AI</span></span>
+      </a>
+      <h1 class="text-2xl font-bold">Welcome back</h1>
+      <p class="text-gray-500">Sign in to access your race plans</p>
+    </div>
+    <div class="border rounded-xl p-6 bg-white shadow-sm">
+      <div class="mb-4"><p class="font-semibold text-base mb-1">Sign In</p><p class="text-sm text-gray-500">Choose your preferred sign-in method</p></div>
+      <div class="space-y-4">
+        <button class="w-full h-14 border rounded-lg flex items-center gap-4 px-4 text-base hover:bg-gray-50">
+          <div class="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center"><span class="text-orange-600">🏃</span></div>
+          Continue with Strava
+        </button>
+        <div class="relative"><div class="absolute inset-0 flex items-center"><span class="w-full border-t"></span></div><div class="relative flex justify-center text-xs uppercase"><span class="bg-white px-2 text-gray-400">Or sign in with email</span></div></div>
+        <div><label class="text-sm font-medium mb-1.5 block">Email</label><input class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="you@example.com"></div>
+        <div><label class="text-sm font-medium mb-1.5 block">Password</label><input type="password" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Your password"></div>
+        <button class="w-full bg-brand text-white py-2.5 rounded-lg text-sm font-semibold">Sign In</button>
+      </div>
+      <p class="mt-4 text-center text-sm text-gray-500">Don't have an account? <a href="#signup" class="text-brand font-medium">Sign up free</a></p>
+    </div>
+    <div class="text-center"><a href="#" class="text-sm text-gray-400 hover:text-brand">← Back to Home</a></div>
+  </div>
+</div>
+
+<div class="flow-arrow"></div>
+<p class="flow-arrow-label">User signs in → Wizard or Dashboard</p>
+
+<!-- ============================================================ -->
+<!-- PAGE: WIZARD -->
+<!-- ============================================================ -->
+<div class="page-divider" data-page="Wizard — /wizard" id="wizard"></div>
+
+<!-- Wizard Header -->
+<header class="w-full border-b bg-white">
+  <div class="max-w-6xl mx-auto flex h-16 items-center justify-between px-4">
+    <div class="flex items-center gap-3">
+      <a href="#" class="flex items-center gap-1.5 text-sm font-bold">
+        <div class="h-6 w-6 rounded-md bg-brand flex items-center justify-center">
+          <svg class="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <span>RaceDay<span class="text-brand">AI</span></span>
+      </a>
+      <span class="text-gray-300">|</span>
+      <span class="font-semibold text-sm">Step 1 of 3</span>
+    </div>
+    <button class="p-2 hover:bg-gray-100 rounded-lg"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
+  </div>
+  <div class="h-1 w-full bg-gray-100"><div class="h-full bg-brand transition-all" style="width:33%"></div></div>
+</header>
+
+<div class="max-w-md mx-auto p-6 py-10">
+  <h2 class="text-xl font-bold mb-6">Your Fitness Data</h2>
+  <div class="space-y-5">
+    <div>
+      <label class="text-sm font-medium mb-1.5 block">Functional Threshold Power (FTP)</label>
+      <div class="flex items-center gap-2"><input class="flex-1 border rounded-lg px-3 py-2 text-sm" placeholder="e.g. 220"><span class="text-sm text-gray-400">watts</span></div>
+    </div>
+    <div>
+      <label class="text-sm font-medium mb-1.5 block">Run Threshold Pace</label>
+      <div class="flex items-center gap-2"><input class="flex-1 border rounded-lg px-3 py-2 text-sm" placeholder="e.g. 4:45"><span class="text-sm text-gray-400">min/km</span></div>
+    </div>
+    <div>
+      <label class="text-sm font-medium mb-1.5 block">Swim Pace (100m)</label>
+      <div class="flex items-center gap-2"><input class="flex-1 border rounded-lg px-3 py-2 text-sm" placeholder="e.g. 1:45"><span class="text-sm text-gray-400">min/100m</span></div>
+    </div>
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
+      💡 Connect Strava to auto-import your latest FTP and pace data
+    </div>
+    <button class="w-full bg-brand text-white py-3 rounded-lg font-semibold">Next: Pick Your Race →</button>
+  </div>
+</div>
+
+<div class="flow-arrow"></div>
+<p class="flow-arrow-label">Steps 2 & 3: Race + Course → Plan generated</p>
+
+<!-- ============================================================ -->
+<!-- PAGE: DASHBOARD -->
+<!-- ============================================================ -->
+<div class="page-divider" data-page="Dashboard — /dashboard"></div>
+
+<header class="w-full border-b bg-white">
+  <div class="max-w-6xl mx-auto flex h-16 items-center justify-between px-4">
+    <a href="#" class="flex items-center gap-2 font-bold text-xl">
+      <div class="h-8 w-8 rounded-lg bg-brand flex items-center justify-center">
+        <svg class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      </div>
+      <span>RaceDay<span class="text-brand">AI</span></span>
+    </a>
+    <div class="flex items-center gap-4">
+      <a href="#" class="text-sm font-medium hover:text-brand">Log in</a>
+      <a href="#wizard" class="bg-brand text-white px-4 py-2 rounded-lg text-sm font-semibold">Build My Plan →</a>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-6xl mx-auto p-6 bg-gray-50 min-h-[60vh]">
+  <div class="flex justify-between items-center mb-8">
+    <div><h1 class="text-3xl font-bold">Dashboard</h1><p class="text-gray-500">Welcome back, Mykyta</p></div>
+    <a href="#wizard" class="bg-brand text-white px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-1.5">+ Create Race Plan</a>
+  </div>
+  <div class="grid md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white border rounded-xl p-5">
+      <p class="text-sm text-gray-500 mb-1">Current Plan</p>
+      <p class="text-2xl font-bold">Season Pass</p>
+      <p class="text-xs text-gray-400">4 plans remaining this season</p>
+    </div>
+    <div class="bg-white border rounded-xl p-5">
+      <p class="text-sm text-gray-500 mb-1">Total Plans</p>
+      <p class="text-2xl font-bold">2</p>
+      <p class="text-xs text-gray-400">2 this season</p>
+    </div>
+    <div class="bg-white border rounded-xl p-5">
+      <p class="text-sm text-gray-500 mb-1">Quick Actions</p>
+      <div class="flex flex-col gap-1"><a href="#" class="text-sm text-brand">Settings</a><a href="#pricing-page" class="text-sm text-brand">View Plans</a></div>
+    </div>
+  </div>
+  <h2 class="text-2xl font-bold mb-4">Recent Race Plans</h2>
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition">
+      <h3 class="font-semibold mb-1">IRONMAN 70.3 Dubai</h3>
+      <p class="text-sm text-gray-500 mb-3">Mar 7, 2026 · HALF IRONMAN</p>
+      <div class="text-sm mb-3"><span class="text-gray-500">Predicted:</span> <span class="font-semibold text-brand">5:12:30</span></div>
+      <a href="#" class="w-full py-2 border rounded-lg text-center text-sm font-medium block">View Plan</a>
+    </div>
+    <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition">
+      <h3 class="font-semibold mb-1">Challenge Roth</h3>
+      <p class="text-sm text-gray-500 mb-3">Jun 29, 2026 · FULL IRONMAN</p>
+      <div class="text-sm mb-3"><span class="text-gray-500">Predicted:</span> <span class="font-semibold text-brand">10:45:00</span></div>
+      <a href="#" class="w-full py-2 border rounded-lg text-center text-sm font-medium block">View Plan</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="border-t py-12 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+      <div><h3 class="font-semibold mb-4">Product</h3><ul class="space-y-2 text-sm text-gray-500"><li>Create Plan</li><li>Pricing</li><li>Features</li></ul></div>
+      <div><h3 class="font-semibold mb-4">Company</h3><ul class="space-y-2 text-sm text-gray-500"><li>About</li><li>FAQ</li></ul></div>
+      <div><h3 class="font-semibold mb-4">Legal</h3><ul class="space-y-2 text-sm text-gray-500"><li>Privacy Policy</li><li>Terms of Service</li></ul></div>
+      <div><h3 class="font-semibold mb-4">Connect</h3><ul class="space-y-2 text-sm text-gray-500"><li>Log In</li><li>Sign Up</li></ul></div>
+    </div>
+    <div class="border-t pt-8 text-center text-sm text-gray-400">© 2026 RaceDayAI. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -21,8 +21,8 @@ export function PricingPreview() {
 
         {/* Annual savings note */}
         <div className="text-center mb-12">
-          <span className="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-4 py-1.5 text-sm font-medium text-green-700 dark:text-green-400">
-            All plans include a 7-day money-back guarantee
+          <span className="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-4 py-1.5 text-sm font-medium text-blue-700 dark:text-blue-400">
+            No long-term contracts &mdash; cancel anytime
           </span>
         </div>
 

@@ -31,7 +31,7 @@ export default function PricingPage() {
             <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <Shield className="h-4 w-4 text-green-600" />
-                7-day money-back guarantee
+                No long-term contracts
               </span>
               <span className="flex items-center gap-1.5">
                 <Zap className="h-4 w-4 text-primary" />
@@ -290,7 +290,7 @@ export default function PricingPage() {
               <div>
                 <h3 className="font-semibold mb-1">What if it doesn&apos;t work for me?</h3>
                 <p className="text-sm text-muted-foreground">
-                  All paid plans come with a 7-day money-back guarantee. If you&apos;re not happy, email us and we&apos;ll refund you &mdash; no questions asked.
+                  All sales are final. You can cancel your subscription at any time and retain access through the end of your billing period. We don&apos;t offer refunds, but you can try RaceDayAI free before committing.
                 </p>
               </div>
               <div>
@@ -344,6 +344,7 @@ export default function PricingPage() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li><Link href="/about" className="hover:text-primary">About</Link></li>
                 <li><Link href="/faq" className="hover:text-primary">FAQ</Link></li>
+                <li><Link href="/contact" className="hover:text-primary">Contact</Link></li>
               </ul>
             </div>
             <div>

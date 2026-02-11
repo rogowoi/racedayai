@@ -55,6 +55,36 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    async signIn({ user, account, profile }) {
+      // Handle Strava OAuth sign-in
+      if (account?.provider === "strava" && user?.id && account.access_token) {
+        try {
+          // Save Strava token to athlete profile
+          const athlete = await prisma.athlete.findUnique({
+            where: { userId: user.id },
+          });
+
+          if (athlete) {
+            await prisma.athlete.update({
+              where: { id: athlete.id },
+              data: {
+                stravaConnected: true,
+                stravaToken: {
+                  access_token: account.access_token,
+                  refresh_token: account.refresh_token,
+                  expires_at: account.expires_at,
+                  token_type: account.token_type,
+                },
+              },
+            });
+          }
+        } catch (error) {
+          console.error("Error saving Strava token:", error);
+          // Continue sign-in even if token save fails
+        }
+      }
+      return true;
+    },
     async session({ session, user, token }) {
       // For OAuth (database sessions), attach user ID from user object
       if (user) {

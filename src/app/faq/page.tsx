@@ -123,7 +123,7 @@ const faqs = [
   {
     question: "Do you offer refunds?",
     answer:
-      "Yes, we offer a 7-day money-back guarantee on all paid plans. If you're not satisfied with RaceDayAI for any reason, contact us within 7 days of purchase for a full refund.",
+      "All sales are final. You can cancel your subscription at any time and retain access through the end of your billing period. We don't offer refunds, but you can try RaceDayAI free before committing.",
   },
   {
     question: "Can I use RaceDayAI for other endurance events?",

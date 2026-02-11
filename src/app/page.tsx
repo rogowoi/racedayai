@@ -6,6 +6,7 @@ import { BeforeAfter } from "@/components/home/before-after";
 import { Demo } from "@/components/home/demo";
 import { Features } from "@/components/home/features";
 import { HowItWorks } from "@/components/home/how-it-works";
+import { Testimonials } from "@/components/home/testimonials";
 import { PricingPreview } from "@/components/home/pricing-preview";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -33,10 +34,13 @@ export default function Home() {
         {/* 6. Easy: How it works — remove friction */}
         <HowItWorks />
 
-        {/* 7. Close: Pricing — anchor value and convert */}
+        {/* 7. Social Proof: Testimonials — build trust */}
+        <Testimonials />
+
+        {/* 8. Close: Pricing — anchor value and convert */}
         <PricingPreview />
 
-        {/* 8. Final CTA */}
+        {/* 9. Final CTA */}
         <section className="py-20 md:py-28 bg-primary/5">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
@@ -97,6 +101,11 @@ export default function Home() {
                 <li>
                   <Link href="/faq" className="hover:text-primary">
                     FAQ
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className="hover:text-primary">
+                    Contact
                   </Link>
                 </li>
               </ul>
