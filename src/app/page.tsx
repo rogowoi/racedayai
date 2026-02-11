@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Navbar } from "@/components/layout/navbar";
 import { Hero } from "@/components/home/hero";
+import { Demo } from "@/components/home/demo";
 import { Features } from "@/components/home/features";
 import { HowItWorks } from "@/components/home/how-it-works";
 import { PricingPreview } from "@/components/home/pricing-preview";
@@ -12,6 +13,7 @@ export default function Home() {
       <Navbar />
       <main className="flex-1">
         <Hero />
+        <Demo />
         <Features />
         <HowItWorks />
         <PricingPreview />
