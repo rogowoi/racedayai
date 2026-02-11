@@ -4,7 +4,8 @@ import { Navbar } from "@/components/layout/navbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Download, Share2, Printer } from "lucide-react";
+import { Download } from "lucide-react";
+import { ShareButton } from "@/components/plan/share-button";
 import Link from "next/link";
 import { Metadata } from "next";
 import { generateRacePlanSchema, jsonLdScript } from "@/lib/schema";
@@ -127,9 +128,7 @@ export default async function PlanPage({
               </p>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm">
-                <Share2 className="mr-2 h-4 w-4" /> Share
-              </Button>
+              <ShareButton planId={id} existingShareToken={plan.shareToken} />
               <Button variant="outline" size="sm" asChild>
                 <a href={`/api/plans/${id}/pdf`} download>
                   <Download className="mr-2 h-4 w-4" /> PDF
@@ -150,9 +149,14 @@ export default async function PlanPage({
                 <div className="text-3xl font-bold">
                   {formatTime(plan.predictedFinishSec || 0)}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  High Confidence
-                </p>
+                {(() => {
+                  const confidence = calculateConfidence(plan);
+                  return (
+                    <p className={`text-xs mt-1 font-medium ${confidence.color}`}>
+                      {confidence.label}
+                    </p>
+                  );
+                })()}
               </CardContent>
             </Card>
             <Card>
@@ -275,6 +279,20 @@ export default async function PlanPage({
             </Card>
           </div>
 
+          {/* AI Narrative */}
+          {plan.narrativePlan && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Race Strategy Narrative</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="prose prose-sm max-w-none text-muted-foreground whitespace-pre-wrap">
+                  {plan.narrativePlan}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           <div className="flex justify-center pt-8">
             <Button size="lg" className="w-full md:w-auto" asChild>
               <Link href="/wizard">Create New Plan</Link>
@@ -284,6 +302,22 @@ export default async function PlanPage({
       </main>
     </div>
   );
+}
+
+function calculateConfidence(plan: any): { label: string; color: string } {
+  let score = 0;
+  const maxScore = 5;
+
+  if (plan.weatherData) score++;
+  if (plan.athlete?.ftpWatts) score++;
+  if (plan.athlete?.thresholdPaceSec) score++;
+  if (plan.course?.bikeElevationGainM) score++;
+  if (plan.athlete?.stravaConnected || plan.athlete?.garminConnected) score++;
+
+  const ratio = score / maxScore;
+  if (ratio >= 0.8) return { label: "High Confidence", color: "text-green-600" };
+  if (ratio >= 0.5) return { label: "Medium Confidence", color: "text-amber-600" };
+  return { label: "Low Confidence", color: "text-red-500" };
 }
 
 function formatTime(seconds: number) {

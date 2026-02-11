@@ -98,6 +98,12 @@ export default function LoginPage() {
                 />
               </div>
 
+              <div className="text-right">
+                <Link href="/auth/forgot-password" className="text-xs text-primary hover:underline">
+                  Forgot your password?
+                </Link>
+              </div>
+
               <Button type="submit" className="w-full" disabled={isPending}>
                 {isPending ? (
                   <>

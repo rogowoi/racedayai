@@ -64,8 +64,6 @@ export const PLANS = {
       "AI-generated race strategy narrative",
       "Advanced weather warnings",
       "Share plans via public link",
-      "Plan comparison tool",
-      "API access",
     ],
     priceId: process.env.STRIPE_UNLIMITED_ANNUAL_PRICE_ID,
     monthlyPriceId: process.env.STRIPE_UNLIMITED_MONTHLY_PRICE_ID,

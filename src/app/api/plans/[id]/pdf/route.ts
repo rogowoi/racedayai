@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/db';
 import { generateRaceDayPdf } from '@/lib/pdf-generator';
+import { isPaidPlan } from '@/lib/stripe';
 
 export async function GET(
   req: NextRequest,
@@ -50,6 +51,19 @@ export async function GET(
           { status: 403 }
         );
       }
+    }
+
+    // Check if user's plan allows PDF export (Season+ only)
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { plan: true },
+    });
+
+    if (!user || !isPaidPlan(user.plan)) {
+      return NextResponse.json(
+        { error: 'PDF export requires a Season Pass or Pro subscription.' },
+        { status: 403 }
+      );
     }
 
     // Generate the PDF

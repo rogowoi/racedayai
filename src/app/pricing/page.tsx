@@ -215,7 +215,7 @@ export default function PricingPage() {
                     </span>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    For coaches, clubs, and multi-sport athletes
+                    For dedicated multi-race athletes
                   </p>
                 </div>
 
@@ -231,18 +231,6 @@ export default function PricingPage() {
                   <li className="flex items-start gap-2.5">
                     <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
                     <span>Share plans via public link</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-                    <span>Plan comparison tool</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-                    <span>Multi-athlete support <span className="text-muted-foreground">(up to 5)</span></span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-                    <span>API access</span>
                   </li>
                   <li className="flex items-start gap-2.5">
                     <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />

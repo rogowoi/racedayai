@@ -1,5 +1,7 @@
 "use server";
 
+import { sendContactEmail } from "@/lib/email";
+
 interface ContactFormData {
   name: string;
   email: string;
@@ -47,16 +49,11 @@ export async function submitContact(
     return { success: false, message: "Invalid subject selected" };
   }
 
-  // TODO: Send email via Resend
-  // const email = await resend.emails.send({
-  //   from: "noreply@racedayai.com",
-  //   to: "support@racedayai.com",
-  //   subject: `New Contact Form Submission: ${data.subject}`,
-  //   html: `...`,
-  // });
-
-  // For now, just return success after validation
-  console.log("Contact form submitted:", data);
+  try {
+    await sendContactEmail(data);
+  } catch {
+    return { success: false, message: "Failed to send message. Please try again." };
+  }
 
   return {
     success: true,
