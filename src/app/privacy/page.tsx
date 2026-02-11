@@ -58,8 +58,16 @@ export default function PrivacyPage() {
                 metrics, and profile information as authorized by you
               </li>
               <li>
+                <strong>Garmin Connect:</strong> We access your activity
+                summaries, daily health metrics (heart rate, weight), and body
+                composition data via the Garmin Health API as authorized by you.
+                We do not access GPS tracks, location data, or any data beyond
+                what is needed to calculate your fitness profile.
+              </li>
+              <li>
                 Connection tokens are stored securely and can be revoked at any
-                time
+                time through your account settings or directly through the
+                third-party service
               </li>
             </ul>
 
