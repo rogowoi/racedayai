@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { generateProductSchema, jsonLdScript } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -34,5 +35,49 @@ export default function PricingLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  // Generate Product schema for all three pricing tiers
+  const freeProductSchema = generateProductSchema({
+    name: "RaceDayAI Free",
+    description:
+      "Unlimited Sprint and Olympic distance race plans with AI-powered pacing and nutrition guidance.",
+    price: "0",
+    currency: "USD",
+    imageUrl: "https://racedayai.com/og-image.png",
+  });
+
+  const seasonPassSchema = generateProductSchema({
+    name: "RaceDayAI Season Pass",
+    description:
+      "Complete access to Half IRONMAN (70.3) and Full IRONMAN race planning with weather adjustments, advanced nutrition, and course analysis. Up to 10 plans per season.",
+    price: "39",
+    currency: "USD",
+    imageUrl: "https://racedayai.com/og-image.png",
+  });
+
+  const unlimitedSchema = generateProductSchema({
+    name: "RaceDayAI Unlimited",
+    description:
+      "Unlimited race plans for all distances including IRONMAN. Perfect for coaches managing multiple athletes or serious age-groupers racing frequently.",
+    price: "149",
+    currency: "USD",
+    imageUrl: "https://racedayai.com/og-image.png",
+  });
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLdScript(freeProductSchema)}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLdScript(seasonPassSchema)}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLdScript(unlimitedSchema)}
+      />
+      {children}
+    </>
+  );
 }

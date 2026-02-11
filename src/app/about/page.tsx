@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/layout/navbar";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Target, Zap, Users, TrendingUp } from "lucide-react";
@@ -13,10 +14,11 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
+      <Breadcrumbs items={[{ label: "About", href: "/about" }]} />
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-20 bg-gradient-to-b from-muted/30 to-background">
+        <section className="py-16 bg-gradient-to-b from-muted/30 to-background">
           <div className="container mx-auto px-4 max-w-4xl text-center">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
               About RaceDayAI

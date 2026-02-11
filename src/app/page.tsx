@@ -50,6 +50,11 @@ export default function Home() {
                     About
                   </Link>
                 </li>
+                <li>
+                  <Link href="/faq" className="hover:text-primary">
+                    FAQ
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
