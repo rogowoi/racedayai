@@ -1,4 +1,3 @@
-// @ts-expect-error - jspdf types installed with package
 import jsPDF from 'jspdf';
 
 interface SwimPlan {

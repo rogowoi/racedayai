@@ -1,12 +1,17 @@
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signUp } from "@/app/actions/auth-actions";
-import { Zap } from "lucide-react";
+import { Zap, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { useActionState } from "react";
 
 export default function SignUpPage() {
+  const [state, formAction, isPending] = useActionState(signUp, { error: null });
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -36,7 +41,14 @@ export default function SignUpPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form action={signUp} className="space-y-4">
+            <form action={formAction} className="space-y-4">
+              {state.error && (
+                <div className="flex items-center gap-2 rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{state.error}</span>
+                </div>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
                 <Input
@@ -45,6 +57,7 @@ export default function SignUpPage() {
                   type="text"
                   placeholder="Your name"
                   required
+                  disabled={isPending}
                 />
               </div>
 
@@ -56,6 +69,7 @@ export default function SignUpPage() {
                   type="email"
                   placeholder="you@example.com"
                   required
+                  disabled={isPending}
                 />
               </div>
 
@@ -68,11 +82,19 @@ export default function SignUpPage() {
                   placeholder="At least 8 characters"
                   minLength={8}
                   required
+                  disabled={isPending}
                 />
               </div>
 
-              <Button type="submit" className="w-full font-semibold">
-                Create Free Account
+              <Button type="submit" className="w-full font-semibold" disabled={isPending}>
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creating account...
+                  </>
+                ) : (
+                  "Create Free Account"
+                )}
               </Button>
             </form>
 

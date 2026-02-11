@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { BillingSection } from "@/components/dashboard/billing-section";
 import { getPlanUsage } from "@/lib/plan-limits";
+import { ConnectedAccountsSection } from "@/components/dashboard/connected-accounts-section";
 
 export default async function SettingsPage() {
   const session = await auth();
@@ -11,7 +12,7 @@ export default async function SettingsPage() {
     redirect("/login");
   }
 
-  const [user, usage] = await Promise.all([
+  const [user, usage, athlete] = await Promise.all([
     prisma.user.findUnique({
       where: { id: session.user.id },
       select: {
@@ -20,6 +21,13 @@ export default async function SettingsPage() {
       },
     }),
     getPlanUsage(session.user.id),
+    prisma.athlete.findUnique({
+      where: { userId: session.user.id },
+      select: {
+        garminConnected: true,
+        stravaConnected: true,
+      },
+    }),
   ]);
 
   if (!user || !usage) {
@@ -34,6 +42,11 @@ export default async function SettingsPage() {
           Manage your account and subscription
         </p>
       </div>
+
+      <ConnectedAccountsSection
+        garminConnected={athlete?.garminConnected ?? false}
+        stravaConnected={athlete?.stravaConnected ?? false}
+      />
 
       <BillingSection
         currentPlan={user.plan}

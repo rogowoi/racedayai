@@ -19,11 +19,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Activity, Smartphone } from "lucide-react";
+import { Smartphone, AlertCircle, CheckCircle2 } from "lucide-react";
 import { loginWithStrava } from "@/app/actions/auth-actions";
+import { GarminConnectButton } from "@/components/garmin-connect-button";
+import { useSearchParams } from "next/navigation";
 
 export function Step1Fitness() {
   const { fitnessData, setFitnessData, setStep } = useWizardStore();
+  const searchParams = useSearchParams();
+  const garminError = searchParams.get("garmin_error");
+  const garminConnected = searchParams.get("garmin_connected");
 
   const handleNext = () => {
     // Basic validation
@@ -150,15 +155,19 @@ export function Step1Fitness() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Button
-                variant="outline"
-                className="w-full h-14 justify-start gap-4 text-base font-normal"
-              >
-                <div className="h-8 w-8 rounded-full bg-blue-500/10 flex items-center justify-center">
-                  <Activity className="h-5 w-5 text-blue-600" />
+              {garminConnected && (
+                <div className="text-sm text-green-600 dark:text-green-400 flex items-center gap-2 p-2 rounded-md bg-green-50 dark:bg-green-950/20">
+                  <CheckCircle2 className="h-4 w-4 shrink-0" />
+                  Garmin connected successfully!
                 </div>
-                Connect Garmin
-              </Button>
+              )}
+              {garminError && (
+                <div className="text-sm text-red-600 dark:text-red-400 flex items-center gap-2 p-2 rounded-md bg-red-50 dark:bg-red-950/20">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  Failed to connect Garmin. Please try again.
+                </div>
+              )}
+              <GarminConnectButton />
               <form action={loginWithStrava} className="w-full">
                 <Button
                   variant="outline"

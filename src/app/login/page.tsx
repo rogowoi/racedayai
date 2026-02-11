@@ -1,12 +1,17 @@
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginWithStrava, loginWithCredentials } from "@/app/actions/auth-actions";
-import { Zap, Activity } from "lucide-react";
+import { Zap, Activity, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { useActionState } from "react";
 
 export default function LoginPage() {
+  const [state, formAction, isPending] = useActionState(loginWithCredentials, { error: null });
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -61,7 +66,14 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <form action={loginWithCredentials} className="space-y-4">
+            <form action={formAction} className="space-y-4">
+              {state.error && (
+                <div className="flex items-center gap-2 rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{state.error}</span>
+                </div>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -70,6 +82,7 @@ export default function LoginPage() {
                   type="email"
                   placeholder="you@example.com"
                   required
+                  disabled={isPending}
                 />
               </div>
 
@@ -81,11 +94,19 @@ export default function LoginPage() {
                   type="password"
                   placeholder="Your password"
                   required
+                  disabled={isPending}
                 />
               </div>
 
-              <Button type="submit" className="w-full">
-                Sign In
+              <Button type="submit" className="w-full" disabled={isPending}>
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
               </Button>
             </form>
 
