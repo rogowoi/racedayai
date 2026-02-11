@@ -3,24 +3,28 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginWithStrava, loginWithCredentials } from "@/app/actions/auth-actions";
-import { Activity } from "lucide-react";
+import { Zap, Activity } from "lucide-react";
 import Link from "next/link";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        {/* Brand header with back link */}
         <div className="text-center space-y-2">
-          <div className="flex justify-center mb-4">
-            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <Activity className="h-6 w-6 text-primary" />
+          <Link href="/" className="inline-flex items-center gap-2 font-bold text-xl mb-4 hover:opacity-80 transition-opacity">
+            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+              <Zap className="h-4 w-4 text-primary-foreground" />
             </div>
-          </div>
+            <span>
+              RaceDay<span className="text-primary">AI</span>
+            </span>
+          </Link>
           <h1 className="text-2xl font-bold tracking-tight">
-            Welcome to RaceDayAI
+            Welcome back
           </h1>
           <p className="text-muted-foreground">
-            Sign in to create your personalized race plan
+            Sign in to access your race plans
           </p>
         </div>
 
@@ -32,6 +36,31 @@ export default function LoginPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
+            {/* Strava first — it's the path of least resistance for triathletes */}
+            <form action={loginWithStrava}>
+              <Button
+                variant="outline"
+                type="submit"
+                className="w-full h-14 justify-start gap-4 text-base font-normal"
+              >
+                <div className="h-8 w-8 rounded-full bg-orange-500/10 flex items-center justify-center">
+                  <Activity className="h-5 w-5 text-orange-600" />
+                </div>
+                Continue with Strava
+              </Button>
+            </form>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or sign in with email
+                </span>
+              </div>
+            </div>
+
             <form action={loginWithCredentials} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -60,38 +89,20 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            <form action={loginWithStrava}>
-              <Button
-                variant="outline"
-                type="submit"
-                className="w-full h-14 justify-start gap-4 text-base font-normal"
-              >
-                <div className="h-8 w-8 rounded-full bg-orange-500/10 flex items-center justify-center">
-                  <Activity className="h-5 w-5 text-orange-600" />
-                </div>
-                Continue with Strava
-              </Button>
-            </form>
-
             <div className="text-center text-sm text-muted-foreground">
               Don&apos;t have an account?{" "}
-              <Link href="/signup" className="text-primary hover:underline">
-                Sign up
+              <Link href="/signup" className="text-primary hover:underline font-medium">
+                Sign up free
               </Link>
             </div>
           </CardContent>
         </Card>
+
+        <div className="text-center">
+          <Link href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            &larr; Back to Home
+          </Link>
+        </div>
       </div>
     </div>
   );

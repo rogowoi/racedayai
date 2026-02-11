@@ -1,66 +1,81 @@
-import { Upload, Zap, MapPin, Download } from "lucide-react";
+import { Upload, MapPin, Zap, Download } from "lucide-react";
 
 export function HowItWorks() {
   const steps = [
     {
       icon: Upload,
-      title: "1. Enter Your Data",
+      title: "Enter your fitness data",
       description:
-        "Input your fitness metrics (FTP, threshold pace) or connect Strava. Upload race GPX files for course-specific analysis.",
+        "Input FTP, threshold pace, and body weight \u2014 or connect Strava and we\u2019ll pull it automatically.",
+      detail: "2 minutes",
     },
     {
       icon: MapPin,
-      title: "2. Select Your Race",
+      title: "Pick your race",
       description:
-        "Choose your race date, distance (Sprint, Olympic, 70.3, 140.6), and location. We'll pull real-time weather forecasts.",
+        "Select distance, date, and location. Upload a GPX file for course-specific analysis.",
+      detail: "30 seconds",
     },
     {
       icon: Zap,
-      title: "3. AI Generates Your Plan",
+      title: "AI builds your plan",
       description:
-        "Our AI analyzes course elevation, weather conditions, and your fitness to create optimized pacing, nutrition, and hydration strategies.",
+        "Our engine analyzes course elevation, weather forecast, and your fitness to create optimized targets.",
+      detail: "~30 seconds",
     },
     {
       icon: Download,
-      title: "4. Execute on Race Day",
+      title: "Execute on race day",
       description:
-        "Download your plan as a PDF with race-day cards. Follow power targets, pace zones, and nutrition timeline to execute perfectly.",
+        "Download your PDF race card. Follow power, pace, and nutrition targets to your best finish.",
+      detail: "Race day",
     },
   ];
 
   return (
-    <section id="how-it-works" className="py-24 bg-muted/30">
+    <section id="how-it-works" className="py-20 md:py-28 bg-muted/30">
       <div className="container mx-auto px-4">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">
+            How it works
+          </p>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-            How It Works
+            From data to race plan in 3 minutes.
           </h2>
           <p className="text-lg text-muted-foreground">
-            From fitness data to race-day execution plan in minutes
+            No coaching degree required. No spreadsheet wizardry. Just answer a
+            few questions.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
           {steps.map((step, index) => (
             <div
               key={index}
               className="relative flex flex-col items-center text-center group"
             >
-              {/* Connector Line (except for last item) */}
+              {/* Connector */}
               {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-12 left-1/2 w-full h-0.5 bg-border -z-10" />
+                <div className="hidden lg:block absolute top-10 left-[calc(50%+40px)] w-[calc(100%-80px)] h-px bg-border" />
               )}
 
-              {/* Icon Circle */}
-              <div className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary text-primary-foreground group-hover:scale-110 transition-transform">
-                <step.icon className="h-10 w-10" />
+              {/* Step Number + Icon */}
+              <div className="relative mb-5">
+                <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <step.icon className="h-9 w-9" />
+                </div>
+                <div className="absolute -top-2 -right-2 h-7 w-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
+                  {index + 1}
+                </div>
               </div>
 
-              {/* Content */}
-              <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed mb-2">
                 {step.description}
               </p>
+              <span className="text-xs font-medium text-primary">
+                {step.detail}
+              </span>
             </div>
           ))}
         </div>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { X, ChevronLeft } from "lucide-react";
+import { X, ChevronLeft, Zap } from "lucide-react";
 import { useWizardStore } from "@/stores/wizard-store";
 
 export default function WizardLayoutClient({
@@ -19,7 +19,7 @@ export default function WizardLayoutClient({
       {/* Wizard Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {step > 1 && (
               <Button
                 variant="ghost"
@@ -29,6 +29,15 @@ export default function WizardLayoutClient({
                 <ChevronLeft className="h-5 w-5" />
               </Button>
             )}
+            <Link href="/" className="flex items-center gap-1.5 text-sm font-bold">
+              <div className="h-6 w-6 rounded-md bg-primary flex items-center justify-center">
+                <Zap className="h-3 w-3 text-primary-foreground" />
+              </div>
+              <span className="hidden sm:inline">
+                RaceDay<span className="text-primary">AI</span>
+              </span>
+            </Link>
+            <span className="text-muted-foreground">|</span>
             <span className="font-semibold text-sm">
               Step {step} of {totalSteps}
             </span>

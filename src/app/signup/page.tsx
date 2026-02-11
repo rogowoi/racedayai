@@ -3,24 +3,28 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signUp } from "@/app/actions/auth-actions";
-import { Activity } from "lucide-react";
+import { Zap } from "lucide-react";
 import Link from "next/link";
 
 export default function SignUpPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        {/* Brand header with back link */}
         <div className="text-center space-y-2">
-          <div className="flex justify-center mb-4">
-            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <Activity className="h-6 w-6 text-primary" />
+          <Link href="/" className="inline-flex items-center gap-2 font-bold text-xl mb-4 hover:opacity-80 transition-opacity">
+            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+              <Zap className="h-4 w-4 text-primary-foreground" />
             </div>
-          </div>
+            <span>
+              RaceDay<span className="text-primary">AI</span>
+            </span>
+          </Link>
           <h1 className="text-2xl font-bold tracking-tight">
             Create Your Account
           </h1>
           <p className="text-muted-foreground">
-            Sign up to start creating personalized race plans
+            Your first race plan is free &mdash; no credit card required
           </p>
         </div>
 
@@ -28,7 +32,7 @@ export default function SignUpPage() {
           <CardHeader>
             <CardTitle className="text-base">Sign Up</CardTitle>
             <CardDescription>
-              Enter your details to create an account
+              Enter your details to get started
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -67,14 +71,14 @@ export default function SignUpPage() {
                 />
               </div>
 
-              <Button type="submit" className="w-full">
-                Create Account
+              <Button type="submit" className="w-full font-semibold">
+                Create Free Account
               </Button>
             </form>
 
             <div className="mt-4 text-center text-sm text-muted-foreground">
               Already have an account?{" "}
-              <Link href="/login" className="text-primary hover:underline">
+              <Link href="/login" className="text-primary hover:underline font-medium">
                 Sign in
               </Link>
             </div>
@@ -82,8 +86,21 @@ export default function SignUpPage() {
         </Card>
 
         <p className="text-center text-xs text-muted-foreground">
-          By creating an account, you agree to our Terms of Service and Privacy Policy
+          By creating an account, you agree to our{" "}
+          <Link href="/terms" className="text-primary hover:underline">
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link href="/privacy" className="text-primary hover:underline">
+            Privacy Policy
+          </Link>
         </p>
+
+        <div className="text-center">
+          <Link href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            &larr; Back to Home
+          </Link>
+        </div>
       </div>
     </div>
   );

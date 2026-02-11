@@ -58,12 +58,12 @@ const faqs = [
   {
     question: "Can I use RaceDayAI for my first triathlon?",
     answer:
-      "Absolutely! RaceDayAI is designed for all levels, from first-timers to seasoned pros. For newer athletes, we provide conservative pacing recommendations and detailed nutrition guidance to help you finish strong. The free plan includes unlimited Sprint and Olympic distance plans.",
+      "Absolutely! RaceDayAI is designed for all levels, from first-timers to seasoned pros. For newer athletes, we provide conservative pacing recommendations and detailed nutrition guidance to help you finish strong. The free plan lets you create one race plan for any distance to try it out.",
   },
   {
     question: "What's the difference between the Free and Season Pass plans?",
     answer:
-      "The Free plan includes unlimited Sprint and Olympic distance race plans with basic features. The Season Pass ($39/year) adds Half IRONMAN (70.3) and Full IRONMAN support, weather-adjusted pacing, advanced nutrition planning, course-specific analysis, and up to 10 race plans per season.",
+      "The Free plan lets you create one race plan for any distance with basic pacing and nutrition. The Season Pass ($39/year) unlocks weather-adjusted pacing, GPX course upload, PDF race-day cards, Strava auto-import, and up to 6 race plans per season.",
   },
   {
     question: "How does the weather adjustment work?",
@@ -123,7 +123,7 @@ const faqs = [
   {
     question: "Do you offer refunds?",
     answer:
-      "Yes, we offer a 30-day money-back guarantee on all paid plans. If you're not satisfied with RaceDayAI for any reason, contact us within 30 days of purchase for a full refund.",
+      "Yes, we offer a 7-day money-back guarantee on all paid plans. If you're not satisfied with RaceDayAI for any reason, contact us within 7 days of purchase for a full refund.",
   },
   {
     question: "Can I use RaceDayAI for other endurance events?",
@@ -198,8 +198,8 @@ export default function FAQPage() {
                 Ready to Create Your Race Plan?
               </h2>
               <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Join thousands of triathletes who trust RaceDayAI for their race
-                execution planning. Start with a free Sprint or Olympic plan.
+                Build your perfect race-day execution plan in minutes. Start
+                with a free plan for any distance &mdash; no credit card required.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" asChild>

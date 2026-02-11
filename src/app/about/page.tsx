@@ -199,8 +199,8 @@ export default function AboutPage() {
               Ready to Execute Your Perfect Race?
             </h2>
             <p className="text-lg mb-8 opacity-90">
-              Join thousands of triathletes who trust RaceDayAI for their race
-              execution planning.
+              Build your perfect race-day execution plan in minutes &mdash;
+              backed by sports science and powered by AI.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button

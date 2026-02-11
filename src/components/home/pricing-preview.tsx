@@ -1,151 +1,212 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { Check, ArrowRight, X } from "lucide-react";
 
 export function PricingPreview() {
   return (
-    <section id="pricing" className="py-24 bg-background">
+    <section id="pricing" className="py-20 md:py-28 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-6">
+          <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">
+            Pricing
+          </p>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-            Simple, Transparent Pricing
+            A coach charges $150 for one race plan.
           </h2>
           <p className="text-lg text-muted-foreground">
-            Start free, upgrade when you need more plans
+            Get unlimited AI-powered plans for less than the cost of a race
+            entry fee.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {/* Free Plan */}
-          <div className="flex flex-col p-8 bg-card rounded-lg border">
+        {/* Annual savings note */}
+        <div className="text-center mb-12">
+          <span className="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-4 py-1.5 text-sm font-medium text-green-700 dark:text-green-400">
+            All plans include a 7-day money-back guarantee
+          </span>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {/* Free — Taste */}
+          <div className="flex flex-col p-7 bg-card rounded-xl border">
             <div className="mb-6">
-              <h3 className="text-2xl font-bold mb-2">Free</h3>
-              <div className="flex items-baseline gap-1 mb-4">
-                <span className="text-4xl font-bold">$0</span>
+              <h3 className="text-xl font-bold mb-1">Starter</h3>
+              <div className="flex items-baseline gap-1 mb-3">
+                <span className="text-4xl font-extrabold">$0</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                Perfect for trying your first race plan
+                Try one race plan &mdash; see your predicted finish time
               </p>
             </div>
 
-            <ul className="space-y-3 mb-8 flex-1">
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-sm">1 race plan</span>
+            <ul className="space-y-3 mb-8 flex-1 text-sm">
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>
+                  <span className="font-medium">1 race plan</span> (any
+                  distance)
+                </span>
               </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-sm">Basic pacing + nutrition</span>
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>Basic pacing + nutrition</span>
               </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-sm">Manual fitness entry</span>
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>Manual fitness entry</span>
+              </li>
+              <li className="flex items-start gap-2.5 text-muted-foreground">
+                <X className="h-4 w-4 flex-shrink-0 mt-0.5 opacity-40" />
+                <span>No PDF export</span>
+              </li>
+              <li className="flex items-start gap-2.5 text-muted-foreground">
+                <X className="h-4 w-4 flex-shrink-0 mt-0.5 opacity-40" />
+                <span>No weather adjustments</span>
               </li>
             </ul>
 
-            <Button variant="outline" className="w-full" asChild>
-              <Link href="/wizard">Get Started Free</Link>
+            <Button variant="outline" className="w-full h-11" asChild>
+              <Link href="/wizard">Try Free</Link>
             </Button>
           </div>
 
-          {/* Season Pass */}
-          <div className="flex flex-col p-8 bg-primary text-primary-foreground rounded-lg border-2 border-primary relative">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-foreground text-primary px-3 py-1 rounded-full text-xs font-semibold">
-              Most Popular
+          {/* Season Pass — Core conversion target */}
+          <div className="flex flex-col p-7 rounded-xl border-2 border-primary relative bg-card shadow-xl shadow-primary/10">
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+              <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                Most Popular
+              </span>
             </div>
 
             <div className="mb-6">
-              <h3 className="text-2xl font-bold mb-2">Season Pass</h3>
-              <div className="flex items-baseline gap-1 mb-4">
-                <span className="text-4xl font-bold">$39</span>
-                <span className="text-sm opacity-90">/year</span>
+              <h3 className="text-xl font-bold mb-1">Season Pass</h3>
+              <div className="flex items-baseline gap-2 mb-1">
+                <span className="text-4xl font-extrabold">$39</span>
+                <span className="text-sm text-muted-foreground">/year</span>
               </div>
-              <p className="text-sm opacity-90">
-                For athletes racing 2-6 times per season
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-sm text-muted-foreground line-through">
+                  $150/plan with a coach
+                </span>
+              </div>
+              <p className="text-sm font-medium text-primary">
+                Just $6.50 per race &middot; 6 races per season
               </p>
             </div>
 
-            <ul className="space-y-3 mb-8 flex-1">
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                <span className="text-sm">6 race plans per season</span>
+            <ul className="space-y-3 mb-8 flex-1 text-sm">
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>
+                  <span className="font-medium">6 race plans</span> per season
+                </span>
               </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                <span className="text-sm">PDF export with race-day cards</span>
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>
+                  <span className="font-medium">Full weather integration</span>{" "}
+                  &mdash; heat, wind, humidity
+                </span>
               </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                <span className="text-sm">GPX course upload + analysis</span>
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>GPX course upload + elevation analysis</span>
               </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                <span className="text-sm">Weather integration</span>
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>
+                  PDF race-day card{" "}
+                  <span className="text-muted-foreground">(print & go)</span>
+                </span>
               </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                <span className="text-sm">Strava auto-import</span>
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>Strava auto-import</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>
+                  AI narrative strategy{" "}
+                  <span className="text-muted-foreground">
+                    (coach-style advice)
+                  </span>
+                </span>
               </li>
             </ul>
 
             <Button
-              variant="secondary"
-              className="w-full bg-primary-foreground text-primary hover:bg-primary-foreground/90"
+              className="w-full h-11 font-semibold shadow-lg shadow-primary/25"
               asChild
             >
-              <Link href="/pricing">Get Season Pass</Link>
+              <Link href="/pricing">
+                Get Season Pass
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
           </div>
 
-          {/* Unlimited */}
-          <div className="flex flex-col p-8 bg-card rounded-lg border">
+          {/* Pro / Unlimited */}
+          <div className="flex flex-col p-7 bg-card rounded-xl border">
             <div className="mb-6">
-              <h3 className="text-2xl font-bold mb-2">Unlimited</h3>
-              <div className="flex items-baseline gap-1 mb-4">
-                <span className="text-4xl font-bold">$99</span>
+              <h3 className="text-xl font-bold mb-1">Pro</h3>
+              <div className="flex items-baseline gap-2 mb-1">
+                <span className="text-4xl font-extrabold">$99</span>
                 <span className="text-sm text-muted-foreground">/year</span>
               </div>
+              <div className="mb-3">
+                <span className="text-sm text-muted-foreground line-through">
+                  $600+/year for coaching
+                </span>
+              </div>
               <p className="text-sm text-muted-foreground">
-                For coaches and multi-sport athletes
+                For coaches, clubs, and multi-sport athletes
               </p>
             </div>
 
-            <ul className="space-y-3 mb-8 flex-1">
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-sm">Unlimited race plans</span>
+            <ul className="space-y-3 mb-8 flex-1 text-sm">
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>
+                  <span className="font-medium">Unlimited</span> race plans
+                </span>
               </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-sm">AI-generated race strategy</span>
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>Everything in Season Pass</span>
               </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-sm">Advanced weather warnings</span>
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>Share plans via public link</span>
               </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-sm">Share plans via public link</span>
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>
+                  Multi-athlete support{" "}
+                  <span className="text-muted-foreground">(up to 5)</span>
+                </span>
               </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-sm">API access</span>
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>API access</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>Priority support</span>
               </li>
             </ul>
 
-            <Button variant="outline" className="w-full" asChild>
-              <Link href="/pricing">Get Unlimited</Link>
+            <Button variant="outline" className="w-full h-11" asChild>
+              <Link href="/pricing">Get Pro</Link>
             </Button>
           </div>
         </div>
 
-        <div className="text-center mt-12">
-          <Link
-            href="/pricing"
-            className="text-sm text-muted-foreground hover:text-primary underline"
-          >
-            View full pricing details →
-          </Link>
+        {/* Value anchor */}
+        <div className="max-w-2xl mx-auto mt-12 text-center">
+          <p className="text-sm text-muted-foreground">
+            You spent $200+ on race entry, $150 on a wetsuit, and $5,000 on a
+            bike. The plan that ties it all together costs less than two gels.
+          </p>
         </div>
       </div>
     </section>

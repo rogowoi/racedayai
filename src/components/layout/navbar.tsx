@@ -1,7 +1,14 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Activity, Calendar, Map, CheckCircle2 } from "lucide-react";
+import {
+  Menu,
+  Zap,
+  ArrowRight,
+  TrendingUp,
+  Map,
+  DollarSign,
+} from "lucide-react";
 
 export function Navbar() {
   return (
@@ -9,8 +16,12 @@ export function Navbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-          <Activity className="h-6 w-6 text-primary" />
-          <span>RaceDayAI</span>
+          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+            <Zap className="h-4 w-4 text-primary-foreground" />
+          </div>
+          <span>
+            RaceDay<span className="text-primary">AI</span>
+          </span>
         </Link>
 
         {/* Desktop Nav */}
@@ -39,12 +50,15 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-4">
           <Link
             href="/login"
-            className="text-sm font-medium hover:text-primary"
+            className="text-sm font-medium hover:text-primary transition-colors"
           >
             Log in
           </Link>
-          <Button asChild>
-            <Link href="/wizard">Get Started</Link>
+          <Button className="font-semibold" asChild>
+            <Link href="/wizard">
+              Build My Plan
+              <ArrowRight className="ml-1.5 h-4 w-4" />
+            </Link>
           </Button>
         </div>
 
@@ -61,23 +75,23 @@ export function Navbar() {
               <div className="flex flex-col gap-4 text-base font-medium">
                 <Link
                   href="#features"
-                  className="flex items-center gap-2 py-2 hover:text-primary"
+                  className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
                 >
-                  <CheckCircle2 className="h-5 w-5" />
+                  <TrendingUp className="h-5 w-5 text-muted-foreground" />
                   Features
                 </Link>
                 <Link
                   href="#how-it-works"
-                  className="flex items-center gap-2 py-2 hover:text-primary"
+                  className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
                 >
-                  <Map className="h-5 w-5" />
+                  <Map className="h-5 w-5 text-muted-foreground" />
                   How it Works
                 </Link>
                 <Link
                   href="#pricing"
-                  className="flex items-center gap-2 py-2 hover:text-primary"
+                  className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
                 >
-                  <Calendar className="h-5 w-5" />
+                  <DollarSign className="h-5 w-5 text-muted-foreground" />
                   Pricing
                 </Link>
               </div>
@@ -85,13 +99,16 @@ export function Navbar() {
               <div className="flex flex-col gap-3 mt-auto">
                 <Button
                   variant="outline"
-                  className="w-full justify-start"
+                  className="w-full justify-center"
                   asChild
                 >
                   <Link href="/login">Log in</Link>
                 </Button>
-                <Button className="w-full" size="lg" asChild>
-                  <Link href="/wizard">Get Your Race Plan</Link>
+                <Button className="w-full font-semibold" size="lg" asChild>
+                  <Link href="/wizard">
+                    Build My Race Plan
+                    <ArrowRight className="ml-1.5 h-4 w-4" />
+                  </Link>
                 </Button>
               </div>
             </div>

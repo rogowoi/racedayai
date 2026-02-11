@@ -48,7 +48,7 @@ export default function PricingLayout({
   const seasonPassSchema = generateProductSchema({
     name: "RaceDayAI Season Pass",
     description:
-      "Complete access to Half IRONMAN (70.3) and Full IRONMAN race planning with weather adjustments, advanced nutrition, and course analysis. Up to 10 plans per season.",
+      "Complete access to Half IRONMAN (70.3) and Full IRONMAN race planning with weather adjustments, advanced nutrition, and course analysis. Up to 6 plans per season.",
     price: "39",
     currency: "USD",
     imageUrl: "https://racedayai.com/og-image.png",
@@ -58,7 +58,7 @@ export default function PricingLayout({
     name: "RaceDayAI Unlimited",
     description:
       "Unlimited race plans for all distances including IRONMAN. Perfect for coaches managing multiple athletes or serious age-groupers racing frequently.",
-    price: "149",
+    price: "99",
     currency: "USD",
     imageUrl: "https://racedayai.com/og-image.png",
   });
