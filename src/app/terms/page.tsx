@@ -189,6 +189,9 @@ export default function TermsPage() {
         </div>
 
         <div className="mt-12 pt-8 border-t">
+          <p className="text-sm text-muted-foreground mb-4">
+            Last updated: February 11, 2026
+          </p>
           <Link
             href="/"
             className="text-sm text-primary hover:underline"

@@ -1,60 +1,40 @@
-"use client";
+import type { Metadata } from "next";
+import WizardLayoutClient from "./wizard-layout";
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { X, ChevronLeft } from "lucide-react";
-import { useWizardStore } from "@/stores/wizard-store";
+export const metadata: Metadata = {
+  title: "Create Race Plan",
+  description:
+    "Generate your personalized triathlon race execution plan in minutes. Enter your fitness data, select your race, upload the course, and get AI-powered pacing, nutrition, and race-day strategy.",
+  keywords: [
+    "create race plan",
+    "triathlon race planner",
+    "race execution plan",
+    "pacing calculator",
+    "triathlon nutrition plan",
+  ],
+  openGraph: {
+    title: "Create Race Plan — RaceDayAI",
+    description:
+      "Generate your personalized race execution plan with AI-powered pacing and nutrition strategy.",
+    url: "https://racedayai.com/wizard",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Create Race Plan — RaceDayAI",
+    description:
+      "Build your custom race execution plan with AI-powered recommendations.",
+  },
+  robots: {
+    index: false, // Don't index the wizard page (conversion funnel)
+    follow: true,
+  },
+};
 
 export default function WizardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const step = useWizardStore((state) => state.step);
-  const totalSteps = 3;
-  const progress = (step / totalSteps) * 100;
-
-  return (
-    <div className="min-h-screen flex flex-col bg-background">
-      {/* Wizard Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            {step > 1 && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => useWizardStore.getState().setStep(step - 1)}
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </Button>
-            )}
-            <span className="font-semibold text-sm">
-              Step {step} of {totalSteps}
-            </span>
-          </div>
-
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/">
-              <X className="h-5 w-5" />
-              <span className="sr-only">Exit</span>
-            </Link>
-          </Button>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="h-1 w-full bg-muted">
-          <div
-            className="h-full bg-primary transition-all duration-500 ease-out"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </header>
-
-      {/* Content */}
-      <main className="flex-1 w-full max-w-md mx-auto p-4 md:py-8">
-        {children}
-      </main>
-    </div>
-  );
+  return <WizardLayoutClient>{children}</WizardLayoutClient>;
 }

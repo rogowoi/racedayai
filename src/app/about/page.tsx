@@ -219,7 +219,8 @@ export default function AboutPage() {
 
       <footer className="border-t py-6 md:py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} RaceDayAI. All rights reserved.
+          <p className="mb-2">Last updated: February 11, 2026</p>
+          <p>© {new Date().getFullYear()} RaceDayAI. All rights reserved.</p>
         </div>
       </footer>
     </div>
