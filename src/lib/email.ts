@@ -62,7 +62,7 @@ export async function sendContactEmail(data: {
     await resend.emails.send({
       from: FROM_EMAIL,
       to: "support@racedayai.com",
-      replyTo: data.email,
+      reply_to: data.email,
       subject: `[Contact] ${data.subject}: from ${data.name}`,
       html: contactEmailHtml(data),
     });

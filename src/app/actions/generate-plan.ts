@@ -12,7 +12,8 @@ import { getRaceWeather } from "@/lib/weather";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { checkCanCreatePlan, incrementPlanCount, getPlanUsage } from "@/lib/plan-limits";
-import { getPlanLimits } from "@/lib/stripe";
+import { getPlanLimits, isPaidPlan } from "@/lib/stripe";
+import { generateRaceNarrative } from "@/lib/engine/narrative";
 
 export async function generateRacePlan(formData: FormData) {
   const session = await auth();
@@ -163,7 +164,43 @@ export async function generateRacePlan(formData: FormData) {
     },
   });
 
-  // 6. Increment plan count after successful creation
+  // 6. Generate AI narrative for paid users (non-blocking)
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { plan: true },
+  });
+
+  if (user && isPaidPlan(user.plan)) {
+    const narrative = await generateRaceNarrative({
+      raceName: raceData.name,
+      distanceCategory: raceData.distanceCategory,
+      raceDate: raceDate.toLocaleDateString(),
+      weatherTempC: weather.tempC,
+      weatherHumidity: weather.humidity,
+      swimPacePer100m: formatPaceStr(swimPacing.targetPaceSec),
+      bikeTargetPower: bikePacing.targetPower,
+      bikeSpeedKph: bikePacing.targetSpeedKph,
+      runTargetPace: formatPaceStr(runPacing.targetPaceSec),
+      carbsPerHour: nutrition.carbsPerHour,
+      fluidPerHour: nutrition.fluidPerHour,
+      predictedFinish: formatFinishTime(
+        (swimPacing.estimatedTimeMin +
+          bikePacing.durationMinutes +
+          runPacing.estimatedTimeMin) * 60
+      ),
+      elevationGainM: courseData.elevationGainM,
+      athleteWeight: Number(athlete.weightKg) || undefined,
+    });
+
+    if (narrative) {
+      await prisma.racePlan.update({
+        where: { id: plan.id },
+        data: { narrativePlan: narrative },
+      });
+    }
+  }
+
+  // 7. Increment plan count after successful creation
   await incrementPlanCount(userId);
 
   redirect(`/plan/${plan.id}`);
@@ -193,4 +230,17 @@ function getRunDist(cat: string): number {
   if (cat === "70.3") return 21100;
   if (cat === "140.6") return 42200;
   return 10000;
+}
+
+function formatPaceStr(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
+function formatFinishTime(seconds: number): string {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  return `${h}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 }
