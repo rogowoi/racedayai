@@ -61,6 +61,18 @@ export default async function SettingsPage({
         hasStripeCustomer={!!user.stripeCustomerId}
         showSuccess={params.billing === "success"}
         showCancelled={params.billing === "cancelled"}
+        autoUpgradePlan={
+          typeof params.upgrade === "string" &&
+          (params.upgrade === "season" || params.upgrade === "unlimited")
+            ? (params.upgrade as "season" | "unlimited")
+            : undefined
+        }
+        autoUpgradeBilling={
+          typeof params.billing === "string" &&
+          (params.billing === "monthly" || params.billing === "annual")
+            ? (params.billing as "monthly" | "annual")
+            : undefined
+        }
       />
     </div>
   );

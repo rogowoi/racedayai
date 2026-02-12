@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Card,
   CardContent,
@@ -20,6 +20,8 @@ interface BillingSectionProps {
   hasStripeCustomer: boolean;
   showSuccess?: boolean;
   showCancelled?: boolean;
+  autoUpgradePlan?: "season" | "unlimited";
+  autoUpgradeBilling?: "monthly" | "annual";
 }
 
 export function BillingSection({
@@ -30,19 +32,22 @@ export function BillingSection({
   hasStripeCustomer,
   showSuccess,
   showCancelled,
+  autoUpgradePlan,
+  autoUpgradeBilling,
 }: BillingSectionProps) {
   const [loading, setLoading] = useState<string | null>(null);
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">(
-    "annual",
+    autoUpgradeBilling ?? "annual",
   );
+  const autoUpgradeTriggered = useRef(false);
 
-  const handleUpgrade = async (planKey: PlanKey) => {
+  const handleUpgrade = async (planKey: PlanKey, billing?: "monthly" | "annual") => {
     setLoading(planKey);
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planKey, billing: billingPeriod }),
+        body: JSON.stringify({ plan: planKey, billing: billing ?? billingPeriod }),
       });
 
       if (res.ok) {
@@ -55,6 +60,15 @@ export function BillingSection({
       setLoading(null);
     }
   };
+
+  // Auto-trigger checkout when redirected from signup with a plan selection
+  useEffect(() => {
+    if (autoUpgradePlan && !autoUpgradeTriggered.current) {
+      autoUpgradeTriggered.current = true;
+      handleUpgrade(autoUpgradePlan, autoUpgradeBilling ?? "annual");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoUpgradePlan, autoUpgradeBilling]);
 
   const handleManageBilling = async () => {
     setLoading("manage");
@@ -72,6 +86,7 @@ export function BillingSection({
   };
 
   const isUnlimited = plansLimit === Infinity;
+  const isPaid = currentPlan === "season" || currentPlan === "unlimited";
 
   return (
     <div className="space-y-6">
@@ -156,8 +171,8 @@ export function BillingSection({
         </CardContent>
       </Card>
 
-      {/* Billing Period Toggle */}
-      {currentPlan === "free" && (
+      {/* Billing Period Toggle — show for free and season users (not unlimited) */}
+      {currentPlan !== "unlimited" && (
         <div className="flex justify-center gap-2">
           <Button
             variant={billingPeriod === "annual" ? "default" : "outline"}
@@ -184,6 +199,11 @@ export function BillingSection({
           const price =
             billingPeriod === "annual" ? plan.annualPrice : plan.monthlyPrice;
 
+          // Determine if this plan is a downgrade
+          const planOrder = { free: 0, season: 1, unlimited: 2 } as const;
+          const isDowngrade =
+            (planOrder[planKey] ?? 0) < (planOrder[currentPlan as PlanKey] ?? 0);
+
           return (
             <Card key={planKey} className={isCurrent ? "border-primary" : ""}>
               <CardHeader>
@@ -209,9 +229,21 @@ export function BillingSection({
                   <Button disabled variant="outline" className="w-full">
                     Current Plan
                   </Button>
-                ) : planKey === "free" ? (
+                ) : isDowngrade && hasStripeCustomer ? (
+                  <Button
+                    onClick={handleManageBilling}
+                    disabled={loading === "manage"}
+                    variant="ghost"
+                    className="w-full"
+                  >
+                    {loading === "manage" && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Downgrade via Billing Portal
+                  </Button>
+                ) : isDowngrade ? (
                   <Button disabled variant="ghost" className="w-full">
-                    Downgrade to Free
+                    Free Plan
                   </Button>
                 ) : (
                   <Button
@@ -222,7 +254,7 @@ export function BillingSection({
                     {loading === planKey && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
-                    {currentPlan === "free" ? "Upgrade" : "Switch Plan"}
+                    {isPaid ? "Switch Plan" : "Upgrade"}
                   </Button>
                 )}
               </CardContent>

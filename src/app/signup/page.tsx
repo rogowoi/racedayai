@@ -14,11 +14,24 @@ import { signUp } from "@/app/actions/auth-actions";
 import { Zap, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useActionState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function SignUpPage() {
+function SignUpForm() {
+  const searchParams = useSearchParams();
+  const plan = searchParams.get("plan"); // "season" | "unlimited" | null
+  const billing = searchParams.get("billing"); // "monthly" | "annual" | null
+
   const [state, formAction, isPending] = useActionState(signUp, {
     error: null,
   });
+
+  const planLabel =
+    plan === "season"
+      ? "Season Pass"
+      : plan === "unlimited"
+        ? "Pro"
+        : null;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -40,7 +53,9 @@ export default function SignUpPage() {
             Create Your Account
           </h1>
           <p className="text-muted-foreground">
-            Your first race plan is free &mdash; no credit card required
+            {planLabel
+              ? `Sign up to get the ${planLabel} plan`
+              : "Your first race plan is free \u2014 no credit card required"}
           </p>
         </div>
 
@@ -56,6 +71,12 @@ export default function SignUpPage() {
                   <AlertCircle className="h-4 w-4 shrink-0" />
                   <span>{state.error}</span>
                 </div>
+              )}
+
+              {/* Pass plan selection through to the server action */}
+              {plan && <input type="hidden" name="plan" value={plan} />}
+              {billing && (
+                <input type="hidden" name="billing" value={billing} />
               )}
 
               <div className="space-y-2">
@@ -108,6 +129,8 @@ export default function SignUpPage() {
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Creating account...
                   </>
+                ) : planLabel ? (
+                  `Sign Up & Get ${planLabel}`
                 ) : (
                   "Create Free Account"
                 )}
@@ -147,5 +170,13 @@ export default function SignUpPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense>
+      <SignUpForm />
+    </Suspense>
   );
 }
