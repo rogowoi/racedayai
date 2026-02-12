@@ -1,0 +1,1833 @@
+{
+  "metadata": {
+    "dataset": "Half Ironman / IRONMAN 70.3",
+    "date_generated": "2026-02-12",
+    "description": "Split ratio analysis for pacing recommendations",
+    "min_samples": 50
+  },
+  "by_percentile_band": {
+    "top_10pct": {
+      "count": 83991,
+      "avg_total_min": 282.9,
+      "splits": {
+        "swim": {
+          "mean": 11.15,
+          "median": 11.11,
+          "std": 1.29
+        },
+        "bike": {
+          "mean": 53.07,
+          "median": 53.12,
+          "std": 2.13
+        },
+        "run": {
+          "mean": 33.79,
+          "median": 33.7,
+          "std": 2.01
+        }
+      }
+    },
+    "top_25pct": {
+      "count": 209993,
+      "avg_total_min": 297.29,
+      "splits": {
+        "swim": {
+          "mean": 11.19,
+          "median": 11.15,
+          "std": 1.39
+        },
+        "bike": {
+          "mean": 52.59,
+          "median": 52.63,
+          "std": 2.35
+        },
+        "run": {
+          "mean": 34.11,
+          "median": 34.0,
+          "std": 2.27
+        }
+      }
+    },
+    "25_50pct": {
+      "count": 210040,
+      "avg_total_min": 332.1,
+      "splits": {
+        "swim": {
+          "mean": 11.19,
+          "median": 11.14,
+          "std": 1.59
+        },
+        "bike": {
+          "mean": 51.37,
+          "median": 51.33,
+          "std": 2.76
+        },
+        "run": {
+          "mean": 35.08,
+          "median": 34.97,
+          "std": 2.81
+        }
+      }
+    },
+    "50_75pct": {
+      "count": 210006,
+      "avg_total_min": 362.8,
+      "splits": {
+        "swim": {
+          "mean": 11.08,
+          "median": 10.99,
+          "std": 1.73
+        },
+        "bike": {
+          "mean": 50.31,
+          "median": 50.23,
+          "std": 3.17
+        },
+        "run": {
+          "mean": 36.11,
+          "median": 36.02,
+          "std": 3.28
+        }
+      }
+    },
+    "bottom_25pct": {
+      "count": 210007,
+      "avg_total_min": 416.38,
+      "splits": {
+        "swim": {
+          "mean": 10.9,
+          "median": 10.75,
+          "std": 1.94
+        },
+        "bike": {
+          "mean": 48.72,
+          "median": 48.58,
+          "std": 3.78
+        },
+        "run": {
+          "mean": 37.85,
+          "median": 37.84,
+          "std": 3.84
+        }
+      }
+    }
+  },
+  "by_cohort_and_percentile": {
+    "F_00": {
+      "count": 6329,
+      "by_percentile": {
+        "10": {
+          "count": 632,
+          "avg_total_min": 258.34,
+          "swim_pct": 10.41,
+          "bike_pct": 55.22,
+          "run_pct": 32.88
+        },
+        "20": {
+          "count": 632,
+          "avg_total_min": 264.19,
+          "swim_pct": 10.45,
+          "bike_pct": 55.1,
+          "run_pct": 32.97
+        },
+        "30": {
+          "count": 634,
+          "avg_total_min": 268.78,
+          "swim_pct": 10.47,
+          "bike_pct": 55.16,
+          "run_pct": 32.88
+        },
+        "40": {
+          "count": 632,
+          "avg_total_min": 272.92,
+          "swim_pct": 10.5,
+          "bike_pct": 55.13,
+          "run_pct": 32.87
+        },
+        "50": {
+          "count": 634,
+          "avg_total_min": 276.88,
+          "swim_pct": 10.46,
+          "bike_pct": 54.94,
+          "run_pct": 33.1
+        },
+        "60": {
+          "count": 633,
+          "avg_total_min": 281.11,
+          "swim_pct": 10.46,
+          "bike_pct": 55.14,
+          "run_pct": 32.9
+        },
+        "70": {
+          "count": 632,
+          "avg_total_min": 285.81,
+          "swim_pct": 10.47,
+          "bike_pct": 55.0,
+          "run_pct": 33.01
+        },
+        "80": {
+          "count": 632,
+          "avg_total_min": 291.8,
+          "swim_pct": 10.38,
+          "bike_pct": 55.28,
+          "run_pct": 32.79
+        },
+        "90": {
+          "count": 634,
+          "avg_total_min": 301.23,
+          "swim_pct": 10.37,
+          "bike_pct": 55.11,
+          "run_pct": 32.93
+        }
+      }
+    },
+    "F_18-24": {
+      "count": 8129,
+      "by_percentile": {
+        "10": {
+          "count": 813,
+          "avg_total_min": 308.41,
+          "swim_pct": 10.37,
+          "bike_pct": 53.83,
+          "run_pct": 33.98
+        },
+        "20": {
+          "count": 814,
+          "avg_total_min": 325.46,
+          "swim_pct": 10.34,
+          "bike_pct": 53.23,
+          "run_pct": 34.52
+        },
+        "30": {
+          "count": 813,
+          "avg_total_min": 339.61,
+          "swim_pct": 10.39,
+          "bike_pct": 52.73,
+          "run_pct": 34.86
+        },
+        "40": {
+          "count": 812,
+          "avg_total_min": 352.21,
+          "swim_pct": 10.35,
+          "bike_pct": 52.52,
+          "run_pct": 34.99
+        },
+        "50": {
+          "count": 813,
+          "avg_total_min": 365.5,
+          "swim_pct": 10.24,
+          "bike_pct": 52.04,
+          "run_pct": 35.54
+        },
+        "60": {
+          "count": 813,
+          "avg_total_min": 379.47,
+          "swim_pct": 10.24,
+          "bike_pct": 51.87,
+          "run_pct": 35.62
+        },
+        "70": {
+          "count": 813,
+          "avg_total_min": 394.02,
+          "swim_pct": 10.05,
+          "bike_pct": 51.74,
+          "run_pct": 35.92
+        },
+        "80": {
+          "count": 813,
+          "avg_total_min": 412.64,
+          "swim_pct": 10.13,
+          "bike_pct": 50.86,
+          "run_pct": 36.7
+        },
+        "90": {
+          "count": 813,
+          "avg_total_min": 440.36,
+          "swim_pct": 9.9,
+          "bike_pct": 50.64,
+          "run_pct": 37.16
+        }
+      }
+    },
+    "F_25-29": {
+      "count": 26130,
+      "by_percentile": {
+        "10": {
+          "count": 2613,
+          "avg_total_min": 307.93,
+          "swim_pct": 10.68,
+          "bike_pct": 53.46,
+          "run_pct": 33.97
+        },
+        "20": {
+          "count": 2614,
+          "avg_total_min": 325.47,
+          "swim_pct": 10.75,
+          "bike_pct": 52.97,
+          "run_pct": 34.25
+        },
+        "30": {
+          "count": 2612,
+          "avg_total_min": 339.89,
+          "swim_pct": 10.67,
+          "bike_pct": 52.64,
+          "run_pct": 34.56
+        },
+        "40": {
+          "count": 2614,
+          "avg_total_min": 352.4,
+          "swim_pct": 10.71,
+          "bike_pct": 52.31,
+          "run_pct": 34.76
+        },
+        "50": {
+          "count": 2611,
+          "avg_total_min": 364.75,
+          "swim_pct": 10.67,
+          "bike_pct": 52.09,
+          "run_pct": 34.96
+        },
+        "60": {
+          "count": 2616,
+          "avg_total_min": 378.08,
+          "swim_pct": 10.57,
+          "bike_pct": 51.74,
+          "run_pct": 35.34
+        },
+        "70": {
+          "count": 2609,
+          "avg_total_min": 392.48,
+          "swim_pct": 10.5,
+          "bike_pct": 51.33,
+          "run_pct": 35.77
+        },
+        "80": {
+          "count": 2613,
+          "avg_total_min": 410.81,
+          "swim_pct": 10.46,
+          "bike_pct": 50.91,
+          "run_pct": 36.22
+        },
+        "90": {
+          "count": 2615,
+          "avg_total_min": 438.22,
+          "swim_pct": 10.31,
+          "bike_pct": 50.4,
+          "run_pct": 36.89
+        }
+      }
+    },
+    "F_30-34": {
+      "count": 35555,
+      "by_percentile": {
+        "10": {
+          "count": 3555,
+          "avg_total_min": 309.29,
+          "swim_pct": 10.96,
+          "bike_pct": 53.13,
+          "run_pct": 33.99
+        },
+        "20": {
+          "count": 3551,
+          "avg_total_min": 325.94,
+          "swim_pct": 10.94,
+          "bike_pct": 52.76,
+          "run_pct": 34.26
+        },
+        "30": {
+          "count": 3557,
+          "avg_total_min": 339.74,
+          "swim_pct": 10.96,
+          "bike_pct": 52.4,
+          "run_pct": 34.48
+        },
+        "40": {
+          "count": 3562,
+          "avg_total_min": 352.22,
+          "swim_pct": 10.9,
+          "bike_pct": 52.08,
+          "run_pct": 34.77
+        },
+        "50": {
+          "count": 3553,
+          "avg_total_min": 365.07,
+          "swim_pct": 10.93,
+          "bike_pct": 51.74,
+          "run_pct": 35.01
+        },
+        "60": {
+          "count": 3552,
+          "avg_total_min": 378.46,
+          "swim_pct": 10.85,
+          "bike_pct": 51.29,
+          "run_pct": 35.47
+        },
+        "70": {
+          "count": 3558,
+          "avg_total_min": 393.33,
+          "swim_pct": 10.8,
+          "bike_pct": 50.94,
+          "run_pct": 35.84
+        },
+        "80": {
+          "count": 3553,
+          "avg_total_min": 411.52,
+          "swim_pct": 10.78,
+          "bike_pct": 50.54,
+          "run_pct": 36.21
+        },
+        "90": {
+          "count": 3557,
+          "avg_total_min": 439.12,
+          "swim_pct": 10.62,
+          "bike_pct": 49.92,
+          "run_pct": 37.01
+        }
+      }
+    },
+    "F_35-39": {
+      "count": 37189,
+      "by_percentile": {
+        "10": {
+          "count": 3717,
+          "avg_total_min": 313.18,
+          "swim_pct": 11.11,
+          "bike_pct": 52.78,
+          "run_pct": 34.13
+        },
+        "20": {
+          "count": 3718,
+          "avg_total_min": 329.7,
+          "swim_pct": 11.15,
+          "bike_pct": 52.42,
+          "run_pct": 34.31
+        },
+        "30": {
+          "count": 3721,
+          "avg_total_min": 343.08,
+          "swim_pct": 11.08,
+          "bike_pct": 52.03,
+          "run_pct": 34.67
+        },
+        "40": {
+          "count": 3718,
+          "avg_total_min": 355.55,
+          "swim_pct": 11.12,
+          "bike_pct": 51.59,
+          "run_pct": 34.96
+        },
+        "50": {
+          "count": 3717,
+          "avg_total_min": 368.03,
+          "swim_pct": 11.09,
+          "bike_pct": 51.23,
+          "run_pct": 35.29
+        },
+        "60": {
+          "count": 3722,
+          "avg_total_min": 381.23,
+          "swim_pct": 10.99,
+          "bike_pct": 50.8,
+          "run_pct": 35.78
+        },
+        "70": {
+          "count": 3720,
+          "avg_total_min": 395.91,
+          "swim_pct": 10.93,
+          "bike_pct": 50.52,
+          "run_pct": 36.07
+        },
+        "80": {
+          "count": 3717,
+          "avg_total_min": 414.13,
+          "swim_pct": 10.88,
+          "bike_pct": 49.89,
+          "run_pct": 36.73
+        },
+        "90": {
+          "count": 3720,
+          "avg_total_min": 442.38,
+          "swim_pct": 10.8,
+          "bike_pct": 49.32,
+          "run_pct": 37.4
+        }
+      }
+    },
+    "F_40-44": {
+      "count": 35910,
+      "by_percentile": {
+        "10": {
+          "count": 3589,
+          "avg_total_min": 317.26,
+          "swim_pct": 11.13,
+          "bike_pct": 52.53,
+          "run_pct": 34.3
+        },
+        "20": {
+          "count": 3595,
+          "avg_total_min": 333.44,
+          "swim_pct": 11.13,
+          "bike_pct": 52.06,
+          "run_pct": 34.6
+        },
+        "30": {
+          "count": 3589,
+          "avg_total_min": 346.64,
+          "swim_pct": 11.13,
+          "bike_pct": 51.68,
+          "run_pct": 34.88
+        },
+        "40": {
+          "count": 3590,
+          "avg_total_min": 358.6,
+          "swim_pct": 11.11,
+          "bike_pct": 51.26,
+          "run_pct": 35.28
+        },
+        "50": {
+          "count": 3589,
+          "avg_total_min": 370.87,
+          "swim_pct": 11.13,
+          "bike_pct": 50.91,
+          "run_pct": 35.52
+        },
+        "60": {
+          "count": 3596,
+          "avg_total_min": 383.63,
+          "swim_pct": 11.05,
+          "bike_pct": 50.56,
+          "run_pct": 35.9
+        },
+        "70": {
+          "count": 3589,
+          "avg_total_min": 398.2,
+          "swim_pct": 10.96,
+          "bike_pct": 50.12,
+          "run_pct": 36.4
+        },
+        "80": {
+          "count": 3591,
+          "avg_total_min": 416.65,
+          "swim_pct": 10.99,
+          "bike_pct": 49.6,
+          "run_pct": 36.88
+        },
+        "90": {
+          "count": 3591,
+          "avg_total_min": 444.72,
+          "swim_pct": 10.92,
+          "bike_pct": 48.94,
+          "run_pct": 37.62
+        }
+      }
+    },
+    "F_45-49": {
+      "count": 26993,
+      "by_percentile": {
+        "10": {
+          "count": 2699,
+          "avg_total_min": 323.07,
+          "swim_pct": 11.16,
+          "bike_pct": 52.16,
+          "run_pct": 34.58
+        },
+        "20": {
+          "count": 2701,
+          "avg_total_min": 338.57,
+          "swim_pct": 11.17,
+          "bike_pct": 51.61,
+          "run_pct": 34.99
+        },
+        "30": {
+          "count": 2698,
+          "avg_total_min": 351.12,
+          "swim_pct": 11.17,
+          "bike_pct": 51.3,
+          "run_pct": 35.21
+        },
+        "40": {
+          "count": 2699,
+          "avg_total_min": 363.02,
+          "swim_pct": 11.13,
+          "bike_pct": 50.95,
+          "run_pct": 35.5
+        },
+        "50": {
+          "count": 2698,
+          "avg_total_min": 375.13,
+          "swim_pct": 11.1,
+          "bike_pct": 50.57,
+          "run_pct": 35.88
+        },
+        "60": {
+          "count": 2700,
+          "avg_total_min": 387.71,
+          "swim_pct": 10.98,
+          "bike_pct": 50.29,
+          "run_pct": 36.22
+        },
+        "70": {
+          "count": 2701,
+          "avg_total_min": 402.05,
+          "swim_pct": 10.94,
+          "bike_pct": 49.94,
+          "run_pct": 36.58
+        },
+        "80": {
+          "count": 2698,
+          "avg_total_min": 419.75,
+          "swim_pct": 10.97,
+          "bike_pct": 49.31,
+          "run_pct": 37.17
+        },
+        "90": {
+          "count": 2699,
+          "avg_total_min": 446.49,
+          "swim_pct": 10.87,
+          "bike_pct": 48.72,
+          "run_pct": 37.89
+        }
+      }
+    },
+    "F_50-54": {
+      "count": 16879,
+      "by_percentile": {
+        "10": {
+          "count": 1688,
+          "avg_total_min": 329.11,
+          "swim_pct": 11.06,
+          "bike_pct": 51.74,
+          "run_pct": 35.0
+        },
+        "20": {
+          "count": 1687,
+          "avg_total_min": 344.62,
+          "swim_pct": 11.19,
+          "bike_pct": 51.32,
+          "run_pct": 35.21
+        },
+        "30": {
+          "count": 1689,
+          "avg_total_min": 356.9,
+          "swim_pct": 11.08,
+          "bike_pct": 50.84,
+          "run_pct": 35.72
+        },
+        "40": {
+          "count": 1689,
+          "avg_total_min": 369.02,
+          "swim_pct": 11.1,
+          "bike_pct": 50.65,
+          "run_pct": 35.82
+        },
+        "50": {
+          "count": 1686,
+          "avg_total_min": 381.17,
+          "swim_pct": 11.01,
+          "bike_pct": 50.3,
+          "run_pct": 36.22
+        },
+        "60": {
+          "count": 1688,
+          "avg_total_min": 393.7,
+          "swim_pct": 10.95,
+          "bike_pct": 49.99,
+          "run_pct": 36.55
+        },
+        "70": {
+          "count": 1690,
+          "avg_total_min": 407.77,
+          "swim_pct": 10.87,
+          "bike_pct": 49.62,
+          "run_pct": 36.96
+        },
+        "80": {
+          "count": 1685,
+          "avg_total_min": 425.98,
+          "swim_pct": 10.81,
+          "bike_pct": 49.01,
+          "run_pct": 37.62
+        },
+        "90": {
+          "count": 1688,
+          "avg_total_min": 453.9,
+          "swim_pct": 10.67,
+          "bike_pct": 48.57,
+          "run_pct": 38.22
+        }
+      }
+    },
+    "F_55-59": {
+      "count": 7664,
+      "by_percentile": {
+        "10": {
+          "count": 766,
+          "avg_total_min": 337.35,
+          "swim_pct": 10.99,
+          "bike_pct": 51.37,
+          "run_pct": 35.37
+        },
+        "20": {
+          "count": 766,
+          "avg_total_min": 353.52,
+          "swim_pct": 10.98,
+          "bike_pct": 50.88,
+          "run_pct": 35.8
+        },
+        "30": {
+          "count": 766,
+          "avg_total_min": 366.23,
+          "swim_pct": 11.22,
+          "bike_pct": 50.62,
+          "run_pct": 35.74
+        },
+        "40": {
+          "count": 767,
+          "avg_total_min": 378.08,
+          "swim_pct": 11.02,
+          "bike_pct": 50.37,
+          "run_pct": 36.14
+        },
+        "50": {
+          "count": 766,
+          "avg_total_min": 389.89,
+          "swim_pct": 10.91,
+          "bike_pct": 50.05,
+          "run_pct": 36.53
+        },
+        "60": {
+          "count": 767,
+          "avg_total_min": 402.84,
+          "swim_pct": 10.87,
+          "bike_pct": 49.72,
+          "run_pct": 36.91
+        },
+        "70": {
+          "count": 767,
+          "avg_total_min": 418.02,
+          "swim_pct": 10.7,
+          "bike_pct": 49.28,
+          "run_pct": 37.5
+        },
+        "80": {
+          "count": 766,
+          "avg_total_min": 435.12,
+          "swim_pct": 10.76,
+          "bike_pct": 48.73,
+          "run_pct": 37.97
+        },
+        "90": {
+          "count": 767,
+          "avg_total_min": 461.63,
+          "swim_pct": 10.53,
+          "bike_pct": 48.29,
+          "run_pct": 38.69
+        }
+      }
+    },
+    "F_60-64": {
+      "count": 2766,
+      "by_percentile": {
+        "10": {
+          "count": 276,
+          "avg_total_min": 350.77,
+          "swim_pct": 11.07,
+          "bike_pct": 51.09,
+          "run_pct": 35.47
+        },
+        "20": {
+          "count": 277,
+          "avg_total_min": 366.54,
+          "swim_pct": 11.02,
+          "bike_pct": 50.5,
+          "run_pct": 36.13
+        },
+        "30": {
+          "count": 277,
+          "avg_total_min": 379.91,
+          "swim_pct": 10.99,
+          "bike_pct": 50.04,
+          "run_pct": 36.52
+        },
+        "40": {
+          "count": 277,
+          "avg_total_min": 392.5,
+          "swim_pct": 10.97,
+          "bike_pct": 49.88,
+          "run_pct": 36.71
+        },
+        "50": {
+          "count": 276,
+          "avg_total_min": 404.96,
+          "swim_pct": 10.77,
+          "bike_pct": 49.98,
+          "run_pct": 36.78
+        },
+        "60": {
+          "count": 277,
+          "avg_total_min": 417.99,
+          "swim_pct": 10.8,
+          "bike_pct": 49.5,
+          "run_pct": 37.14
+        },
+        "70": {
+          "count": 276,
+          "avg_total_min": 433.25,
+          "swim_pct": 10.78,
+          "bike_pct": 48.61,
+          "run_pct": 38.07
+        },
+        "80": {
+          "count": 277,
+          "avg_total_min": 452.11,
+          "swim_pct": 10.67,
+          "bike_pct": 48.69,
+          "run_pct": 38.13
+        },
+        "90": {
+          "count": 276,
+          "avg_total_min": 476.3,
+          "swim_pct": 10.53,
+          "bike_pct": 48.12,
+          "run_pct": 38.88
+        }
+      }
+    },
+    "F_65-69": {
+      "count": 665,
+      "by_percentile": {
+        "10": {
+          "count": 66,
+          "avg_total_min": 369.43,
+          "swim_pct": 11.13,
+          "bike_pct": 50.1,
+          "run_pct": 36.44
+        },
+        "20": {
+          "count": 67,
+          "avg_total_min": 386.02,
+          "swim_pct": 10.96,
+          "bike_pct": 49.9,
+          "run_pct": 36.62
+        },
+        "30": {
+          "count": 66,
+          "avg_total_min": 400.87,
+          "swim_pct": 10.76,
+          "bike_pct": 49.3,
+          "run_pct": 37.41
+        },
+        "40": {
+          "count": 67,
+          "avg_total_min": 412.92,
+          "swim_pct": 10.89,
+          "bike_pct": 49.7,
+          "run_pct": 36.9
+        },
+        "50": {
+          "count": 66,
+          "avg_total_min": 423.4,
+          "swim_pct": 10.52,
+          "bike_pct": 49.47,
+          "run_pct": 37.4
+        },
+        "60": {
+          "count": 67,
+          "avg_total_min": 434.1,
+          "swim_pct": 10.88,
+          "bike_pct": 48.66,
+          "run_pct": 38.03
+        },
+        "70": {
+          "count": 66,
+          "avg_total_min": 447.89,
+          "swim_pct": 10.85,
+          "bike_pct": 48.46,
+          "run_pct": 38.16
+        },
+        "80": {
+          "count": 67,
+          "avg_total_min": 463.64,
+          "swim_pct": 10.74,
+          "bike_pct": 47.82,
+          "run_pct": 38.95
+        },
+        "90": {
+          "count": 66,
+          "avg_total_min": 483.24,
+          "swim_pct": 10.68,
+          "bike_pct": 47.79,
+          "run_pct": 39.13
+        }
+      }
+    },
+    "F_70-74": {
+      "count": 165,
+      "by_percentile": {
+        "10": {
+          "count": 16,
+          "avg_total_min": 384.61,
+          "swim_pct": 11.17,
+          "bike_pct": 48.68,
+          "run_pct": 37.88
+        },
+        "20": {
+          "count": 17,
+          "avg_total_min": 402.16,
+          "swim_pct": 11.08,
+          "bike_pct": 49.27,
+          "run_pct": 37.04
+        },
+        "30": {
+          "count": 16,
+          "avg_total_min": 417.57,
+          "swim_pct": 10.84,
+          "bike_pct": 48.09,
+          "run_pct": 38.65
+        },
+        "40": {
+          "count": 17,
+          "avg_total_min": 437.89,
+          "swim_pct": 10.55,
+          "bike_pct": 48.36,
+          "run_pct": 38.3
+        },
+        "50": {
+          "count": 16,
+          "avg_total_min": 454.1,
+          "swim_pct": 11.31,
+          "bike_pct": 47.33,
+          "run_pct": 39.06
+        },
+        "60": {
+          "count": 17,
+          "avg_total_min": 464.65,
+          "swim_pct": 10.1,
+          "bike_pct": 49.08,
+          "run_pct": 38.57
+        },
+        "70": {
+          "count": 16,
+          "avg_total_min": 478.48,
+          "swim_pct": 10.73,
+          "bike_pct": 47.44,
+          "run_pct": 39.3
+        },
+        "80": {
+          "count": 17,
+          "avg_total_min": 490.18,
+          "swim_pct": 11.57,
+          "bike_pct": 46.86,
+          "run_pct": 39.28
+        },
+        "90": {
+          "count": 16,
+          "avg_total_min": 504.81,
+          "swim_pct": 10.77,
+          "bike_pct": 47.23,
+          "run_pct": 39.82
+        }
+      }
+    },
+    "M_00": {
+      "count": 10282,
+      "by_percentile": {
+        "10": {
+          "count": 1025,
+          "avg_total_min": 231.64,
+          "swim_pct": 10.43,
+          "bike_pct": 55.03,
+          "run_pct": 33.07
+        },
+        "20": {
+          "count": 1029,
+          "avg_total_min": 236.83,
+          "swim_pct": 10.45,
+          "bike_pct": 55.06,
+          "run_pct": 33.0
+        },
+        "30": {
+          "count": 1030,
+          "avg_total_min": 240.74,
+          "swim_pct": 10.44,
+          "bike_pct": 55.07,
+          "run_pct": 32.98
+        },
+        "40": {
+          "count": 1024,
+          "avg_total_min": 244.45,
+          "swim_pct": 10.43,
+          "bike_pct": 54.99,
+          "run_pct": 33.06
+        },
+        "50": {
+          "count": 1032,
+          "avg_total_min": 248.3,
+          "swim_pct": 10.4,
+          "bike_pct": 55.15,
+          "run_pct": 32.9
+        },
+        "60": {
+          "count": 1028,
+          "avg_total_min": 252.49,
+          "swim_pct": 10.4,
+          "bike_pct": 55.02,
+          "run_pct": 33.0
+        },
+        "70": {
+          "count": 1026,
+          "avg_total_min": 257.27,
+          "swim_pct": 10.43,
+          "bike_pct": 54.99,
+          "run_pct": 33.0
+        },
+        "80": {
+          "count": 1029,
+          "avg_total_min": 263.57,
+          "swim_pct": 10.36,
+          "bike_pct": 54.9,
+          "run_pct": 33.13
+        },
+        "90": {
+          "count": 1028,
+          "avg_total_min": 275.1,
+          "swim_pct": 10.38,
+          "bike_pct": 54.53,
+          "run_pct": 33.45
+        }
+      }
+    },
+    "M_18-24": {
+      "count": 22484,
+      "by_percentile": {
+        "10": {
+          "count": 2252,
+          "avg_total_min": 276.7,
+          "swim_pct": 10.82,
+          "bike_pct": 53.66,
+          "run_pct": 33.63
+        },
+        "20": {
+          "count": 2245,
+          "avg_total_min": 292.89,
+          "swim_pct": 10.91,
+          "bike_pct": 52.97,
+          "run_pct": 34.13
+        },
+        "30": {
+          "count": 2250,
+          "avg_total_min": 306.74,
+          "swim_pct": 10.87,
+          "bike_pct": 52.55,
+          "run_pct": 34.47
+        },
+        "40": {
+          "count": 2250,
+          "avg_total_min": 319.81,
+          "swim_pct": 10.92,
+          "bike_pct": 51.99,
+          "run_pct": 34.9
+        },
+        "50": {
+          "count": 2245,
+          "avg_total_min": 332.51,
+          "swim_pct": 10.88,
+          "bike_pct": 51.48,
+          "run_pct": 35.33
+        },
+        "60": {
+          "count": 2250,
+          "avg_total_min": 345.99,
+          "swim_pct": 10.75,
+          "bike_pct": 51.06,
+          "run_pct": 35.82
+        },
+        "70": {
+          "count": 2247,
+          "avg_total_min": 361.41,
+          "swim_pct": 10.8,
+          "bike_pct": 50.48,
+          "run_pct": 36.32
+        },
+        "80": {
+          "count": 2247,
+          "avg_total_min": 380.87,
+          "swim_pct": 10.61,
+          "bike_pct": 49.97,
+          "run_pct": 36.99
+        },
+        "90": {
+          "count": 2250,
+          "avg_total_min": 410.05,
+          "swim_pct": 10.55,
+          "bike_pct": 49.33,
+          "run_pct": 37.67
+        }
+      }
+    },
+    "M_25-29": {
+      "count": 63093,
+      "by_percentile": {
+        "10": {
+          "count": 6308,
+          "avg_total_min": 279.63,
+          "swim_pct": 11.07,
+          "bike_pct": 53.46,
+          "run_pct": 33.51
+        },
+        "20": {
+          "count": 6313,
+          "avg_total_min": 296.06,
+          "swim_pct": 11.17,
+          "bike_pct": 52.71,
+          "run_pct": 34.01
+        },
+        "30": {
+          "count": 6307,
+          "avg_total_min": 310.21,
+          "swim_pct": 11.15,
+          "bike_pct": 52.19,
+          "run_pct": 34.48
+        },
+        "40": {
+          "count": 6304,
+          "avg_total_min": 322.84,
+          "swim_pct": 11.12,
+          "bike_pct": 51.75,
+          "run_pct": 34.82
+        },
+        "50": {
+          "count": 6312,
+          "avg_total_min": 335.57,
+          "swim_pct": 11.12,
+          "bike_pct": 51.38,
+          "run_pct": 35.11
+        },
+        "60": {
+          "count": 6316,
+          "avg_total_min": 348.55,
+          "swim_pct": 11.0,
+          "bike_pct": 50.88,
+          "run_pct": 35.65
+        },
+        "70": {
+          "count": 6301,
+          "avg_total_min": 362.88,
+          "swim_pct": 10.97,
+          "bike_pct": 50.57,
+          "run_pct": 35.96
+        },
+        "80": {
+          "count": 6317,
+          "avg_total_min": 381.68,
+          "swim_pct": 10.89,
+          "bike_pct": 49.76,
+          "run_pct": 36.84
+        },
+        "90": {
+          "count": 6306,
+          "avg_total_min": 410.1,
+          "swim_pct": 10.8,
+          "bike_pct": 48.96,
+          "run_pct": 37.72
+        }
+      }
+    },
+    "M_30-34": {
+      "count": 102127,
+      "by_percentile": {
+        "10": {
+          "count": 10214,
+          "avg_total_min": 282.4,
+          "swim_pct": 11.23,
+          "bike_pct": 53.11,
+          "run_pct": 33.62
+        },
+        "20": {
+          "count": 10199,
+          "avg_total_min": 298.19,
+          "swim_pct": 11.32,
+          "bike_pct": 52.44,
+          "run_pct": 34.08
+        },
+        "30": {
+          "count": 10220,
+          "avg_total_min": 311.5,
+          "swim_pct": 11.32,
+          "bike_pct": 51.88,
+          "run_pct": 34.53
+        },
+        "40": {
+          "count": 10216,
+          "avg_total_min": 323.68,
+          "swim_pct": 11.31,
+          "bike_pct": 51.42,
+          "run_pct": 34.92
+        },
+        "50": {
+          "count": 10212,
+          "avg_total_min": 335.66,
+          "swim_pct": 11.25,
+          "bike_pct": 51.03,
+          "run_pct": 35.29
+        },
+        "60": {
+          "count": 10207,
+          "avg_total_min": 348.32,
+          "swim_pct": 11.21,
+          "bike_pct": 50.59,
+          "run_pct": 35.73
+        },
+        "70": {
+          "count": 10219,
+          "avg_total_min": 362.61,
+          "swim_pct": 11.15,
+          "bike_pct": 50.09,
+          "run_pct": 36.24
+        },
+        "80": {
+          "count": 10207,
+          "avg_total_min": 381.15,
+          "swim_pct": 11.06,
+          "bike_pct": 49.46,
+          "run_pct": 36.93
+        },
+        "90": {
+          "count": 10216,
+          "avg_total_min": 408.99,
+          "swim_pct": 10.95,
+          "bike_pct": 48.63,
+          "run_pct": 37.86
+        }
+      }
+    },
+    "M_35-39": {
+      "count": 123729,
+      "by_percentile": {
+        "10": {
+          "count": 12378,
+          "avg_total_min": 286.16,
+          "swim_pct": 11.35,
+          "bike_pct": 52.73,
+          "run_pct": 33.85
+        },
+        "20": {
+          "count": 12366,
+          "avg_total_min": 301.51,
+          "swim_pct": 11.41,
+          "bike_pct": 52.11,
+          "run_pct": 34.28
+        },
+        "30": {
+          "count": 12371,
+          "avg_total_min": 314.48,
+          "swim_pct": 11.41,
+          "bike_pct": 51.56,
+          "run_pct": 34.73
+        },
+        "40": {
+          "count": 12371,
+          "avg_total_min": 326.21,
+          "swim_pct": 11.37,
+          "bike_pct": 51.14,
+          "run_pct": 35.1
+        },
+        "50": {
+          "count": 12385,
+          "avg_total_min": 337.86,
+          "swim_pct": 11.32,
+          "bike_pct": 50.67,
+          "run_pct": 35.56
+        },
+        "60": {
+          "count": 12361,
+          "avg_total_min": 350.14,
+          "swim_pct": 11.24,
+          "bike_pct": 50.24,
+          "run_pct": 36.01
+        },
+        "70": {
+          "count": 12375,
+          "avg_total_min": 364.1,
+          "swim_pct": 11.24,
+          "bike_pct": 49.74,
+          "run_pct": 36.48
+        },
+        "80": {
+          "count": 12371,
+          "avg_total_min": 382.1,
+          "swim_pct": 11.14,
+          "bike_pct": 49.04,
+          "run_pct": 37.26
+        },
+        "90": {
+          "count": 12379,
+          "avg_total_min": 409.56,
+          "swim_pct": 11.04,
+          "bike_pct": 48.18,
+          "run_pct": 38.21
+        }
+      }
+    },
+    "M_40-44": {
+      "count": 123659,
+      "by_percentile": {
+        "10": {
+          "count": 12369,
+          "avg_total_min": 290.54,
+          "swim_pct": 11.37,
+          "bike_pct": 52.43,
+          "run_pct": 34.05
+        },
+        "20": {
+          "count": 12364,
+          "avg_total_min": 305.67,
+          "swim_pct": 11.38,
+          "bike_pct": 51.92,
+          "run_pct": 34.43
+        },
+        "30": {
+          "count": 12363,
+          "avg_total_min": 318.15,
+          "swim_pct": 11.36,
+          "bike_pct": 51.37,
+          "run_pct": 34.89
+        },
+        "40": {
+          "count": 12360,
+          "avg_total_min": 329.62,
+          "swim_pct": 11.34,
+          "bike_pct": 50.92,
+          "run_pct": 35.29
+        },
+        "50": {
+          "count": 12375,
+          "avg_total_min": 341.06,
+          "swim_pct": 11.28,
+          "bike_pct": 50.47,
+          "run_pct": 35.74
+        },
+        "60": {
+          "count": 12369,
+          "avg_total_min": 352.9,
+          "swim_pct": 11.23,
+          "bike_pct": 50.03,
+          "run_pct": 36.19
+        },
+        "70": {
+          "count": 12356,
+          "avg_total_min": 366.77,
+          "swim_pct": 11.2,
+          "bike_pct": 49.48,
+          "run_pct": 36.74
+        },
+        "80": {
+          "count": 12372,
+          "avg_total_min": 384.38,
+          "swim_pct": 11.12,
+          "bike_pct": 48.86,
+          "run_pct": 37.42
+        },
+        "90": {
+          "count": 12365,
+          "avg_total_min": 411.37,
+          "swim_pct": 11.06,
+          "bike_pct": 47.92,
+          "run_pct": 38.42
+        }
+      }
+    },
+    "M_45-49": {
+      "count": 92523,
+      "by_percentile": {
+        "10": {
+          "count": 9246,
+          "avg_total_min": 294.2,
+          "swim_pct": 11.32,
+          "bike_pct": 52.31,
+          "run_pct": 34.14
+        },
+        "20": {
+          "count": 9257,
+          "avg_total_min": 309.39,
+          "swim_pct": 11.37,
+          "bike_pct": 51.77,
+          "run_pct": 34.5
+        },
+        "30": {
+          "count": 9256,
+          "avg_total_min": 321.69,
+          "swim_pct": 11.32,
+          "bike_pct": 51.23,
+          "run_pct": 34.98
+        },
+        "40": {
+          "count": 9249,
+          "avg_total_min": 333.02,
+          "swim_pct": 11.26,
+          "bike_pct": 50.85,
+          "run_pct": 35.37
+        },
+        "50": {
+          "count": 9246,
+          "avg_total_min": 344.33,
+          "swim_pct": 11.23,
+          "bike_pct": 50.37,
+          "run_pct": 35.82
+        },
+        "60": {
+          "count": 9254,
+          "avg_total_min": 356.03,
+          "swim_pct": 11.22,
+          "bike_pct": 49.92,
+          "run_pct": 36.25
+        },
+        "70": {
+          "count": 9259,
+          "avg_total_min": 369.95,
+          "swim_pct": 11.1,
+          "bike_pct": 49.39,
+          "run_pct": 36.87
+        },
+        "80": {
+          "count": 9250,
+          "avg_total_min": 387.28,
+          "swim_pct": 11.03,
+          "bike_pct": 48.68,
+          "run_pct": 37.65
+        },
+        "90": {
+          "count": 9254,
+          "avg_total_min": 413.68,
+          "swim_pct": 11.0,
+          "bike_pct": 47.8,
+          "run_pct": 38.56
+        }
+      }
+    },
+    "M_50-54": {
+      "count": 55880,
+      "by_percentile": {
+        "10": {
+          "count": 5588,
+          "avg_total_min": 299.28,
+          "swim_pct": 11.28,
+          "bike_pct": 52.11,
+          "run_pct": 34.34
+        },
+        "20": {
+          "count": 5589,
+          "avg_total_min": 314.18,
+          "swim_pct": 11.31,
+          "bike_pct": 51.58,
+          "run_pct": 34.72
+        },
+        "30": {
+          "count": 5587,
+          "avg_total_min": 326.26,
+          "swim_pct": 11.26,
+          "bike_pct": 51.08,
+          "run_pct": 35.18
+        },
+        "40": {
+          "count": 5585,
+          "avg_total_min": 337.56,
+          "swim_pct": 11.22,
+          "bike_pct": 50.69,
+          "run_pct": 35.52
+        },
+        "50": {
+          "count": 5592,
+          "avg_total_min": 348.73,
+          "swim_pct": 11.17,
+          "bike_pct": 50.25,
+          "run_pct": 35.96
+        },
+        "60": {
+          "count": 5588,
+          "avg_total_min": 360.68,
+          "swim_pct": 11.15,
+          "bike_pct": 49.77,
+          "run_pct": 36.42
+        },
+        "70": {
+          "count": 5590,
+          "avg_total_min": 374.9,
+          "swim_pct": 11.08,
+          "bike_pct": 49.18,
+          "run_pct": 37.07
+        },
+        "80": {
+          "count": 5584,
+          "avg_total_min": 391.92,
+          "swim_pct": 11.06,
+          "bike_pct": 48.51,
+          "run_pct": 37.75
+        },
+        "90": {
+          "count": 5591,
+          "avg_total_min": 418.24,
+          "swim_pct": 10.91,
+          "bike_pct": 47.66,
+          "run_pct": 38.78
+        }
+      }
+    },
+    "M_55-59": {
+      "count": 26448,
+      "by_percentile": {
+        "10": {
+          "count": 2644,
+          "avg_total_min": 306.86,
+          "swim_pct": 11.22,
+          "bike_pct": 51.84,
+          "run_pct": 34.66
+        },
+        "20": {
+          "count": 2643,
+          "avg_total_min": 321.63,
+          "swim_pct": 11.26,
+          "bike_pct": 51.34,
+          "run_pct": 34.98
+        },
+        "30": {
+          "count": 2647,
+          "avg_total_min": 333.92,
+          "swim_pct": 11.22,
+          "bike_pct": 50.83,
+          "run_pct": 35.44
+        },
+        "40": {
+          "count": 2642,
+          "avg_total_min": 345.39,
+          "swim_pct": 11.21,
+          "bike_pct": 50.36,
+          "run_pct": 35.85
+        },
+        "50": {
+          "count": 2643,
+          "avg_total_min": 356.51,
+          "swim_pct": 11.12,
+          "bike_pct": 50.04,
+          "run_pct": 36.21
+        },
+        "60": {
+          "count": 2651,
+          "avg_total_min": 368.65,
+          "swim_pct": 11.08,
+          "bike_pct": 49.49,
+          "run_pct": 36.79
+        },
+        "70": {
+          "count": 2644,
+          "avg_total_min": 382.29,
+          "swim_pct": 11.02,
+          "bike_pct": 48.87,
+          "run_pct": 37.46
+        },
+        "80": {
+          "count": 2642,
+          "avg_total_min": 399.51,
+          "swim_pct": 10.91,
+          "bike_pct": 48.25,
+          "run_pct": 38.17
+        },
+        "90": {
+          "count": 2646,
+          "avg_total_min": 425.28,
+          "swim_pct": 10.9,
+          "bike_pct": 47.52,
+          "run_pct": 38.93
+        }
+      }
+    },
+    "M_60-64": {
+      "count": 10332,
+      "by_percentile": {
+        "10": {
+          "count": 1034,
+          "avg_total_min": 317.59,
+          "swim_pct": 11.26,
+          "bike_pct": 51.28,
+          "run_pct": 35.13
+        },
+        "20": {
+          "count": 1033,
+          "avg_total_min": 332.43,
+          "swim_pct": 11.28,
+          "bike_pct": 50.79,
+          "run_pct": 35.46
+        },
+        "30": {
+          "count": 1034,
+          "avg_total_min": 344.09,
+          "swim_pct": 11.12,
+          "bike_pct": 50.42,
+          "run_pct": 35.96
+        },
+        "40": {
+          "count": 1031,
+          "avg_total_min": 355.26,
+          "swim_pct": 11.26,
+          "bike_pct": 50.12,
+          "run_pct": 36.07
+        },
+        "50": {
+          "count": 1034,
+          "avg_total_min": 367.12,
+          "swim_pct": 11.1,
+          "bike_pct": 49.79,
+          "run_pct": 36.53
+        },
+        "60": {
+          "count": 1033,
+          "avg_total_min": 380.0,
+          "swim_pct": 11.04,
+          "bike_pct": 49.1,
+          "run_pct": 37.24
+        },
+        "70": {
+          "count": 1033,
+          "avg_total_min": 394.16,
+          "swim_pct": 11.03,
+          "bike_pct": 48.55,
+          "run_pct": 37.79
+        },
+        "80": {
+          "count": 1034,
+          "avg_total_min": 412.26,
+          "swim_pct": 11.01,
+          "bike_pct": 47.93,
+          "run_pct": 38.41
+        },
+        "90": {
+          "count": 1033,
+          "avg_total_min": 438.02,
+          "swim_pct": 10.82,
+          "bike_pct": 47.12,
+          "run_pct": 39.46
+        }
+      }
+    },
+    "M_65-69": {
+      "count": 3730,
+      "by_percentile": {
+        "10": {
+          "count": 373,
+          "avg_total_min": 332.68,
+          "swim_pct": 11.11,
+          "bike_pct": 50.73,
+          "run_pct": 35.65
+        },
+        "20": {
+          "count": 372,
+          "avg_total_min": 347.44,
+          "swim_pct": 11.31,
+          "bike_pct": 50.17,
+          "run_pct": 36.02
+        },
+        "30": {
+          "count": 373,
+          "avg_total_min": 359.59,
+          "swim_pct": 11.23,
+          "bike_pct": 49.97,
+          "run_pct": 36.27
+        },
+        "40": {
+          "count": 374,
+          "avg_total_min": 371.26,
+          "swim_pct": 11.4,
+          "bike_pct": 49.54,
+          "run_pct": 36.45
+        },
+        "50": {
+          "count": 373,
+          "avg_total_min": 383.53,
+          "swim_pct": 11.18,
+          "bike_pct": 49.49,
+          "run_pct": 36.75
+        },
+        "60": {
+          "count": 373,
+          "avg_total_min": 395.7,
+          "swim_pct": 11.17,
+          "bike_pct": 48.88,
+          "run_pct": 37.34
+        },
+        "70": {
+          "count": 373,
+          "avg_total_min": 409.34,
+          "swim_pct": 11.13,
+          "bike_pct": 47.96,
+          "run_pct": 38.28
+        },
+        "80": {
+          "count": 373,
+          "avg_total_min": 425.96,
+          "swim_pct": 11.04,
+          "bike_pct": 47.51,
+          "run_pct": 38.85
+        },
+        "90": {
+          "count": 372,
+          "avg_total_min": 452.69,
+          "swim_pct": 10.74,
+          "bike_pct": 47.21,
+          "run_pct": 39.48
+        }
+      }
+    },
+    "M_70-74": {
+      "count": 1146,
+      "by_percentile": {
+        "10": {
+          "count": 114,
+          "avg_total_min": 357.65,
+          "swim_pct": 11.52,
+          "bike_pct": 49.27,
+          "run_pct": 36.58
+        },
+        "20": {
+          "count": 115,
+          "avg_total_min": 373.1,
+          "swim_pct": 10.84,
+          "bike_pct": 49.65,
+          "run_pct": 37.02
+        },
+        "30": {
+          "count": 115,
+          "avg_total_min": 385.66,
+          "swim_pct": 11.41,
+          "bike_pct": 48.78,
+          "run_pct": 37.17
+        },
+        "40": {
+          "count": 115,
+          "avg_total_min": 397.14,
+          "swim_pct": 11.3,
+          "bike_pct": 48.91,
+          "run_pct": 37.08
+        },
+        "50": {
+          "count": 114,
+          "avg_total_min": 408.41,
+          "swim_pct": 11.12,
+          "bike_pct": 48.26,
+          "run_pct": 38.04
+        },
+        "60": {
+          "count": 114,
+          "avg_total_min": 420.94,
+          "swim_pct": 11.28,
+          "bike_pct": 48.42,
+          "run_pct": 37.79
+        },
+        "70": {
+          "count": 115,
+          "avg_total_min": 434.27,
+          "swim_pct": 10.58,
+          "bike_pct": 48.43,
+          "run_pct": 38.51
+        },
+        "80": {
+          "count": 115,
+          "avg_total_min": 452.59,
+          "swim_pct": 11.02,
+          "bike_pct": 47.25,
+          "run_pct": 39.29
+        },
+        "90": {
+          "count": 114,
+          "avg_total_min": 474.32,
+          "swim_pct": 11.01,
+          "bike_pct": 46.82,
+          "run_pct": 39.7
+        }
+      }
+    },
+    "M_75-79": {
+      "count": 213,
+      "by_percentile": {
+        "10": {
+          "count": 21,
+          "avg_total_min": 378.6,
+          "swim_pct": 11.28,
+          "bike_pct": 48.5,
+          "run_pct": 37.27
+        },
+        "20": {
+          "count": 22,
+          "avg_total_min": 398.35,
+          "swim_pct": 10.74,
+          "bike_pct": 48.81,
+          "run_pct": 37.7
+        },
+        "30": {
+          "count": 22,
+          "avg_total_min": 413.93,
+          "swim_pct": 11.29,
+          "bike_pct": 47.56,
+          "run_pct": 38.48
+        },
+        "40": {
+          "count": 20,
+          "avg_total_min": 426.48,
+          "swim_pct": 11.46,
+          "bike_pct": 48.07,
+          "run_pct": 37.94
+        },
+        "50": {
+          "count": 22,
+          "avg_total_min": 438.78,
+          "swim_pct": 11.38,
+          "bike_pct": 47.36,
+          "run_pct": 38.53
+        },
+        "60": {
+          "count": 21,
+          "avg_total_min": 451.18,
+          "swim_pct": 10.79,
+          "bike_pct": 47.75,
+          "run_pct": 38.96
+        },
+        "70": {
+          "count": 21,
+          "avg_total_min": 462.28,
+          "swim_pct": 10.9,
+          "bike_pct": 46.63,
+          "run_pct": 40.2
+        },
+        "80": {
+          "count": 22,
+          "avg_total_min": 475.58,
+          "swim_pct": 10.55,
+          "bike_pct": 46.25,
+          "run_pct": 40.75
+        },
+        "90": {
+          "count": 21,
+          "avg_total_min": 497.44,
+          "swim_pct": 11.22,
+          "bike_pct": 45.14,
+          "run_pct": 41.12
+        }
+      }
+    }
+  },
+  "bike_run_relationship": {
+    "bike_run_correlation": -0.8597,
+    "interpretation": "Negative correlation means higher bike % correlates with lower run %",
+    "heavy_bike_racers": {
+      "count": 220925,
+      "avg_bike_pct": 54.77,
+      "avg_run_pct": 32.45,
+      "avg_total_min": 326.91
+    },
+    "light_bike_racers": {
+      "count": 236504,
+      "avg_bike_pct": 46.59,
+      "avg_run_pct": 39.48,
+      "avg_total_min": 384.7
+    }
+  }
+}
