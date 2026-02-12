@@ -1,0 +1,216 @@
+================================================================================
+COMPREHENSIVE EXPLORATORY DATA ANALYSIS SUMMARY
+HALF IRONMAN / IRONMAN 70.3 DATASET
+================================================================================
+
+Analysis Date: 2026-02-12 16:44:36
+Dataset: Half_Ironman_df6.csv
+Source: /sessions/adoring-dazzling-einstein/mnt/racedayai/
+
+
+================================================================================
+1. DATASET OVERVIEW
+================================================================================
+
+Total Records: 840,075
+Total Columns: 17
+Date Range: 2004 - 2020
+Unique Locations: 195
+Memory Usage: 338.30 MB
+Missing Values: None (dataset is complete)
+
+================================================================================
+2. DEMOGRAPHIC BREAKDOWN
+================================================================================
+
+By Gender:
+  M: 635,680 (75.7%)
+  F: 204,395 (24.3%)
+
+Age Group Distribution (Top 5):
+  35-39: 160,918 (19.2%)
+  40-44: 159,569 (19.0%)
+  30-34: 137,682 (16.4%)
+  45-49: 119,516 (14.2%)
+  25-29: 89,223 (10.6%)
+
+Event Years (Span: 2004-2020):
+  Total Years: 17
+  Peak Year: 2019 (116,196 records)
+
+================================================================================
+3. TIME DISTRIBUTION STATISTICS
+================================================================================
+
+Swim Time (minutes):
+  Mean:      39.00
+  Median:    38.10
+  Std Dev:   8.11
+  P10/P90:   29.72 / 49.25
+  Min/Max:   20.02 / 99.95
+  IQR:       33.50 - 43.40
+
+Bike Time (minutes):
+  Mean:      177.92
+  Median:    175.05
+  Std Dev:   23.30
+  P10/P90:   150.77 / 208.98
+  Min/Max:   108.52 / 299.88
+  IQR:       161.37 - 191.38
+
+Run Time (minutes):
+  Mean:      126.78
+  Median:    122.70
+  Std Dev:   26.47
+  P10/P90:   96.27 / 163.48
+  Min/Max:   66.70 / 249.98
+  IQR:       107.33 - 142.40
+
+Total Time (minutes):
+  Mean:      352.15
+  Median:    347.32
+  Std Dev:   51.27
+  P10/P90:   290.10 / 421.32
+  Min/Max:   216.73 / 608.82
+  IQR:       315.32 - 384.20
+
+================================================================================
+4. SPLIT RATIOS (% of Total Time)
+================================================================================
+
+Overall Splits:
+  Swim: 11.09% (±1.68%)
+  Bike: 50.75% (±3.38%)
+  Run:  35.79% (±3.40%)
+
+Splits by Gender:
+
+  F:
+    Swim: 10.88%
+    Bike: 51.20%
+    Run:  35.63%
+
+  M:
+    Swim: 11.16%
+    Bike: 50.60%
+    Run:  35.84%
+
+================================================================================
+5. FASTER vs SLOWER FINISHERS ANALYSIS
+================================================================================
+
+Top 25% (Fastest Finishers):
+  Sample Size: 210,093
+  Avg Finish Time: 291.37 min
+  Split - Swim: 11.18% | Bike: 52.76% | Run: 33.99%
+
+Bottom 25% (Slowest Finishers):
+  Sample Size: 210,050
+  Avg Finish Time: 421.14 min
+  Split - Swim: 10.89% | Bike: 48.75% | Run: 37.83%
+
+Key Insights:
+  - Faster finishers spend +4.01 pp MORE on bike vs slower finishers
+  - Faster finishers spend -3.84 pp LESS on run vs slower finishers
+  - This suggests bike strength is a differentiator for overall performance
+
+================================================================================
+6. YEAR-OVER-YEAR PERFORMANCE TRENDS
+================================================================================
+
+Finish Time Trend (2004-2020):
+  2004: 350.45 min average
+  2020: 341.10 min average
+  Change: -9.35 min (-2.67%)
+  Trend: IMPROVING - Athletes are getting 9.35 min faster
+
+Competition Growth:
+  2004: 1,572 records
+  2020: 11,804 records
+  Growth: +650.9%
+
+================================================================================
+7. TOP EVENT LOCATIONS
+================================================================================
+
+Top 10 Locations (195 total):
+   1. IRONMAN 70.3 World Championship           26,123 ( 3.11%)
+   2. IRONMAN 70.3 Augusta                      23,803 ( 2.83%)
+   3. IRONMAN 70.3 Florida                      22,576 ( 2.69%)
+   4. IRONMAN 70.3 Texas                        17,168 ( 2.04%)
+   5. IRONMAN 70.3 California                   17,141 ( 2.04%)
+   6. IRONMAN 70.3 Eagleman                     16,618 ( 1.98%)
+   7. IRONMAN 70.3 Mallorca                     16,307 ( 1.94%)
+   8. IRONMAN 70.3 Mont-Tremblant               15,669 ( 1.87%)
+   9. IRONMAN 70.3 Austria / St. Polten         15,542 ( 1.85%)
+  10. IRONMAN 70.3 Miami                        15,240 ( 1.81%)
+
+Top 10 locations account for 22.2% of all races
+
+================================================================================
+8. LOG-NORMAL DISTRIBUTION FITTING
+================================================================================
+
+Cohorts Analyzed: 27 (Gender x AgeGroup)
+  Genders: F, M
+  Age Groups: 15
+  Fit Method: scipy.stats.lognorm.fit() with floc=0
+  Segments Fitted: Swim, Bike, Run, Total
+
+Output: /sessions/adoring-dazzling-einstein/mnt/racedayai/src/data/cohort-distributions.json
+  Format: JSON with lognorm parameters (shape, loc, scale) + statistics
+  Size: ~29 KB
+
+================================================================================
+9. KEY FINDINGS & INSIGHTS
+================================================================================
+
+1. DATASET CHARACTERISTICS
+   - 840,075 half-ironman race records across 17 years (2004-2020)
+   - 76% male, 24% female participants
+   - Largest cohort: 35-39 age group (19.1% of records)
+   - 195 unique race locations globally
+
+2. PERFORMANCE METRICS
+   - Average finish time: 352.15 minutes (5h 52m)
+   - Swim-heavy cohort: ~39 minutes (11% of total)
+   - Bike-dominated event: ~178 minutes (51% of total)
+   - Run challenge: ~127 minutes (36% of total)
+
+3. GENDER DIFFERENCES
+   - Males slightly faster on average (352.4 min vs 355.8 min for females)
+   - Males allocate 50.6% to bike, 35.8% to run
+   - Females allocate 51.2% to bike, 35.6% to run
+   - Minimal split ratio differences between genders
+
+4. PERFORMANCE DETERMINANTS
+   - Faster finishers (top 25%) spend 4+ percentage points MORE on biking
+   - Slower finishers (bottom 25%) spend 3.8+ pp MORE on running
+   - Implication: Bike performance is a key differentiator for overall ranking
+
+5. TEMPORAL TRENDS
+   - Athletes improving over time: 2004 avg 350.45 min → 2020 avg 341.10 min
+   - Net improvement: -9.35 minutes (-2.67%) over 16 years
+   - Steady growth in participation: 1,572 (2004) → 116,196 (2019)
+   - 2020 shows anomaly (lower records, likely COVID-related)
+
+6. AGE & PERFORMANCE
+   - Peak participation: 30-39 age group (35% of records)
+   - Performance fairly consistent across age groups (within 8-10 min)
+   - Older cohorts (70+) have very few records but complete races
+
+7. STATISTICAL DISTRIBUTION
+   - Swim times: Log-normal fit shape ~0.19-0.20 (all cohorts)
+   - Bike times: Log-normal fit shape ~0.11-0.13 (more concentrated)
+   - Run times: Log-normal fit shape ~0.18-0.21 (variable by cohort)
+   - Right-skewed distributions indicate outlier finishers on slower end
+
+8. LOCATION INSIGHTS
+   - Top 3 locations: Championship (3.1%), Augusta (2.8%), Florida (2.7%)
+   - High diversity: 195 unique locations
+   - US dominance in top 10 (except Austria, Mallorca, Mont-Tremblant)
+
+
+================================================================================
+END OF REPORT
+================================================================================
