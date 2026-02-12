@@ -6,9 +6,16 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { ShareButton } from "@/components/plan/share-button";
+import { StatisticalInsights } from "@/components/plan/statistical-insights";
 import Link from "next/link";
 import { Metadata } from "next";
 import { generateRacePlanSchema, jsonLdScript } from "@/lib/schema";
+import type { WeatherData } from "@/lib/weather";
+import type { PacingOutput } from "@/lib/engine/pacing";
+import type { NutritionPlan } from "@/lib/engine/nutrition";
+import type { FullStatisticalContext } from "@/lib/engine/statistics";
+
+type SwimRunPlan = { targetPaceSec: number; estimatedTimeMin: number };
 
 async function getRacePlan(id: string) {
   const plan = await prisma.racePlan.findUnique({
@@ -36,9 +43,9 @@ export async function generateMetadata({
   }
 
   const { course, bikePlan, runPlan, nutritionPlan } = plan;
-  const bike = bikePlan as any;
-  const run = runPlan as any;
-  const nutrition = nutritionPlan as any;
+  const bike = bikePlan as PacingOutput | null;
+  const run = runPlan as SwimRunPlan | null;
+  const nutrition = nutritionPlan as NutritionPlan | null;
 
   const finishTime = formatTime(plan.predictedFinishSec || 0);
   const shareUrl = plan.shareToken
@@ -87,13 +94,21 @@ export default async function PlanPage({
 
   if (!plan) notFound();
 
-  const { course, weatherData, bikePlan, runPlan, swimPlan, nutritionPlan } =
-    plan;
-  const weather = weatherData as any;
-  const bike = bikePlan as any;
-  const run = runPlan as any;
-  const swim = swimPlan as any;
-  const nutrition = nutritionPlan as any;
+  const {
+    course,
+    weatherData,
+    bikePlan,
+    runPlan,
+    swimPlan,
+    nutritionPlan,
+    statisticalContext: rawStats,
+  } = plan;
+  const weather = weatherData as WeatherData | null;
+  const bike = bikePlan as PacingOutput | null;
+  const run = runPlan as SwimRunPlan | null;
+  const swim = swimPlan as SwimRunPlan | null;
+  const nutrition = nutritionPlan as NutritionPlan | null;
+  const statisticalContext = rawStats as FullStatisticalContext | null;
 
   const racePlanSchema = generateRacePlanSchema({
     raceName: course.raceName,
@@ -167,13 +182,13 @@ export default async function PlanPage({
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold flex items-center gap-2">
-                  {weather?.tempC}°C
+                  {weather?.tempC ?? "--"}°C
                   <span className="text-sm font-normal text-muted-foreground">
-                    {weather?.humidity}% Hum
+                    {weather?.humidity ?? "--"}% Hum
                   </span>
                 </div>
                 <p className="text-xs text-amber-600 mt-1 font-medium">
-                  {weather?.tempC > 25
+                  {(weather?.tempC ?? 0) > 25
                     ? "Heat Adjustment Active"
                     : "Optimal Conditions"}
                 </p>
@@ -206,7 +221,7 @@ export default async function PlanPage({
               <CardHeader>
                 <CardTitle className="flex justify-between">
                   <span>Swim</span>
-                  <span>{formatTime(swim?.estimatedTimeMin * 60)}</span>
+                  <span>{formatTime((swim?.estimatedTimeMin ?? 0) * 60)}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="grid sm:grid-cols-3 gap-4">
@@ -215,7 +230,7 @@ export default async function PlanPage({
                     Target Pace
                   </div>
                   <div className="text-lg font-semibold">
-                    {formatPace(swim?.targetPaceSec)}/100m
+                    {formatPace(swim?.targetPaceSec ?? 0)}/100m
                   </div>
                 </div>
                 <div className="sm:col-span-2 text-sm text-muted-foreground">
@@ -229,7 +244,7 @@ export default async function PlanPage({
               <CardHeader>
                 <CardTitle className="flex justify-between">
                   <span>Bike</span>
-                  <span>{formatTime(bike?.durationMinutes * 60)}</span>
+                  <span>{formatTime((bike?.durationMinutes ?? 0) * 60)}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="grid sm:grid-cols-3 gap-4">
@@ -239,7 +254,7 @@ export default async function PlanPage({
                     {bike?.targetPower} Watts
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    Intensity: {(bike?.intensityFactor * 100).toFixed(0)}%
+                    Intensity: {((bike?.intensityFactor ?? 0) * 100).toFixed(0)}%
                   </div>
                 </div>
                 <div>
@@ -260,7 +275,7 @@ export default async function PlanPage({
               <CardHeader>
                 <CardTitle className="flex justify-between">
                   <span>Run</span>
-                  <span>{formatTime(run?.estimatedTimeMin * 60)}</span>
+                  <span>{formatTime((run?.estimatedTimeMin ?? 0) * 60)}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="grid sm:grid-cols-3 gap-4">
@@ -269,7 +284,7 @@ export default async function PlanPage({
                     Target Pace
                   </div>
                   <div className="text-lg font-semibold">
-                    {formatPace(run?.targetPaceSec)}/km
+                    {formatPace(run?.targetPaceSec ?? 0)}/km
                   </div>
                 </div>
                 <div className="sm:col-span-2 text-sm text-muted-foreground">
@@ -278,6 +293,14 @@ export default async function PlanPage({
               </CardContent>
             </Card>
           </div>
+
+          {/* Data-Driven Statistical Insights */}
+          {statisticalContext?.available && (
+            <StatisticalInsights
+              statisticalContext={statisticalContext}
+              predictedFinishSec={plan.predictedFinishSec ?? undefined}
+            />
+          )}
 
           {/* AI Narrative */}
           {plan.narrativePlan && (
@@ -304,7 +327,11 @@ export default async function PlanPage({
   );
 }
 
-function calculateConfidence(plan: any): { label: string; color: string } {
+function calculateConfidence(plan: {
+  weatherData: unknown;
+  athlete: { ftpWatts: number | null; thresholdPaceSec: number | null; stravaConnected: boolean; garminConnected: boolean } | null;
+  course: { bikeElevationGainM: number | null } | null;
+}): { label: string; color: string } {
   let score = 0;
   const maxScore = 5;
 

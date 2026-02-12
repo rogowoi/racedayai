@@ -5,6 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Zap } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
+import type { WeatherData } from "@/lib/weather";
+import type { PacingOutput } from "@/lib/engine/pacing";
+import type { NutritionPlan } from "@/lib/engine/nutrition";
+
+type SwimRunPlan = { targetPaceSec: number; estimatedTimeMin: number };
 
 async function getSharedPlan(token: string) {
   const plan = await prisma.racePlan.findUnique({
@@ -70,11 +75,11 @@ export default async function SharedPlanPage({
 
   const { course, weatherData, bikePlan, runPlan, swimPlan, nutritionPlan } =
     plan;
-  const weather = weatherData as any;
-  const bike = bikePlan as any;
-  const run = runPlan as any;
-  const swim = swimPlan as any;
-  const nutrition = nutritionPlan as any;
+  const weather = weatherData as WeatherData | null;
+  const bike = bikePlan as PacingOutput | null;
+  const run = runPlan as SwimRunPlan | null;
+  const swim = swimPlan as SwimRunPlan | null;
+  const nutrition = nutritionPlan as NutritionPlan | null;
 
   return (
     <div className="min-h-screen flex flex-col bg-muted/30">
@@ -170,7 +175,7 @@ export default async function SharedPlanPage({
               <CardHeader>
                 <CardTitle className="flex justify-between">
                   <span>Swim</span>
-                  <span>{formatTime(swim?.estimatedTimeMin * 60)}</span>
+                  <span>{formatTime((swim?.estimatedTimeMin ?? 0) * 60)}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="grid sm:grid-cols-3 gap-4">
@@ -179,7 +184,7 @@ export default async function SharedPlanPage({
                     Target Pace
                   </div>
                   <div className="text-lg font-semibold">
-                    {formatPace(swim?.targetPaceSec)}/100m
+                    {formatPace(swim?.targetPaceSec ?? 0)}/100m
                   </div>
                 </div>
               </CardContent>
@@ -190,7 +195,7 @@ export default async function SharedPlanPage({
               <CardHeader>
                 <CardTitle className="flex justify-between">
                   <span>Bike</span>
-                  <span>{formatTime(bike?.durationMinutes * 60)}</span>
+                  <span>{formatTime((bike?.durationMinutes ?? 0) * 60)}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="grid sm:grid-cols-3 gap-4">
@@ -218,7 +223,7 @@ export default async function SharedPlanPage({
               <CardHeader>
                 <CardTitle className="flex justify-between">
                   <span>Run</span>
-                  <span>{formatTime(run?.estimatedTimeMin * 60)}</span>
+                  <span>{formatTime((run?.estimatedTimeMin ?? 0) * 60)}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="grid sm:grid-cols-3 gap-4">
@@ -227,7 +232,7 @@ export default async function SharedPlanPage({
                     Target Pace
                   </div>
                   <div className="text-lg font-semibold">
-                    {formatPace(run?.targetPaceSec)}/km
+                    {formatPace(run?.targetPaceSec ?? 0)}/km
                   </div>
                 </div>
               </CardContent>

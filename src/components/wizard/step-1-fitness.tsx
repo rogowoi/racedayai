@@ -61,11 +61,43 @@ export function Step1Fitness() {
             <CardHeader className="pb-4">
               <CardTitle className="text-base">Physiology</CardTitle>
               <CardDescription>
-                Basic metrics for pacing calculations
+                Basic metrics for pacing calculations. Gender & age unlock
+                data-driven insights from 840K+ race records.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="gender">Gender</Label>
+                  <Select
+                    value={fitnessData.gender || ""}
+                    onValueChange={(val: any) =>
+                      setFitnessData({ gender: val })
+                    }
+                  >
+                    <SelectTrigger id="gender">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="M">Male</SelectItem>
+                      <SelectItem value="F">Female</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="age">Age</Label>
+                  <Input
+                    id="age"
+                    type="number"
+                    placeholder="35"
+                    min={14}
+                    max={99}
+                    value={fitnessData.age || ""}
+                    onChange={(e) =>
+                      setFitnessData({ age: Number(e.target.value) })
+                    }
+                  />
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="weight">Weight (kg)</Label>
                   <Input
@@ -78,8 +110,11 @@ export function Step1Fitness() {
                     }
                   />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="ftp">Bike FTP (Watts)</Label>
+                  <Label htmlFor="ftp">Bike FTP (W)</Label>
                   <Input
                     id="ftp"
                     type="number"
@@ -90,11 +125,8 @@ export function Step1Fitness() {
                     }
                   />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="pace">Threshold Run</Label>
+                  <Label htmlFor="pace">Run Threshold</Label>
                   <Input
                     id="pace"
                     type="text"

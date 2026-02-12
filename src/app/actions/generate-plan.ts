@@ -14,6 +14,15 @@ import { auth } from "@/auth";
 import { checkCanCreatePlan, incrementPlanCount, getPlanUsage } from "@/lib/plan-limits";
 import { getPlanLimits, isPaidPlan } from "@/lib/stripe";
 import { generateRaceNarrative } from "@/lib/engine/narrative";
+import {
+  buildStatisticalContext,
+  buildFullContext,
+  getPercentile,
+  type Gender,
+  type StatisticalContext,
+  type FullStatisticalContext,
+} from "@/lib/engine/statistics";
+import { getRaceById } from "@/lib/race-registry";
 
 export async function generateRacePlan(formData: FormData) {
   const session = await auth();
@@ -62,7 +71,11 @@ export async function generateRacePlan(formData: FormData) {
     },
   });
 
-  // 2. Parse GPX
+  // 2. Parse GPX — use registry data as smart defaults
+  const registryRace = raceData.selectedRaceId
+    ? getRaceById(raceData.selectedRaceId)
+    : null;
+
   let courseData: CourseData = {
     totalDistanceM: 90000,
     elevationGainM: 500,
@@ -72,9 +85,19 @@ export async function generateRacePlan(formData: FormData) {
   if (gpxFile && gpxFile.size > 0) {
     const text = await gpxFile.text();
     courseData = parseGpx(text);
+  } else if (registryRace) {
+    // Use registry race data for distance and elevation
+    courseData.totalDistanceM = registryRace.bikeDistanceM;
+    courseData.elevationGainM = registryRace.bikeElevationGainM || 500;
   } else {
-    // Fallback if no GPX (use defaults based on distance category)
-    if (raceData.distanceCategory === "70.3") {
+    // Fallback if no GPX and no registry race (use defaults based on distance category)
+    if (raceData.distanceCategory === "sprint") {
+      courseData.totalDistanceM = 20000;
+      courseData.elevationGainM = 200;
+    } else if (raceData.distanceCategory === "olympic") {
+      courseData.totalDistanceM = 40000;
+      courseData.elevationGainM = 300;
+    } else if (raceData.distanceCategory === "70.3") {
       courseData.totalDistanceM = 90000;
       courseData.elevationGainM = 600;
     } else if (raceData.distanceCategory === "140.6") {
@@ -83,14 +106,22 @@ export async function generateRacePlan(formData: FormData) {
     }
   }
 
-  // 3. Get Weather (Mock location for now or parse from GPX first point if available)
-  // Default to Dubai logic if 'Dubai' in name
-  let lat = 52.52; // Berlin
+  // 3. Get Weather — use registry coordinates, GPX coordinates, or store coordinates
+  let lat = 52.52; // Berlin fallback
   let lon = 13.41;
 
   if (courseData.points.length > 0) {
+    // GPX coordinates take priority
     lat = courseData.points[0].lat;
     lon = courseData.points[0].lon;
+  } else if (raceData.latitude && raceData.longitude) {
+    // Use coordinates from wizard store (set by race registry selection)
+    lat = raceData.latitude;
+    lon = raceData.longitude;
+  } else if (registryRace?.latitude && registryRace?.longitude) {
+    // Fallback to registry lookup
+    lat = registryRace.latitude;
+    lon = registryRace.longitude;
   }
 
   // Use today if no date
@@ -134,15 +165,39 @@ export async function generateRacePlan(formData: FormData) {
     weather.tempC,
   );
 
+  // 4b. Build Statistical Context (data-driven insights from 840K race records + course/fade models)
+  const predictedFinishSec =
+    (swimPacing.estimatedTimeMin +
+      bikePacing.durationMinutes +
+      runPacing.estimatedTimeMin) * 60;
+
+  // Build full context with course matching and fade prediction
+  const statisticalContext = await buildFullContext({
+    gender: fitnessData.gender as Gender | undefined,
+    age: fitnessData.age ?? undefined,
+    ftp: athlete.ftpWatts ?? undefined,
+    distanceCategory: raceData.distanceCategory,
+    predictedTotalSec: predictedFinishSec,
+    raceName: raceData.name,
+    bikePlanIF: bikePacing.intensityFactor,
+  });
+
   // 5. Save RacePlan
-  // Create Course first
+  // Create Course first — enrich with registry data if available
   const course = await prisma.raceCourse.create({
     data: {
       raceName: raceData.name,
       distanceCategory: raceData.distanceCategory,
+      location: raceData.raceLocation || registryRace?.location || null,
+      latitude: raceData.latitude || registryRace?.latitude || null,
+      longitude: raceData.longitude || registryRace?.longitude || null,
+      swimDistanceM: registryRace?.swimDistanceM || getSwimDist(raceData.distanceCategory),
       bikeDistanceM: courseData.totalDistanceM,
+      runDistanceM: registryRace?.runDistanceM || getRunDist(raceData.distanceCategory),
       bikeElevationGainM: courseData.elevationGainM,
-      // ... store full gpx url later
+      runElevationGainM: registryRace?.runElevationGainM || null,
+      bikeGpxUrl: registryRace?.gpx?.bikeUrl || null,
+      runGpxUrl: registryRace?.gpx?.runUrl || null,
     },
   });
 
@@ -151,16 +206,13 @@ export async function generateRacePlan(formData: FormData) {
       athleteId: athlete.id,
       courseId: course.id,
       raceDate: raceDate,
-      weatherData: weather as any,
-      swimPlan: swimPacing as any,
-      bikePlan: bikePacing as any,
-      runPlan: runPacing as any,
-      nutritionPlan: nutrition as any,
-      predictedFinishSec:
-        (swimPacing.estimatedTimeMin +
-          bikePacing.durationMinutes +
-          runPacing.estimatedTimeMin) *
-        60,
+      weatherData: weather,
+      swimPlan: swimPacing,
+      bikePlan: bikePacing,
+      runPlan: runPacing,
+      nutritionPlan: nutrition,
+      statisticalContext: JSON.parse(JSON.stringify(statisticalContext)),
+      predictedFinishSec: predictedFinishSec,
     },
   });
 
@@ -171,6 +223,33 @@ export async function generateRacePlan(formData: FormData) {
   });
 
   if (user && isPaidPlan(user.plan)) {
+    // Build statistical summary for the narrative
+    const statsForNarrative = statisticalContext.available && statisticalContext.cohort
+      ? {
+          cohortSize: statisticalContext.cohort.sampleSize,
+          percentilePlacement: statisticalContext.cohort.percentilePlacement?.label,
+          fasterThanPct: statisticalContext.cohort.percentilePlacement?.fasterThanPct,
+          confidenceRange: statisticalContext.confidenceInterval
+            ? `${formatFinishTime(statisticalContext.confidenceInterval.p10)} to ${formatFinishTime(statisticalContext.confidenceInterval.p90)}`
+            : undefined,
+          recommendedSplitBike: statisticalContext.cohort.splitRecommendation?.bikePct,
+          recommendedSplitRun: statisticalContext.cohort.splitRecommendation?.runPct,
+          courseInfo: statisticalContext.course?.matched
+            ? {
+                courseName: statisticalContext.course.courseName ?? undefined,
+                difficulty: statisticalContext.course.difficulty?.tier,
+                medianFinishSec: statisticalContext.course.medianFinishSec ?? undefined,
+              }
+            : undefined,
+          fadeInfo: statisticalContext.fadePrediction
+            ? {
+                paceSlowdownPct: statisticalContext.fadePrediction.paceSlowdownPct,
+                estimatedTimeAddedSec: statisticalContext.fadePrediction.estimatedTimeAddedSec,
+              }
+            : undefined,
+        }
+      : undefined;
+
     const narrative = await generateRaceNarrative({
       raceName: raceData.name,
       distanceCategory: raceData.distanceCategory,
@@ -183,13 +262,10 @@ export async function generateRacePlan(formData: FormData) {
       runTargetPace: formatPaceStr(runPacing.targetPaceSec),
       carbsPerHour: nutrition.carbsPerHour,
       fluidPerHour: nutrition.fluidPerHour,
-      predictedFinish: formatFinishTime(
-        (swimPacing.estimatedTimeMin +
-          bikePacing.durationMinutes +
-          runPacing.estimatedTimeMin) * 60
-      ),
+      predictedFinish: formatFinishTime(predictedFinishSec),
       elevationGainM: courseData.elevationGainM,
       athleteWeight: Number(athlete.weightKg) || undefined,
+      statisticalInsights: statsForNarrative,
     });
 
     if (narrative) {

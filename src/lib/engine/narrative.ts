@@ -15,12 +15,37 @@ interface NarrativeInput {
   predictedFinish: string;
   elevationGainM?: number;
   athleteWeight?: number;
+  statisticalInsights?: {
+    cohortSize?: number;
+    percentilePlacement?: string;
+    fasterThanPct?: number;
+    confidenceRange?: string;
+    recommendedSplitBike?: number;
+    recommendedSplitRun?: number;
+    courseInfo?: {
+      courseName?: string;
+      difficulty?: string;
+      medianFinishSec?: number;
+    };
+    fadeInfo?: {
+      paceSlowdownPct?: number;
+      estimatedTimeAddedSec?: number;
+    };
+  };
 }
 
 export async function generateRaceNarrative(
   input: NarrativeInput
 ): Promise<string | null> {
   if (!xai) return null;
+
+  // Helper to format seconds to HH:MM:SS
+  const formatTime = (sec: number) => {
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
+    const s = Math.floor(sec % 60);
+    return `${h}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+  };
 
   const prompt = `You are an experienced triathlon coach writing a race-day strategy brief for an athlete.
 
@@ -35,6 +60,22 @@ Targets:
 - Run: ${input.runTargetPace}/km
 - Nutrition: ${input.carbsPerHour}g carbs/hr, ${input.fluidPerHour}ml fluid/hr
 - Predicted Finish: ${input.predictedFinish}
+${input.statisticalInsights ? `
+Data-Driven Insights (from ${input.statisticalInsights.cohortSize?.toLocaleString()} similar athletes):
+- Predicted placement: ${input.statisticalInsights.percentilePlacement ?? "N/A"} (faster than ${input.statisticalInsights.fasterThanPct ?? "?"}% of similar athletes)
+- Finish time range (80% confidence): ${input.statisticalInsights.confidenceRange ?? "N/A"}
+- Optimal bike split: ~${input.statisticalInsights.recommendedSplitBike ?? "?"}% of total time
+- Optimal run split: ~${input.statisticalInsights.recommendedSplitRun ?? "?"}% of total time
+${input.statisticalInsights.courseInfo ? `
+Course-Specific Context:
+- Course: ${input.statisticalInsights.courseInfo.courseName ?? "N/A"}
+- Difficulty: ${input.statisticalInsights.courseInfo.difficulty ?? "N/A"} (may be more challenging than typical 70.3)
+- Median finish time at this venue: ${input.statisticalInsights.courseInfo.medianFinishSec ? formatTime(input.statisticalInsights.courseInfo.medianFinishSec) : "N/A"}` : ""}
+${input.statisticalInsights.fadeInfo ? `
+Run Fade Prediction:
+- Based on your bike intensity plan, expect the run to slow ~${input.statisticalInsights.fadeInfo.paceSlowdownPct ?? "?"}% vs fresh legs
+- This adds approximately ${input.statisticalInsights.fadeInfo.estimatedTimeAddedSec ?? "?"} seconds to your predicted run time
+- Prepare mental strategies and pacing discipline for this expected fatigue` : ""}` : ""}
 
 Write a 300-500 word race execution strategy narrative. Cover:
 1. Pre-race mindset and warmup approach
@@ -42,7 +83,7 @@ Write a 300-500 word race execution strategy narrative. Cover:
 3. T1 transition priorities
 4. Bike execution (power management, nutrition timing, terrain awareness)
 5. T2 transition priorities
-6. Run strategy (pacing discipline, nutrition, mental tactics)
+6. Run strategy (pacing discipline, nutrition, mental tactics) - especially accounting for any expected fatigue
 7. Final push and finish
 
 Be specific with the numbers provided. Write in second person ("you"). Be motivational but realistic. No headers or bullet points — write flowing prose paragraphs.`;

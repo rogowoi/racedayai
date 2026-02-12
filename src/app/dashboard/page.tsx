@@ -39,7 +39,7 @@ export default async function DashboardPage() {
   }
 
   const user = await getDashboardData(session.user.id);
-  const athlete = user?.athletes?.[0];
+  const athlete = user?.athletes;
   const racePlans = athlete?.racePlans || [];
 
   const planConfig = getPlanLimits(user?.plan || "free");
