@@ -71,26 +71,39 @@ export async function generateRacePlan(formData: FormData) {
     },
   });
 
-  // 2. Parse GPX — use registry data as smart defaults
+  // 2. Parse GPX — priority: upload > RideWithGPS > registry > defaults
   const registryRace = raceData.selectedRaceId
     ? getRaceById(raceData.selectedRaceId)
     : null;
+
+  // Check for RWGPS course data from the search picker
+  const rwgpsCourseRaw = formData.get("rwgpsCourseData") as string | null;
+  const rwgpsCourse = rwgpsCourseRaw ? JSON.parse(rwgpsCourseRaw) : null;
 
   let courseData: CourseData = {
     totalDistanceM: 90000,
     elevationGainM: 500,
     points: [],
   };
+  let gpxSource: "upload" | "rwgps" | "registry" | "default" = "default";
 
   if (gpxFile && gpxFile.size > 0) {
+    // Priority 1: User-uploaded GPX file
     const text = await gpxFile.text();
     courseData = parseGpx(text);
+    gpxSource = "upload";
+  } else if (rwgpsCourse?.totalDistanceM) {
+    // Priority 2: RideWithGPS route selected by user
+    courseData.totalDistanceM = rwgpsCourse.totalDistanceM;
+    courseData.elevationGainM = rwgpsCourse.elevationGainM || 500;
+    gpxSource = "rwgps";
   } else if (registryRace) {
-    // Use registry race data for distance and elevation
+    // Priority 3: Registry race data for distance and elevation
     courseData.totalDistanceM = registryRace.bikeDistanceM;
     courseData.elevationGainM = registryRace.bikeElevationGainM || 500;
+    gpxSource = "registry";
   } else {
-    // Fallback if no GPX and no registry race (use defaults based on distance category)
+    // Priority 4: Fallback defaults based on distance category
     if (raceData.distanceCategory === "sprint") {
       courseData.totalDistanceM = 20000;
       courseData.elevationGainM = 200;
@@ -126,6 +139,7 @@ export async function generateRacePlan(formData: FormData) {
 
   // Use today if no date
   const raceDate = raceData.date ? new Date(raceData.date) : new Date();
+  const raceYear = raceDate.getFullYear();
 
   const weather = await getRaceWeather(lat, lon, raceDate);
 
@@ -171,7 +185,7 @@ export async function generateRacePlan(formData: FormData) {
       bikePacing.durationMinutes +
       runPacing.estimatedTimeMin) * 60;
 
-  // Build full context with course matching and fade prediction
+  // Build full context with course matching, fade prediction, weather impact, and trend adjustment
   const statisticalContext = await buildFullContext({
     gender: fitnessData.gender as Gender | undefined,
     age: fitnessData.age ?? undefined,
@@ -180,10 +194,20 @@ export async function generateRacePlan(formData: FormData) {
     predictedTotalSec: predictedFinishSec,
     raceName: raceData.name,
     bikePlanIF: bikePacing.intensityFactor,
+    raceYear,
+    weatherTempC: weather.tempC,
+    weatherWindKph: weather.windSpeedKph,
+    weatherHumidityPct: weather.humidity,
   });
 
   // 5. Save RacePlan
   // Create Course first — enrich with registry data if available
+  // Build GPX URL for DB storage: RWGPS URL if used, or registry URL
+  const bikeGpxUrl =
+    gpxSource === "rwgps" && rwgpsCourse?.rwgpsId
+      ? `https://ridewithgps.com/${rwgpsCourse.rwgpsType === "route" ? "routes" : "trips"}/${rwgpsCourse.rwgpsId}.gpx`
+      : registryRace?.gpx?.bikeUrl || null;
+
   const course = await prisma.raceCourse.create({
     data: {
       raceName: raceData.name,
@@ -196,7 +220,7 @@ export async function generateRacePlan(formData: FormData) {
       runDistanceM: registryRace?.runDistanceM || getRunDist(raceData.distanceCategory),
       bikeElevationGainM: courseData.elevationGainM,
       runElevationGainM: registryRace?.runElevationGainM || null,
-      bikeGpxUrl: registryRace?.gpx?.bikeUrl || null,
+      bikeGpxUrl,
       runGpxUrl: registryRace?.gpx?.runUrl || null,
     },
   });
@@ -245,6 +269,23 @@ export async function generateRacePlan(formData: FormData) {
             ? {
                 paceSlowdownPct: statisticalContext.fadePrediction.paceSlowdownPct,
                 estimatedTimeAddedSec: statisticalContext.fadePrediction.estimatedTimeAddedSec,
+              }
+            : undefined,
+          weatherImpact: statisticalContext.weatherImpact
+            ? {
+                combinedImpactPct: statisticalContext.weatherImpact.combinedImpactPct,
+                riskLevel: statisticalContext.weatherImpact.riskLevel,
+              }
+            : undefined,
+          trendInfo: statisticalContext.trendAdjustment
+            ? {
+                adjustmentSec: statisticalContext.trendAdjustment.adjustmentSec,
+                targetYear: statisticalContext.trendAdjustment.targetYear,
+                segmentTrends: {
+                  swim: statisticalContext.trendAdjustment.segmentTrends.swim.direction,
+                  bike: statisticalContext.trendAdjustment.segmentTrends.bike.direction,
+                  run: statisticalContext.trendAdjustment.segmentTrends.run.direction,
+                },
               }
             : undefined,
         }
