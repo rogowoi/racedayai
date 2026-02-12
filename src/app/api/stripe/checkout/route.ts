@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { stripe, PLANS, type PlanKey } from "@/lib/stripe";
+import { stripe, getStripePriceId } from "@/lib/stripe";
+import { PLANS, type PlanKey } from "@/lib/plans";
 import { prisma } from "@/lib/db";
 
 export async function POST(req: Request) {
@@ -19,15 +20,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
     }
 
-    const planConfig = PLANS[plan];
-    const priceId = billing === "monthly" ? planConfig.monthlyPriceId : planConfig.priceId;
-
-    if (!priceId) {
+    if (plan === "free") {
       return NextResponse.json(
-        { error: "Plan does not support billing" },
+        { error: "Cannot checkout for free plan" },
         { status: 400 }
       );
     }
+
+    const priceId = getStripePriceId(plan as "season" | "unlimited", billing);
 
     // Get or create Stripe customer
     const user = await prisma.user.findUnique({

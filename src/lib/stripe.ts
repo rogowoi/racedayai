@@ -1,6 +1,13 @@
 import Stripe from "stripe";
 
-// Validate required environment variables
+// Re-export client-safe plan config so existing server-side
+// imports from "@/lib/stripe" still work without changes.
+export { PLANS, getPlanLimits, isPaidPlan } from "./plans";
+export type { PlanKey } from "./plans";
+
+// --------------- Server-only code below ---------------
+
+// Validate required environment variables (server only)
 const requiredEnvVars = {
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
@@ -26,58 +33,23 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2026-01-28.clover",
 });
 
-export const PLANS = {
-  free: {
-    name: "Free",
-    maxPlansPerSeason: 1,
-    features: [
-      "1 race plan",
-      "Basic pacing + nutrition",
-      "Manual fitness entry",
-      "View online only",
-    ],
-    priceId: null,
-    monthlyPriceId: null,
-    annualPrice: 0,
-    monthlyPrice: 0,
-  },
-  season: {
-    name: "Season Pass",
-    maxPlansPerSeason: 6,
-    features: [
-      "6 race plans per season",
-      "PDF export with race-day cards",
-      "GPX course upload + elevation analysis",
-      "Weather integration with forecasts",
-      "Strava OAuth auto-import",
-    ],
-    priceId: process.env.STRIPE_SEASON_ANNUAL_PRICE_ID,
-    monthlyPriceId: process.env.STRIPE_SEASON_MONTHLY_PRICE_ID,
-    annualPrice: 39,
-    monthlyPrice: 4.99,
-  },
-  unlimited: {
-    name: "Unlimited",
-    maxPlansPerSeason: Infinity,
-    features: [
-      "Unlimited race plans",
-      "AI-generated race strategy narrative",
-      "Advanced weather warnings",
-      "Share plans via public link",
-    ],
-    priceId: process.env.STRIPE_UNLIMITED_ANNUAL_PRICE_ID,
-    monthlyPriceId: process.env.STRIPE_UNLIMITED_MONTHLY_PRICE_ID,
-    annualPrice: 99,
-    monthlyPrice: 12.99,
-  },
-} as const;
+/**
+ * Server-only: resolve a Stripe price ID for a given plan + billing period.
+ */
+export function getStripePriceId(
+  plan: "season" | "unlimited",
+  billing: "monthly" | "annual" = "annual",
+): string {
+  const map: Record<string, string | undefined> = {
+    "season-annual": process.env.STRIPE_SEASON_ANNUAL_PRICE_ID,
+    "season-monthly": process.env.STRIPE_SEASON_MONTHLY_PRICE_ID,
+    "unlimited-annual": process.env.STRIPE_UNLIMITED_ANNUAL_PRICE_ID,
+    "unlimited-monthly": process.env.STRIPE_UNLIMITED_MONTHLY_PRICE_ID,
+  };
 
-export type PlanKey = keyof typeof PLANS;
-
-export function getPlanLimits(plan: string) {
-  return PLANS[plan as PlanKey] ?? PLANS.free;
-}
-
-export function isPaidPlan(plan: string): boolean {
-  return plan === "season" || plan === "unlimited";
+  const priceId = map[`${plan}-${billing}`];
+  if (!priceId) {
+    throw new Error(`No Stripe price ID configured for ${plan}-${billing}`);
+  }
+  return priceId;
 }

@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PLANS, type PlanKey } from "@/lib/stripe";
+import { PLANS, type PlanKey } from "@/lib/plans";
 import { Check, Loader2 } from "lucide-react";
 
 interface BillingSectionProps {
