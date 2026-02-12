@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PLANS, type PlanKey } from "@/lib/stripe";
 import { Check, Loader2 } from "lucide-react";
@@ -12,6 +18,8 @@ interface BillingSectionProps {
   plansLimit: number;
   seasonEndDate: Date | null;
   hasStripeCustomer: boolean;
+  showSuccess?: boolean;
+  showCancelled?: boolean;
 }
 
 export function BillingSection({
@@ -20,9 +28,13 @@ export function BillingSection({
   plansLimit,
   seasonEndDate,
   hasStripeCustomer,
+  showSuccess,
+  showCancelled,
 }: BillingSectionProps) {
   const [loading, setLoading] = useState<string | null>(null);
-  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("annual");
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">(
+    "annual",
+  );
 
   const handleUpgrade = async (planKey: PlanKey) => {
     setLoading(planKey);
@@ -63,6 +75,23 @@ export function BillingSection({
 
   return (
     <div className="space-y-6">
+      {showSuccess && (
+        <div className="bg-green-100 border border-green-200 text-green-800 px-4 py-3 rounded-md flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
+          <Check className="h-5 w-5" />
+          <p className="font-medium">
+            Payment successful! Your subscription has been updated.
+          </p>
+        </div>
+      )}
+
+      {showCancelled && (
+        <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-md animate-in fade-in slide-in-from-top-2">
+          <p className="font-medium">
+            Payment cancelled. No charges were made.
+          </p>
+        </div>
+      )}
+
       <div>
         <h2 className="text-2xl font-bold tracking-tight">Billing & Usage</h2>
         <p className="text-muted-foreground">
@@ -73,7 +102,9 @@ export function BillingSection({
       {/* Current Plan & Usage */}
       <Card>
         <CardHeader>
-          <CardTitle>Current Plan: {PLANS[currentPlan as PlanKey]?.name || "Free"}</CardTitle>
+          <CardTitle>
+            Current Plan: {PLANS[currentPlan as PlanKey]?.name || "Free"}
+          </CardTitle>
           <CardDescription>
             {isUnlimited ? (
               "Unlimited race plans"
@@ -116,7 +147,9 @@ export function BillingSection({
               variant="outline"
               className="w-full mt-4"
             >
-              {loading === "manage" && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading === "manage" && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
               Manage Billing
             </Button>
           )}
@@ -148,7 +181,8 @@ export function BillingSection({
         {(Object.keys(PLANS) as PlanKey[]).map((planKey) => {
           const plan = PLANS[planKey];
           const isCurrent = currentPlan === planKey;
-          const price = billingPeriod === "annual" ? plan.annualPrice : plan.monthlyPrice;
+          const price =
+            billingPeriod === "annual" ? plan.annualPrice : plan.monthlyPrice;
 
           return (
             <Card key={planKey} className={isCurrent ? "border-primary" : ""}>

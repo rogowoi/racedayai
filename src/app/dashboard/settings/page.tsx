@@ -5,8 +5,13 @@ import { BillingSection } from "@/components/dashboard/billing-section";
 import { getPlanUsage } from "@/lib/plan-limits";
 import { ConnectedAccountsSection } from "@/components/dashboard/connected-accounts-section";
 
-export default async function SettingsPage() {
+export default async function SettingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const session = await auth();
+  const params = await searchParams;
 
   if (!session?.user?.id) {
     redirect("/login");
@@ -54,6 +59,8 @@ export default async function SettingsPage() {
         plansLimit={usage.plansLimit}
         seasonEndDate={usage.seasonEndDate}
         hasStripeCustomer={!!user.stripeCustomerId}
+        showSuccess={params.billing === "success"}
+        showCancelled={params.billing === "cancelled"}
       />
     </div>
   );
