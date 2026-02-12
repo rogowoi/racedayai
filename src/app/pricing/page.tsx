@@ -3,8 +3,12 @@ import { Navbar } from "@/components/layout/navbar";
 import { Button } from "@/components/ui/button";
 import { Shield, Zap, Clock, ArrowRight } from "lucide-react";
 import { PricingCards } from "@/components/pricing/pricing-cards";
+import { auth } from "@/auth";
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const session = await auth();
+  const isLoggedIn = !!session?.user?.id;
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -42,7 +46,7 @@ export default function PricingPage() {
         </section>
 
         {/* Client component: billing toggle + pricing cards */}
-        <PricingCards />
+        <PricingCards isLoggedIn={isLoggedIn} />
 
         {/* Value anchor */}
         <section className="py-8">

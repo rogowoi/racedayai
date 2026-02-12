@@ -6,10 +6,10 @@
 
 export const PLANS = {
   free: {
-    name: "Free",
+    name: "Starter",
     maxPlansPerSeason: 1,
     features: [
-      "1 race plan",
+      "1 race plan (any distance)",
       "Basic pacing + nutrition",
       "Manual fitness entry",
       "View online only",
@@ -22,22 +22,23 @@ export const PLANS = {
     maxPlansPerSeason: 6,
     features: [
       "6 race plans per season",
-      "PDF export with race-day cards",
+      "Full weather integration",
       "GPX course upload + elevation analysis",
-      "Weather integration with forecasts",
-      "Strava OAuth auto-import",
+      "PDF race-day card (print & go)",
+      "Strava auto-import",
+      "AI race strategy narrative",
     ],
     annualPrice: 39,
     monthlyPrice: 4.99,
   },
   unlimited: {
-    name: "Unlimited",
+    name: "Pro",
     maxPlansPerSeason: Infinity,
     features: [
       "Unlimited race plans",
-      "AI-generated race strategy narrative",
-      "Advanced weather warnings",
+      "Everything in Season Pass",
       "Share plans via public link",
+      "Priority support",
     ],
     annualPrice: 99,
     monthlyPrice: 12.99,

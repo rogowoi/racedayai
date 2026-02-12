@@ -118,7 +118,7 @@ export function BillingSection({
       <Card>
         <CardHeader>
           <CardTitle>
-            Current Plan: {PLANS[currentPlan as PlanKey]?.name || "Free"}
+            Current Plan: {PLANS[currentPlan as PlanKey]?.name || "Starter"}
           </CardTitle>
           <CardDescription>
             {isUnlimited ? (

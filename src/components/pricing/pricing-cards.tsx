@@ -5,8 +5,18 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Check, X, ArrowRight } from "lucide-react";
 
-export function PricingCards() {
+interface PricingCardsProps {
+  isLoggedIn?: boolean;
+}
+
+export function PricingCards({ isLoggedIn = false }: PricingCardsProps) {
   const [billing, setBilling] = useState<"monthly" | "annual">("annual");
+
+  // Logged-in users go straight to checkout via settings, new users go to signup
+  const getUpgradeHref = (plan: string) =>
+    isLoggedIn
+      ? `/dashboard/settings?upgrade=${plan}&billing=${billing}`
+      : `/signup?plan=${plan}&billing=${billing}`;
 
   return (
     <>
@@ -155,7 +165,7 @@ export function PricingCards() {
               </ul>
 
               <Button className="w-full h-11 font-semibold shadow-lg shadow-primary/25" asChild>
-                <Link href={`/signup?plan=season&billing=${billing}`}>
+                <Link href={getUpgradeHref("season")}>
                   Get Season Pass
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -204,7 +214,7 @@ export function PricingCards() {
               </ul>
 
               <Button variant="outline" className="w-full h-11" asChild>
-                <Link href={`/signup?plan=unlimited&billing=${billing}`}>Get Pro</Link>
+                <Link href={getUpgradeHref("unlimited")}>Get Pro</Link>
               </Button>
             </div>
           </div>
