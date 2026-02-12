@@ -55,3 +55,6 @@ prisma/generated/
 docs/*
 *.pyc
 creds.json
+
+# project planning
+plans/
