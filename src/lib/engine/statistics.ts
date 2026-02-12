@@ -150,6 +150,31 @@ export interface FullStatisticalContext extends StatisticalContext {
       upper: number;
     } | null;
   } | null;
+
+  /** Weather impact prediction */
+  weatherImpact?: {
+    combinedImpactPct: number;
+    tempImpactPct: number;
+    windImpactPct: number;
+    humidityImpactPct: number;
+    riskLevel: string;
+    adjustedTimeSec: number;
+  } | null;
+
+  /** Year-adjusted trend prediction */
+  trendAdjustment?: {
+    adjustmentSec: number;
+    adjustmentPct: number;
+    yearCoefficient: number;
+    confidenceNote: string;
+    baselineYear: number;
+    targetYear: number;
+    segmentTrends: {
+      swim: { secPerYear: number; direction: string };
+      bike: { secPerYear: number; direction: string };
+      run: { secPerYear: number; direction: string };
+    };
+  } | null;
 }
 
 // ── Helpers ────────────────────────────────────────────────────
@@ -615,6 +640,7 @@ export function buildStatisticalContext(params: {
  *   1. Standard cohort-based statistical context
  *   2. Course-specific insights (if course is matched)
  *   3. Run fade prediction (if bike intensity data available)
+ *   4. Year-based trend adjustment (if raceYear provided)
  *
  * Returns a FullStatisticalContext with all insights.
  */
@@ -628,10 +654,18 @@ export async function buildFullContext(params: {
   predictedTotalSec?: number;
   raceName?: string;
   bikePlanIF?: number;
+  raceYear?: number;
+  weatherTempC?: number;
+  weatherWindKph?: number;
+  weatherHumidityPct?: number;
 }): Promise<FullStatisticalContext> {
   const {
     raceName,
     bikePlanIF,
+    raceYear,
+    weatherTempC,
+    weatherWindKph,
+    weatherHumidityPct,
   } = params;
 
   // Resolve ageGroup from age if not explicitly provided
@@ -703,9 +737,56 @@ export async function buildFullContext(params: {
     }
   }
 
+  // Try to add weather impact prediction
+  let weatherImpact: FullStatisticalContext["weatherImpact"] = undefined;
+  if (
+    weatherTempC !== undefined &&
+    weatherWindKph !== undefined &&
+    weatherHumidityPct !== undefined &&
+    params.predictedTotalSec !== undefined
+  ) {
+    try {
+      const { buildWeatherContext } = await import("./weather-model");
+      const weatherData = await buildWeatherContext({
+        tempC: weatherTempC,
+        windKph: weatherWindKph,
+        humidityPct: weatherHumidityPct,
+        basePredictionSec: params.predictedTotalSec,
+      });
+
+      weatherImpact = weatherData ?? undefined;
+    } catch {
+      // Weather model not available or error loading data
+      weatherImpact = null;
+    }
+  }
+
+  // Try to add year-based trend adjustment
+  let trendAdjustment: FullStatisticalContext["trendAdjustment"] = undefined;
+  if (raceYear && params.gender && resolvedAgeGroup) {
+    try {
+      const { getYearAdjustment } = await import("./trends-model");
+      const trend = await getYearAdjustment(raceYear, params.gender, resolvedAgeGroup);
+      trendAdjustment = {
+        adjustmentSec: trend.cohortSpecific?.adjustmentSec ?? trend.overall.adjustmentSec,
+        adjustmentPct: trend.cohortSpecific?.adjustmentPct ?? trend.overall.adjustmentPct,
+        yearCoefficient: trend.cohortSpecific?.yearCoefficient ?? trend.overall.yearCoefficient,
+        confidenceNote: trend.cohortSpecific?.confidenceNote ?? trend.overall.confidenceNote,
+        baselineYear: trend.overall.baselineYear,
+        targetYear: raceYear,
+        segmentTrends: trend.segmentTrends,
+      };
+    } catch {
+      // Trends model not available or error loading data
+      trendAdjustment = null;
+    }
+  }
+
   return {
     ...baseContext,
     course: courseContext,
     fadePrediction,
+    weatherImpact,
+    trendAdjustment,
   };
 }

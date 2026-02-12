@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "date_generated": "2026-02-12 18:55:09",
+    "total_events": 773,
+    "geocoded_locations": 152,
+    "weather_records_fetched": 3,
+    "note": "Sample synthetic data. Run with --fetch for real historical data."
+  },
+  "records": {
+    "IRONMAN 70.3 Aarhus_2014": {
+      "location": "IRONMAN 70.3 Aarhus",
+      "year": 2014,
+      "lat": 56.16,
+      "lon": 10.21,
+      "date": "2014-06-15",
+      "temp_max_c": 18,
+      "temp_min_c": 12,
+      "temp_mean_c": 15,
+      "humidity_pct": 65,
+      "wind_max_kph": 12,
+      "precipitation_mm": 0
+    },
+    "IRONMAN 70.3 Miami_2019": {
+      "location": "IRONMAN 70.3 Miami",
+      "year": 2019,
+      "lat": 25.76,
+      "lon": -80.19,
+      "date": "2019-06-15",
+      "temp_max_c": 32,
+      "temp_min_c": 28,
+      "temp_mean_c": 30,
+      "humidity_pct": 75,
+      "wind_max_kph": 18,
+      "precipitation_mm": 2
+    },
+    "IRONMAN 70.3 Coeur d'Alene_2010": {
+      "location": "IRONMAN 70.3 Coeur d'Alene",
+      "year": 2010,
+      "lat": 47.68,
+      "lon": -116.78,
+      "date": "2010-06-15",
+      "temp_max_c": 24,
+      "temp_min_c": 15,
+      "temp_mean_c": 20,
+      "humidity_pct": 55,
+      "wind_max_kph": 8,
+      "precipitation_mm": 0
+    }
+  }
+}

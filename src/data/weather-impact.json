@@ -1,0 +1,81 @@
+{
+  "metadata": {
+    "generated_at": "2026-02-12T18:55:03.280245",
+    "source": "sports_science_research_defaults",
+    "description": "Weather impact factors on triathlon performance. Positive = slower, negative = faster."
+  },
+  "model": {
+    "temperature": [
+      {
+        "bin": "< 15",
+        "temp_range_c": "Below 15\u00b0C",
+        "impact_pct": -1.5,
+        "description": "Cool conditions, slightly faster"
+      },
+      {
+        "bin": "15-20",
+        "temp_range_c": "15-20\u00b0C",
+        "impact_pct": -0.5,
+        "description": "Cool to mild, slightly faster"
+      },
+      {
+        "bin": "20-25",
+        "temp_range_c": "20-25\u00b0C",
+        "impact_pct": 0.0,
+        "description": "Mild baseline, neutral"
+      },
+      {
+        "bin": "25-30",
+        "temp_range_c": "25-30\u00b0C",
+        "impact_pct": 2.5,
+        "description": "Warm, noticeable slowdown from heat"
+      },
+      {
+        "bin": "30+",
+        "temp_range_c": "30\u00b0C+",
+        "impact_pct": 5.0,
+        "description": "Hot, significant heat penalty"
+      }
+    ],
+    "wind": [
+      {
+        "bin": "calm",
+        "wind_range_kph": "0-15 kph",
+        "impact_pct": 0.0,
+        "description": "Calm, neutral baseline"
+      },
+      {
+        "bin": "moderate",
+        "wind_range_kph": "15-30 kph",
+        "impact_pct": 1.5,
+        "description": "Moderate wind, slight slowdown"
+      },
+      {
+        "bin": "strong",
+        "wind_range_kph": "30+ kph",
+        "impact_pct": 3.5,
+        "description": "Strong wind, significant slowdown (especially on bike)"
+      }
+    ],
+    "humidity": [
+      {
+        "bin": "dry",
+        "humidity_range_pct": "0-50%",
+        "impact_pct": 0.0,
+        "description": "Dry, neutral baseline"
+      },
+      {
+        "bin": "moderate",
+        "humidity_range_pct": "50-70%",
+        "impact_pct": 0.5,
+        "description": "Moderate humidity, minimal impact"
+      },
+      {
+        "bin": "humid",
+        "humidity_range_pct": "70-100%",
+        "impact_pct": 1.5,
+        "description": "High humidity, reduced cooling efficiency"
+      }
+    ]
+  }
+}

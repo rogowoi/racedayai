@@ -31,6 +31,15 @@ interface NarrativeInput {
       paceSlowdownPct?: number;
       estimatedTimeAddedSec?: number;
     };
+    weatherImpact?: {
+      combinedImpactPct?: number;
+      riskLevel?: string;
+    };
+    trendInfo?: {
+      adjustmentSec?: number;
+      targetYear?: number;
+      segmentTrends?: { swim: string; bike: string; run: string };
+    };
   };
 }
 
@@ -75,7 +84,17 @@ ${input.statisticalInsights.fadeInfo ? `
 Run Fade Prediction:
 - Based on your bike intensity plan, expect the run to slow ~${input.statisticalInsights.fadeInfo.paceSlowdownPct ?? "?"}% vs fresh legs
 - This adds approximately ${input.statisticalInsights.fadeInfo.estimatedTimeAddedSec ?? "?"} seconds to your predicted run time
-- Prepare mental strategies and pacing discipline for this expected fatigue` : ""}` : ""}
+- Prepare mental strategies and pacing discipline for this expected fatigue` : ""}
+${input.statisticalInsights.weatherImpact ? `
+Weather Impact Prediction:
+- Forecasted conditions will add approximately ${Math.abs(input.statisticalInsights.weatherImpact.combinedImpactPct ?? 0)}% ${input.statisticalInsights.weatherImpact.combinedImpactPct && input.statisticalInsights.weatherImpact.combinedImpactPct > 0 ? "slowdown" : "speedup"} to your time
+- Risk Level: ${input.statisticalInsights.weatherImpact.riskLevel ?? "unknown"}
+- Adjust nutrition and hydration strategy accordingly` : ""}
+${input.statisticalInsights.trendInfo ? `
+Year-Based Performance Trend:
+- Race year (${input.statisticalInsights.trendInfo.targetYear}): Athletes are trending ${input.statisticalInsights.trendInfo.adjustmentSec && input.statisticalInsights.trendInfo.adjustmentSec < 0 ? "faster" : "slower"} than the 2004-2020 dataset median
+- Adjustment: ${input.statisticalInsights.trendInfo.adjustmentSec ?? 0} seconds from historical baseline
+- Segment trends: Swim (${input.statisticalInsights.trendInfo.segmentTrends?.swim ?? "?"}), Bike (${input.statisticalInsights.trendInfo.segmentTrends?.bike ?? "?"}), Run (${input.statisticalInsights.trendInfo.segmentTrends?.run ?? "?"})` : ""}` : ""}
 
 Write a 300-500 word race execution strategy narrative. Cover:
 1. Pre-race mindset and warmup approach

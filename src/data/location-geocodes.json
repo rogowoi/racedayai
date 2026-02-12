@@ -1,0 +1,920 @@
+{
+  "metadata": {
+    "date_generated": "2026-02-12 18:54:07",
+    "matched": 147,
+    "total_locations": 195
+  },
+  "locations": {
+    "IRONMAN 70.3 Aarhus": {
+      "lat": 56.15674,
+      "lon": 10.21076,
+      "source": "open-meteo",
+      "search_term": "Aarhus"
+    },
+    "IRONMAN 70.3 Alagoas": {
+      "lat": -9.71028,
+      "lon": -35.895,
+      "source": "open-meteo",
+      "search_term": "Alagoas"
+    },
+    "IRONMAN 70.3 Arizona": {
+      "lat": 15.63333,
+      "lon": -87.31667,
+      "source": "open-meteo",
+      "search_term": "Arizona"
+    },
+    "IRONMAN 70.3 Astana": {
+      "lat": 51.1801,
+      "lon": 71.44598,
+      "source": "open-meteo",
+      "search_term": "Astana"
+    },
+    "IRONMAN 70.3 Atlantic City": {
+      "lat": 39.36415,
+      "lon": -74.42306,
+      "source": "open-meteo",
+      "search_term": "Atlantic City"
+    },
+    "IRONMAN 70.3 Augusta": {
+      "lat": 33.47,
+      "lon": -81.97,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Austin": {
+      "lat": 30.26715,
+      "lon": -97.74306,
+      "source": "open-meteo",
+      "search_term": "Austin"
+    },
+    "IRONMAN 70.3 Austria / St. Polten": {
+      "lat": 48.2,
+      "lon": 15.63,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Bahrain": {
+      "lat": 26.03333,
+      "lon": 50.55,
+      "source": "open-meteo",
+      "search_term": "Bahrain"
+    },
+    "IRONMAN 70.3 Ballarat": {
+      "lat": -37.56622,
+      "lon": 143.84956,
+      "source": "open-meteo",
+      "search_term": "Ballarat"
+    },
+    "IRONMAN 70.3 Barcelona": {
+      "lat": 41.38879,
+      "lon": 2.15899,
+      "source": "open-meteo",
+      "search_term": "Barcelona"
+    },
+    "IRONMAN 70.3 Bariloche": {
+      "lat": -41.14557,
+      "lon": -71.30822,
+      "source": "open-meteo",
+      "search_term": "Bariloche"
+    },
+    "IRONMAN 70.3 Berlin": {
+      "lat": 52.52437,
+      "lon": 13.41053,
+      "source": "open-meteo",
+      "search_term": "Berlin"
+    },
+    "IRONMAN 70.3 Bintan": {
+      "lat": 1.1,
+      "lon": 104.525,
+      "source": "open-meteo",
+      "search_term": "Bintan"
+    },
+    "IRONMAN 70.3 Boise": {
+      "lat": 43.6135,
+      "lon": -116.20345,
+      "source": "open-meteo",
+      "search_term": "Boise"
+    },
+    "IRONMAN 70.3 Boulder": {
+      "lat": 40.01,
+      "lon": -105.27,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Branson": {
+      "lat": 36.64367,
+      "lon": -93.21851,
+      "source": "open-meteo",
+      "search_term": "Branson"
+    },
+    "IRONMAN 70.3 Brazil": {
+      "lat": -10.0,
+      "lon": -55.0,
+      "source": "open-meteo",
+      "search_term": "Brazil"
+    },
+    "IRONMAN 70.3 Budapest": {
+      "lat": 47.49835,
+      "lon": 19.04045,
+      "source": "open-meteo",
+      "search_term": "Budapest"
+    },
+    "IRONMAN 70.3 Buenos Aires": {
+      "lat": -34.61315,
+      "lon": -58.37723,
+      "source": "open-meteo",
+      "search_term": "Buenos Aires"
+    },
+    "IRONMAN 70.3 Busan": {
+      "lat": 35.10168,
+      "lon": 129.03004,
+      "source": "open-meteo",
+      "search_term": "Busan"
+    },
+    "IRONMAN 70.3 Busselton": {
+      "lat": -33.65249,
+      "lon": 115.3455,
+      "source": "open-meteo",
+      "search_term": "Busselton"
+    },
+    "IRONMAN 70.3 Cairns": {
+      "lat": -16.92366,
+      "lon": 145.76613,
+      "source": "open-meteo",
+      "search_term": "Cairns"
+    },
+    "IRONMAN 70.3 Calgary": {
+      "lat": 51.05011,
+      "lon": -114.08529,
+      "source": "open-meteo",
+      "search_term": "Calgary"
+    },
+    "IRONMAN 70.3 California": {
+      "lat": 36.96,
+      "lon": -122.02,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Campeche": {
+      "lat": 19.84386,
+      "lon": -90.52554,
+      "source": "open-meteo",
+      "search_term": "Campeche"
+    },
+    "IRONMAN 70.3 Canada": {
+      "lat": 60.10867,
+      "lon": -113.64258,
+      "source": "open-meteo",
+      "search_term": "Canada"
+    },
+    "IRONMAN 70.3 Canberra": {
+      "lat": -35.28346,
+      "lon": 149.12807,
+      "source": "open-meteo",
+      "search_term": "Canberra"
+    },
+    "IRONMAN 70.3 Cancun": {
+      "lat": 21.17429,
+      "lon": -86.84656,
+      "source": "open-meteo",
+      "search_term": "Cancun"
+    },
+    "IRONMAN 70.3 Cartagena": {
+      "lat": 10.39972,
+      "lon": -75.51444,
+      "source": "open-meteo",
+      "search_term": "Cartagena"
+    },
+    "IRONMAN 70.3 Chattanooga": {
+      "lat": 35.05,
+      "lon": -85.31,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Chungju": {
+      "lat": 36.97666,
+      "lon": 127.9287,
+      "source": "open-meteo",
+      "search_term": "Chungju"
+    },
+    "IRONMAN 70.3 Coeur d'Alene": {
+      "lat": 47.68,
+      "lon": -116.78,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Colombo": {
+      "lat": 6.93548,
+      "lon": 79.84868,
+      "source": "open-meteo",
+      "search_term": "Colombo"
+    },
+    "IRONMAN 70.3 Connecticut": {
+      "lat": 40.6976,
+      "lon": -74.2632,
+      "source": "open-meteo",
+      "search_term": "Connecticut"
+    },
+    "IRONMAN 70.3 Coquimbo": {
+      "lat": -29.95332,
+      "lon": -71.33947,
+      "source": "open-meteo",
+      "search_term": "Coquimbo"
+    },
+    "IRONMAN 70.3 Costa Rica": {
+      "lat": 10.0,
+      "lon": -84.0,
+      "source": "open-meteo",
+      "search_term": "Costa Rica"
+    },
+    "IRONMAN 70.3 Cozumel": {
+      "lat": 20.50038,
+      "lon": -86.94272,
+      "source": "open-meteo",
+      "search_term": "Cozumel"
+    },
+    "IRONMAN 70.3 Dubai": {
+      "lat": 25.07725,
+      "lon": 55.30927,
+      "source": "open-meteo",
+      "search_term": "Dubai"
+    },
+    "IRONMAN 70.3 Dublin": {
+      "lat": 53.33306,
+      "lon": -6.24889,
+      "source": "open-meteo",
+      "search_term": "Dublin"
+    },
+    "IRONMAN 70.3 Dun Laoghaire": {
+      "lat": 53.29395,
+      "lon": -6.13586,
+      "source": "open-meteo",
+      "search_term": "Dun Laoghaire"
+    },
+    "IRONMAN 70.3 Durban": {
+      "lat": -29.8579,
+      "lon": 31.0292,
+      "source": "open-meteo",
+      "search_term": "Durban"
+    },
+    "IRONMAN 70.3 Eagleman": {
+      "lat": 38.58,
+      "lon": -76.07,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Ecuador": {
+      "lat": -1.25,
+      "lon": -78.25,
+      "source": "open-meteo",
+      "search_term": "Ecuador"
+    },
+    "IRONMAN 70.3 Edinburg": {
+      "lat": 26.30174,
+      "lon": -98.16334,
+      "source": "open-meteo",
+      "search_term": "Edinburg"
+    },
+    "IRONMAN 70.3 Edinburgh": {
+      "lat": 55.95206,
+      "lon": -3.19648,
+      "source": "open-meteo",
+      "search_term": "Edinburgh"
+    },
+    "IRONMAN 70.3 European Championship": {
+      "lat": 50.8432,
+      "lon": 4.37235,
+      "source": "open-meteo",
+      "search_term": "European"
+    },
+    "IRONMAN 70.3 Finland": {
+      "lat": 64.0,
+      "lon": 26.0,
+      "source": "open-meteo",
+      "search_term": "Finland"
+    },
+    "IRONMAN 70.3 Florianopolis": {
+      "lat": -27.59667,
+      "lon": -48.54917,
+      "source": "open-meteo",
+      "search_term": "Florianopolis"
+    },
+    "IRONMAN 70.3 Florida": {
+      "lat": 30.17,
+      "lon": -85.8,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Fortaleza": {
+      "lat": -3.71722,
+      "lon": -38.54306,
+      "source": "open-meteo",
+      "search_term": "Fortaleza"
+    },
+    "IRONMAN 70.3 Galway": {
+      "lat": 53.27245,
+      "lon": -9.05095,
+      "source": "open-meteo",
+      "search_term": "Galway"
+    },
+    "IRONMAN 70.3 Gdynia": {
+      "lat": 54.51889,
+      "lon": 18.53188,
+      "source": "open-meteo",
+      "search_term": "Gdynia"
+    },
+    "IRONMAN 70.3 Geelong": {
+      "lat": -38.14711,
+      "lon": 144.36069,
+      "source": "open-meteo",
+      "search_term": "Geelong"
+    },
+    "IRONMAN 70.3 Goa": {
+      "lat": 44.40478,
+      "lon": 8.94439,
+      "source": "open-meteo",
+      "search_term": "Goa"
+    },
+    "IRONMAN 70.3 Goseong": {
+      "lat": 34.97631,
+      "lon": 128.32361,
+      "source": "open-meteo",
+      "search_term": "Goseong"
+    },
+    "IRONMAN 70.3 Gulf Coast": {
+      "lat": 28.46861,
+      "lon": -96.87304,
+      "source": "open-meteo",
+      "search_term": "Gulf Coast"
+    },
+    "IRONMAN 70.3 Haugesund": {
+      "lat": 59.41378,
+      "lon": 5.268,
+      "source": "open-meteo",
+      "search_term": "Haugesund"
+    },
+    "IRONMAN 70.3 Hawaii": {
+      "lat": 13.86036,
+      "lon": -90.41127,
+      "source": "open-meteo",
+      "search_term": "Hawaii"
+    },
+    "IRONMAN 70.3 Hefei": {
+      "lat": 31.86389,
+      "lon": 117.28083,
+      "source": "open-meteo",
+      "search_term": "Hefei"
+    },
+    "IRONMAN 70.3 Italy": {
+      "lat": 42.83333,
+      "lon": 12.83333,
+      "source": "open-meteo",
+      "search_term": "Italy"
+    },
+    "IRONMAN 70.3 Japan": {
+      "lat": 35.68536,
+      "lon": 139.7531,
+      "source": "open-meteo",
+      "search_term": "Japan"
+    },
+    "IRONMAN 70.3 Jonkoping": {
+      "lat": 57.78145,
+      "lon": 14.15618,
+      "source": "open-meteo",
+      "search_term": "Jonkoping"
+    },
+    "IRONMAN 70.3 Kansas": {
+      "lat": 36.20509,
+      "lon": -94.79773,
+      "source": "open-meteo",
+      "search_term": "Kansas"
+    },
+    "IRONMAN 70.3 Korea": {
+      "lat": 6.82523,
+      "lon": -6.64787,
+      "source": "open-meteo",
+      "search_term": "Korea"
+    },
+    "IRONMAN 70.3 Kronborg": {
+      "lat": 41.00279,
+      "lon": -97.94006,
+      "source": "open-meteo",
+      "search_term": "Kronborg"
+    },
+    "IRONMAN 70.3 Lake Placid": {
+      "lat": 44.28,
+      "lon": -73.99,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Lake Stevens": {
+      "lat": 48.0151,
+      "lon": -122.06374,
+      "source": "open-meteo",
+      "search_term": "Lake Stevens"
+    },
+    "IRONMAN 70.3 Langkawi": {
+      "lat": 5.68333,
+      "lon": 115.93333,
+      "source": "open-meteo",
+      "search_term": "Langkawi"
+    },
+    "IRONMAN 70.3 Lanzarote": {
+      "lat": 29.01,
+      "lon": -13.641,
+      "source": "open-meteo",
+      "search_term": "Lanzarote"
+    },
+    "IRONMAN 70.3 Liuzhou": {
+      "lat": 24.32405,
+      "lon": 109.40698,
+      "source": "open-meteo",
+      "search_term": "Liuzhou"
+    },
+    "IRONMAN 70.3 Los Cabos": {
+      "lat": 43.5147,
+      "lon": -6.09813,
+      "source": "open-meteo",
+      "search_term": "Los Cabos"
+    },
+    "IRONMAN 70.3 Lubbock": {
+      "lat": 33.58,
+      "lon": -101.85,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Luxembourg": {
+      "lat": 49.75,
+      "lon": 6.16667,
+      "source": "open-meteo",
+      "search_term": "Luxembourg"
+    },
+    "IRONMAN 70.3 Maceio": {
+      "lat": -9.66583,
+      "lon": -35.73528,
+      "source": "open-meteo",
+      "search_term": "Maceio"
+    },
+    "IRONMAN 70.3 Maine": {
+      "lat": 42.19257,
+      "lon": -76.06104,
+      "source": "open-meteo",
+      "search_term": "Maine"
+    },
+    "IRONMAN 70.3 Mallorca": {
+      "lat": 39.57,
+      "lon": 2.65,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Mandurah": {
+      "lat": -32.5269,
+      "lon": 115.7217,
+      "source": "open-meteo",
+      "search_term": "Mandurah"
+    },
+    "IRONMAN 70.3 Marbella": {
+      "lat": 36.51543,
+      "lon": -4.88583,
+      "source": "open-meteo",
+      "search_term": "Marbella"
+    },
+    "IRONMAN 70.3 Marrakech": {
+      "lat": 31.63416,
+      "lon": -7.99994,
+      "source": "open-meteo",
+      "search_term": "Marrakech"
+    },
+    "IRONMAN 70.3 Miami": {
+      "lat": 25.76,
+      "lon": -80.19,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Mont-Tremblant": {
+      "lat": 46.21,
+      "lon": -74.58,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Monterrey": {
+      "lat": 25.67507,
+      "lon": -100.31847,
+      "source": "open-meteo",
+      "search_term": "Monterrey"
+    },
+    "IRONMAN 70.3 Muncie": {
+      "lat": 40.19338,
+      "lon": -85.38636,
+      "source": "open-meteo",
+      "search_term": "Muncie"
+    },
+    "IRONMAN 70.3 Muskoka": {
+      "lat": 45.03,
+      "lon": -79.3,
+      "source": "known"
+    },
+    "IRONMAN 70.3 New Orleans": {
+      "lat": 29.95465,
+      "lon": -90.07507,
+      "source": "open-meteo",
+      "search_term": "New Orleans"
+    },
+    "IRONMAN 70.3 New Zealand": {
+      "lat": -42.0,
+      "lon": 174.0,
+      "source": "open-meteo",
+      "search_term": "New Zealand"
+    },
+    "IRONMAN 70.3 Nice": {
+      "lat": 43.70313,
+      "lon": 7.26608,
+      "source": "open-meteo",
+      "search_term": "Nice"
+    },
+    "IRONMAN 70.3 North Carolina": {
+      "lat": 30.72697,
+      "lon": -84.35088,
+      "source": "open-meteo",
+      "search_term": "North Carolina"
+    },
+    "IRONMAN 70.3 Oceanside": {
+      "lat": 33.2,
+      "lon": -117.38,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Ohio": {
+      "lat": 41.55753,
+      "lon": -89.46093,
+      "source": "open-meteo",
+      "search_term": "Ohio"
+    },
+    "IRONMAN 70.3 Oman": {
+      "lat": 21.0,
+      "lon": 57.0,
+      "source": "open-meteo",
+      "search_term": "Oman"
+    },
+    "IRONMAN 70.3 Palmas": {
+      "lat": -10.16745,
+      "lon": -48.32766,
+      "source": "open-meteo",
+      "search_term": "Palmas"
+    },
+    "IRONMAN 70.3 Panama": {
+      "lat": 8.9936,
+      "lon": -79.51973,
+      "source": "open-meteo",
+      "search_term": "Panama"
+    },
+    "IRONMAN 70.3 Peru": {
+      "lat": -10.0,
+      "lon": -75.25,
+      "source": "open-meteo",
+      "search_term": "Peru"
+    },
+    "IRONMAN 70.3 Philippines": {
+      "lat": 13.40882,
+      "lon": 122.56155,
+      "source": "open-meteo",
+      "search_term": "Philippines"
+    },
+    "IRONMAN 70.3 Port Macquarie": {
+      "lat": -31.43084,
+      "lon": 152.90894,
+      "source": "open-meteo",
+      "search_term": "Port Macquarie"
+    },
+    "IRONMAN 70.3 Princeton": {
+      "lat": 38.35532,
+      "lon": -87.56752,
+      "source": "open-meteo",
+      "search_term": "Princeton"
+    },
+    "IRONMAN 70.3 Pucon": {
+      "lat": -39.28223,
+      "lon": -71.95427,
+      "source": "open-meteo",
+      "search_term": "Pucon"
+    },
+    "IRONMAN 70.3 Puerto Rico": {
+      "lat": 18.24829,
+      "lon": -66.49989,
+      "source": "open-meteo",
+      "search_term": "Puerto Rico"
+    },
+    "IRONMAN 70.3 Pula": {
+      "lat": 1.53333,
+      "lon": 103.66667,
+      "source": "open-meteo",
+      "search_term": "Pula"
+    },
+    "IRONMAN 70.3 Punta del Este": {
+      "lat": -34.94747,
+      "lon": -54.93382,
+      "source": "open-meteo",
+      "search_term": "Punta del Este"
+    },
+    "IRONMAN 70.3 Putrajaya": {
+      "lat": 2.93527,
+      "lon": 101.69112,
+      "source": "open-meteo",
+      "search_term": "Putrajaya"
+    },
+    "IRONMAN 70.3 Qujing": {
+      "lat": 25.48333,
+      "lon": 103.78333,
+      "source": "open-meteo",
+      "search_term": "Qujing"
+    },
+    "IRONMAN 70.3 Racine": {
+      "lat": 42.72613,
+      "lon": -87.78285,
+      "source": "open-meteo",
+      "search_term": "Racine"
+    },
+    "IRONMAN 70.3 Raleigh": {
+      "lat": 35.7721,
+      "lon": -78.63861,
+      "source": "open-meteo",
+      "search_term": "Raleigh"
+    },
+    "IRONMAN 70.3 Rhode Island": {
+      "lat": 31.81544,
+      "lon": -96.23136,
+      "source": "open-meteo",
+      "search_term": "Rhode Island"
+    },
+    "IRONMAN 70.3 Rio de Janeiro": {
+      "lat": -22.90642,
+      "lon": -43.18223,
+      "source": "open-meteo",
+      "search_term": "Rio de Janeiro"
+    },
+    "IRONMAN 70.3 Saipan": {
+      "lat": 15.21233,
+      "lon": 145.7545,
+      "source": "open-meteo",
+      "search_term": "Saipan"
+    },
+    "IRONMAN 70.3 San Juan": {
+      "lat": 18.46633,
+      "lon": -66.10572,
+      "source": "open-meteo",
+      "search_term": "San Juan"
+    },
+    "IRONMAN 70.3 Santa Cruz": {
+      "lat": 36.97,
+      "lon": -122.03,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Santa Rosa": {
+      "lat": 14.31222,
+      "lon": 121.11139,
+      "source": "open-meteo",
+      "search_term": "Santa Rosa"
+    },
+    "IRONMAN 70.3 Sao Paulo": {
+      "lat": -23.5475,
+      "lon": -46.63611,
+      "source": "open-meteo",
+      "search_term": "Sao Paulo"
+    },
+    "IRONMAN 70.3 Shanghai": {
+      "lat": 31.22222,
+      "lon": 121.45806,
+      "source": "open-meteo",
+      "search_term": "Shanghai"
+    },
+    "IRONMAN 70.3 Singapore": {
+      "lat": 1.28967,
+      "lon": 103.85007,
+      "source": "open-meteo",
+      "search_term": "Singapore"
+    },
+    "IRONMAN 70.3 South Africa": {
+      "lat": -29.0,
+      "lon": 24.0,
+      "source": "open-meteo",
+      "search_term": "South Africa"
+    },
+    "IRONMAN 70.3 Sri Lanka": {
+      "lat": 7.75,
+      "lon": 80.75,
+      "source": "open-meteo",
+      "search_term": "Sri Lanka"
+    },
+    "IRONMAN 70.3 St. Croix": {
+      "lat": 44.96182,
+      "lon": -64.0327,
+      "source": "open-meteo",
+      "search_term": "St. Croix"
+    },
+    "IRONMAN 70.3 St. George": {
+      "lat": 37.10415,
+      "lon": -113.58412,
+      "source": "open-meteo",
+      "search_term": "St. George"
+    },
+    "IRONMAN 70.3 Staffordshire": {
+      "lat": 37.53515,
+      "lon": -77.58554,
+      "source": "open-meteo",
+      "search_term": "Staffordshire"
+    },
+    "IRONMAN 70.3 Steelhead": {
+      "lat": 42.68,
+      "lon": -86.21,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Subic Bay": {
+      "lat": 14.78899,
+      "lon": 120.27987,
+      "source": "open-meteo",
+      "search_term": "Subic Bay"
+    },
+    "IRONMAN 70.3 Sunshine Coast": {
+      "lat": -26.65682,
+      "lon": 153.07954,
+      "source": "open-meteo",
+      "search_term": "Sunshine Coast"
+    },
+    "IRONMAN 70.3 Switzerland": {
+      "lat": 47.00016,
+      "lon": 8.01427,
+      "source": "open-meteo",
+      "search_term": "Switzerland"
+    },
+    "IRONMAN 70.3 Syracuse": {
+      "lat": 43.04812,
+      "lon": -76.14742,
+      "source": "open-meteo",
+      "search_term": "Syracuse"
+    },
+    "IRONMAN 70.3 Taiwan": {
+      "lat": 24.0,
+      "lon": 121.0,
+      "source": "open-meteo",
+      "search_term": "Taiwan"
+    },
+    "IRONMAN 70.3 Taupo": {
+      "lat": -38.68333,
+      "lon": 176.08333,
+      "source": "open-meteo",
+      "search_term": "Taupo"
+    },
+    "IRONMAN 70.3 Texas": {
+      "lat": 30.63,
+      "lon": -97.68,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Thailand": {
+      "lat": 15.5,
+      "lon": 101.0,
+      "source": "open-meteo",
+      "search_term": "Thailand"
+    },
+    "IRONMAN 70.3 Timberman": {
+      "lat": 43.56,
+      "lon": -71.47,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Traverse City": {
+      "lat": 44.76306,
+      "lon": -85.62063,
+      "source": "open-meteo",
+      "search_term": "Traverse City"
+    },
+    "IRONMAN 70.3 Turkey": {
+      "lat": 40.69843,
+      "lon": -74.40154,
+      "source": "open-meteo",
+      "search_term": "Turkey"
+    },
+    "IRONMAN 70.3 UK": {
+      "lat": 55.079,
+      "lon": 98.8586,
+      "source": "open-meteo",
+      "search_term": "UK"
+    },
+    "IRONMAN 70.3 Vichy": {
+      "lat": 46.12709,
+      "lon": 3.42577,
+      "source": "open-meteo",
+      "search_term": "Vichy"
+    },
+    "IRONMAN 70.3 Victoria": {
+      "lat": -20.31944,
+      "lon": -40.33778,
+      "source": "open-meteo",
+      "search_term": "Victoria"
+    },
+    "IRONMAN 70.3 Vietnam": {
+      "lat": 16.16667,
+      "lon": 107.83333,
+      "source": "open-meteo",
+      "search_term": "Vietnam"
+    },
+    "IRONMAN 70.3 Vineman": {
+      "lat": 38.51,
+      "lon": -122.81,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Virginia": {
+      "lat": -28.10391,
+      "lon": 26.86593,
+      "source": "open-meteo",
+      "search_term": "Virginia"
+    },
+    "IRONMAN 70.3 Waco": {
+      "lat": 31.54933,
+      "lon": -97.14667,
+      "source": "open-meteo",
+      "search_term": "Waco"
+    },
+    "IRONMAN 70.3 Western Sydney": {
+      "lat": -33.8862,
+      "lon": 150.69948,
+      "source": "open-meteo",
+      "search_term": "Western Sydney"
+    },
+    "IRONMAN 70.3 Weymouth": {
+      "lat": 42.22093,
+      "lon": -70.93977,
+      "source": "open-meteo",
+      "search_term": "Weymouth"
+    },
+    "IRONMAN 70.3 Wisconsin": {
+      "lat": 44.38358,
+      "lon": -89.81735,
+      "source": "open-meteo",
+      "search_term": "Wisconsin"
+    },
+    "IRONMAN 70.3 World Championship": {
+      "lat": 21.31,
+      "lon": -157.86,
+      "source": "known"
+    },
+    "IRONMAN 70.3 Xiamen": {
+      "lat": 24.47979,
+      "lon": 118.08187,
+      "source": "open-meteo",
+      "search_term": "Xiamen"
+    },
+    "IRONMAN 70.3 Yeppoon": {
+      "lat": -23.12683,
+      "lon": 150.74406,
+      "source": "open-meteo",
+      "search_term": "Yeppoon"
+    },
+    "IRONMAN 70.3 Zell am See": {
+      "lat": 47.32306,
+      "lon": 12.79839,
+      "source": "open-meteo",
+      "search_term": "Zell am See"
+    },
+    "IRONMAN Oceanside": {
+      "lat": 33.19587,
+      "lon": -117.37948,
+      "source": "open-meteo",
+      "search_term": "Oceanside"
+    }
+  },
+  "unmatched": [
+    "IRONMAN 70.3 Asia-Pacific",
+    "IRONMAN 70.3 Asia-Pacific / Auckland",
+    "IRONMAN 70.3 Asia-Pacific Championship",
+    "IRONMAN 70.3 Asia-Pacific Championship Philippines",
+    "IRONMAN 70.3 Asia-Pacific Championship Western Sydney",
+    "IRONMAN 70.3 Bangsaen",
+    "IRONMAN 70.3 Brazil Paraguay",
+    "IRONMAN 70.3 Buffalo Springs Lake",
+    "IRONMAN 70.3 Cascais Portugal",
+    "IRONMAN 70.3 China",
+    "IRONMAN 70.3 Davao Philippines",
+    "IRONMAN 70.3 Emilia Romagna",
+    "IRONMAN 70.3 European Championship Elsinore",
+    "IRONMAN 70.3 European Championship Wiesbaden",
+    "IRONMAN 70.3 Foz do Igua\u00c3\u00a7u",
+    "IRONMAN 70.3 Greece Costa Navarino",
+    "IRONMAN 70.3 Haugesund / Norway",
+    "IRONMAN 70.3 Incheon Korea",
+    "IRONMAN 70.3 Indian Wells La Quinta",
+    "IRONMAN 70.3 Jeju",
+    "IRONMAN 70.3 Kraichgau",
+    "IRONMAN 70.3 Laguna Phuket",
+    "IRONMAN 70.3 Les Sables d'Olonne",
+    "IRONMAN 70.3 Luxembourg - R\u00c3\u00a9gion Moselle",
+    "IRONMAN 70.3 Middle East Championship Bahrain",
+    "IRONMAN 70.3 Mooseman",
+    "IRONMAN 70.3 North American Pro Championship St. George",
+    "IRONMAN 70.3 Oceanside California",
+    "IRONMAN 70.3 Otepaa",
+    "IRONMAN 70.3 Pan American Pro Championship Panama",
+    "IRONMAN 70.3 Pays D'Aix",
+    "IRONMAN 70.3 Pocono Mountains",
+    "IRONMAN 70.3 Ruegen",
+    "IRONMAN 70.3 Salzburg / Zell am See",
+    "IRONMAN 70.3 San Juan / Puerto Rico",
+    "IRONMAN 70.3 Shepparton",
+    "IRONMAN 70.3 Silverman",
+    "IRONMAN 70.3 Slovenian Istria",
+    "IRONMAN 70.3 South American Championship Buenos Aires",
+    "IRONMAN 70.3 South American Championship Palmas",
+    "IRONMAN 70.3 Subic Bay Philippines",
+    "IRONMAN 70.3 Superfrog",
+    "IRONMAN 70.3 Tallinn",
+    "IRONMAN 70.3 Western Australia",
+    "IRONMAN 70.3 Zell am See Kaprun",
+    "IRONMAN 70.3 Zell am See-Kaprun",
+    "IRONMAN Lake Tahoe",
+    "IRONMAN Triathlon Kohala Coast"
+  ]
+}
