@@ -1,6 +1,12 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,14 +16,19 @@ import Link from "next/link";
 import { useActionState } from "react";
 
 export default function SignUpPage() {
-  const [state, formAction, isPending] = useActionState(signUp, { error: null });
+  const [state, formAction, isPending] = useActionState(signUp, {
+    error: null,
+  });
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
         {/* Brand header with back link */}
         <div className="text-center space-y-2">
-          <Link href="/" className="inline-flex items-center gap-2 font-bold text-xl mb-4 hover:opacity-80 transition-opacity">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 font-bold text-xl mb-4 hover:opacity-80 transition-opacity"
+          >
             <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
               <Zap className="h-4 w-4 text-primary-foreground" />
             </div>
@@ -36,9 +47,7 @@ export default function SignUpPage() {
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Sign Up</CardTitle>
-            <CardDescription>
-              Enter your details to get started
-            </CardDescription>
+            <CardDescription>Enter your details to get started</CardDescription>
           </CardHeader>
           <CardContent>
             <form action={formAction} className="space-y-4">
@@ -58,6 +67,7 @@ export default function SignUpPage() {
                   placeholder="Your name"
                   required
                   disabled={isPending}
+                  autoComplete="name"
                 />
               </div>
 
@@ -70,6 +80,7 @@ export default function SignUpPage() {
                   placeholder="you@example.com"
                   required
                   disabled={isPending}
+                  autoComplete="email"
                 />
               </div>
 
@@ -83,10 +94,15 @@ export default function SignUpPage() {
                   minLength={8}
                   required
                   disabled={isPending}
+                  autoComplete="new-password"
                 />
               </div>
 
-              <Button type="submit" className="w-full font-semibold" disabled={isPending}>
+              <Button
+                type="submit"
+                className="w-full font-semibold"
+                disabled={isPending}
+              >
                 {isPending ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -100,7 +116,10 @@ export default function SignUpPage() {
 
             <div className="mt-4 text-center text-sm text-muted-foreground">
               Already have an account?{" "}
-              <Link href="/login" className="text-primary hover:underline font-medium">
+              <Link
+                href="/login"
+                className="text-primary hover:underline font-medium"
+              >
                 Sign in
               </Link>
             </div>
@@ -119,7 +138,10 @@ export default function SignUpPage() {
         </p>
 
         <div className="text-center">
-          <Link href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+          <Link
+            href="/"
+            className="text-sm text-muted-foreground hover:text-primary transition-colors"
+          >
             &larr; Back to Home
           </Link>
         </div>

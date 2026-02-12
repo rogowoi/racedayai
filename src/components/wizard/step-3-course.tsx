@@ -39,7 +39,7 @@ export function Step3Course() {
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label>Course GPX File</Label>
+            <Label>Course GPX File (Optional)</Label>
             <div className="grid w-full items-center gap-1.5">
               <label
                 htmlFor="gpx-upload"

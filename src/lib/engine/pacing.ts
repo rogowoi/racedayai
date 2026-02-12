@@ -54,9 +54,12 @@ export function calculateBikePacing(input: PacingInput): PacingOutput {
   // 300W = 38kph
   // Formula: Speed = 1.5 * (Power/Weight)^0.5 ... very rough.
 
-  // Better heuristic:
-  // Speed (kph) approx = 0.3 * Power^0.7 (tuned for aero position)
-  let estimatedSpeed = 1.2 * Math.pow(targetPower, 0.55);
+  // Better heuristic for triathlete on TT bike:
+  // Speed (kph) approx = 5.8 * Power^(1/3)
+  // 150W -> ~30.8 kph
+  // 200W -> ~33.9 kph
+  // 250W -> ~36.5 kph
+  let estimatedSpeed = 5.8 * Math.pow(targetPower, 0.333);
 
   if (steepness > 10) estimatedSpeed *= 0.9; // Slower on hills
 
