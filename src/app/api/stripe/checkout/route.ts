@@ -1,8 +1,24 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { auth } from "@/auth";
 import { stripe, getStripePriceId } from "@/lib/stripe";
 import { PLANS, type PlanKey } from "@/lib/plans";
 import { prisma } from "@/lib/db";
+
+/**
+ * Derive the app base URL from request headers instead of relying on
+ * NEXT_PUBLIC_APP_URL (which is inlined at build time by webpack and
+ * can silently become `undefined` if not present during the build).
+ */
+function getBaseUrl(headersList: Headers): string {
+  const host = headersList.get("host") ?? headersList.get("x-forwarded-host");
+  const proto = headersList.get("x-forwarded-proto") ?? "https";
+  if (host) return `${proto}://${host}`;
+  // Fallback to env var (trimmed) or hardcoded production URL
+  return (
+    process.env.NEXT_PUBLIC_APP_URL?.trim() || "https://racedayai.com"
+  );
+}
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -53,6 +69,14 @@ export async function POST(req: Request) {
       });
     }
 
+    // Build return URLs from the actual request origin
+    const headersList = await headers();
+    const baseUrl = getBaseUrl(headersList);
+    const successUrl = `${baseUrl}/dashboard/settings?billing=success`;
+    const cancelUrl = `${baseUrl}/dashboard/settings?billing=cancelled`;
+
+    console.log("[checkout] baseUrl:", baseUrl, "successUrl:", successUrl);
+
     // Create checkout session
     const checkoutSession = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -63,8 +87,8 @@ export async function POST(req: Request) {
         },
       ],
       mode: "subscription",
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/settings?billing=success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/settings?billing=cancelled`,
+      success_url: successUrl,
+      cancel_url: cancelUrl,
       metadata: {
         userId: session.user.id,
         plan,

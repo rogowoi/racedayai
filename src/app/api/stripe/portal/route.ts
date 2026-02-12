@@ -1,7 +1,15 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { auth } from "@/auth";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/db";
+
+function getBaseUrl(headersList: Headers): string {
+  const host = headersList.get("host") ?? headersList.get("x-forwarded-host");
+  const proto = headersList.get("x-forwarded-proto") ?? "https";
+  if (host) return `${proto}://${host}`;
+  return process.env.NEXT_PUBLIC_APP_URL?.trim() || "https://racedayai.com";
+}
 
 export async function POST() {
   const session = await auth();
@@ -23,9 +31,12 @@ export async function POST() {
       );
     }
 
+    const headersList = await headers();
+    const baseUrl = getBaseUrl(headersList);
+
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: user.stripeCustomerId,
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/settings`,
+      return_url: `${baseUrl}/dashboard/settings`,
     });
 
     return NextResponse.json({ url: portalSession.url });
