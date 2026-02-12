@@ -140,7 +140,7 @@ export default async function DashboardPage() {
 
             {racePlans.length === 0 ? (
               <Card>
-                <CardContent className="flex flex-col items-center justify-center py-16">
+                <CardContent className="flex flex-col items-center justify-center py-10 sm:py-16">
                   <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
                   <h3 className="text-lg font-semibold mb-2">
                     No race plans yet

@@ -134,7 +134,7 @@ export default async function PlanPage({
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
                 {course.raceName}
               </h1>
               <p className="text-muted-foreground">
@@ -224,7 +224,7 @@ export default async function PlanPage({
                   <span>{formatTime((swim?.estimatedTimeMin ?? 0) * 60)}</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="grid sm:grid-cols-3 gap-4">
+              <CardContent className="grid md:grid-cols-3 gap-4">
                 <div>
                   <div className="text-sm text-muted-foreground">
                     Target Pace
@@ -233,7 +233,7 @@ export default async function PlanPage({
                     {formatPace(swim?.targetPaceSec ?? 0)}/100m
                   </div>
                 </div>
-                <div className="sm:col-span-2 text-sm text-muted-foreground">
+                <div className="md:col-span-2 text-sm text-muted-foreground">
                   Steady effort. Don't start too fast. Save legs for the bike.
                 </div>
               </CardContent>
@@ -247,7 +247,7 @@ export default async function PlanPage({
                   <span>{formatTime((bike?.durationMinutes ?? 0) * 60)}</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="grid sm:grid-cols-3 gap-4">
+              <CardContent className="grid md:grid-cols-3 gap-4">
                 <div>
                   <div className="text-sm text-muted-foreground">Avg Power</div>
                   <div className="text-lg font-semibold">
@@ -278,7 +278,7 @@ export default async function PlanPage({
                   <span>{formatTime((run?.estimatedTimeMin ?? 0) * 60)}</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="grid sm:grid-cols-3 gap-4">
+              <CardContent className="grid md:grid-cols-3 gap-4">
                 <div>
                   <div className="text-sm text-muted-foreground">
                     Target Pace
@@ -287,7 +287,7 @@ export default async function PlanPage({
                     {formatPace(run?.targetPaceSec ?? 0)}/km
                   </div>
                 </div>
-                <div className="sm:col-span-2 text-sm text-muted-foreground">
+                <div className="md:col-span-2 text-sm text-muted-foreground">
                   Hold back first 5km. Negative split strategy.
                 </div>
               </CardContent>

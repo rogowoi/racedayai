@@ -8,8 +8,8 @@ export function Hero() {
       {/* Gradient background */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-white to-sky-50 dark:from-orange-950/20 dark:via-background dark:to-sky-950/20" />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] bg-accent/5 rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto px-4 py-16 md:py-28 lg:py-36">
@@ -98,31 +98,31 @@ export function Hero() {
                   </div>
                   <div className="grid grid-cols-3 gap-2">
                     <div className="rounded-lg bg-background p-2.5 text-center border">
-                      <div className="text-[10px] text-muted-foreground uppercase">
+                      <div className="text-[11px] text-muted-foreground uppercase">
                         Flats
                       </div>
                       <div className="font-bold text-lg font-mono">195W</div>
-                      <div className="text-[10px] text-muted-foreground">
+                      <div className="text-[11px] text-muted-foreground">
                         73% FTP
                       </div>
                     </div>
                     <div className="rounded-lg bg-background p-2.5 text-center border border-primary/20">
-                      <div className="text-[10px] text-primary uppercase font-medium">
+                      <div className="text-[11px] text-primary uppercase font-medium">
                         Hills
                       </div>
                       <div className="font-bold text-lg font-mono text-primary">
                         210W
                       </div>
-                      <div className="text-[10px] text-muted-foreground">
+                      <div className="text-[11px] text-muted-foreground">
                         79% FTP
                       </div>
                     </div>
                     <div className="rounded-lg bg-background p-2.5 text-center border">
-                      <div className="text-[10px] text-muted-foreground uppercase">
+                      <div className="text-[11px] text-muted-foreground uppercase">
                         Descents
                       </div>
                       <div className="font-bold text-lg font-mono">165W</div>
-                      <div className="text-[10px] text-muted-foreground">
+                      <div className="text-[11px] text-muted-foreground">
                         62% FTP
                       </div>
                     </div>

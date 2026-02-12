@@ -91,7 +91,7 @@ export async function Navbar() {
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+          <SheetContent side="right" className="w-[85vw] max-w-[400px]">
             <div className="flex flex-col h-full gap-6 pt-10">
               <div className="flex flex-col gap-4 text-base font-medium">
                 {session && (
