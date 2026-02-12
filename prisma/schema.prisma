@@ -1,35 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-// ─── User & Auth ───────────────────────────────────────────────
-
 model User {
-  id            String   @id @default(cuid())
-  name          String?
-  email         String   @unique
-  emailVerified DateTime?
-  image         String?
-  passwordHash  String? // Optional for credentials auth
-
-  // Billing
-  stripeCustomerId       String?  // Stripe customer ID
-  plan                   String   @default("free") // free | season | unlimited
-  stripeSubscriptionId   String?  // Active subscription ID
-  seasonStartDate        DateTime? // When current season began
-  plansCreatedThisSeason Int      @default(0) // Count for limit enforcement
-
-  accounts      Account[]
-  sessions      Session[]
-  athletes      Athlete[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                     String    @id @default(cuid())
+  name                   String?
+  email                  String    @unique
+  emailVerified          DateTime?
+  image                  String?
+  passwordHash           String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  plan                   String    @default("free")
+  plansCreatedThisSeason Int       @default(0)
+  seasonStartDate        DateTime?
+  stripeCustomerId       String?
+  stripeSubscriptionId   String?
+  accounts               Account[]
+  athletes               Athlete?
+  sessions               Session[]
 
   @@index([stripeCustomerId])
 }
@@ -46,75 +40,62 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
- 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
 
-// ─── Athlete Profile ───────────────────────────────────────────
-
 model Athlete {
-  id     String @id @default(cuid())
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Fitness platform connections
-  garminConnected Boolean @default(false)
-  garminToken     Json?
-  stravaConnected Boolean @default(false)
-  stravaToken     Json?
-
-  // Fitness metrics
-  ftpWatts         Int?    // Functional Threshold Power
-  thresholdPaceSec Int?    // per km (e.g., 285 = 4:45/km)
-  cssPer100mSec    Int?    // Critical Swim Speed (e.g., 102 = 1:42)
+  id               String                   @id @default(cuid())
+  userId           String                   @unique
+  garminConnected  Boolean                  @default(false)
+  garminToken      Json?
+  stravaConnected  Boolean                  @default(false)
+  stravaToken      Json?
+  ftpWatts         Int?
+  thresholdPaceSec Int?
+  cssPer100mSec    Int?
   maxHr            Int?
   restingHr        Int?
-  weightKg         Decimal? @db.Decimal(5, 1)
-  experienceLevel  String   @default("beginner") // beginner | intermediate | advanced | elite
-  sweatRateMlHr    Int?     // optional: known sweat rate
-
-  racePlans RacePlan[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  weightKg         Decimal?                 @db.Decimal(5, 1)
+  experienceLevel  String                   @default("beginner")
+  sweatRateMlHr    Int?
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  user             User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  racePlans        RacePlan[]
+  trainingFeatures AthleteTrainingFeature[]
 
   @@index([userId])
 }
 
-// ─── Race Course ───────────────────────────────────────────────
-
 model RaceCourse {
-  id               String @id @default(cuid())
-  raceName         String
-  raceYear         Int?
-  distanceCategory String // sprint | olympic | 70.3 | 140.6
-  location         String?
-  latitude         Decimal? @db.Decimal(9, 6)
-  longitude        Decimal? @db.Decimal(9, 6)
-
+  id                 String     @id @default(cuid())
+  raceName           String
+  raceYear           Int?
+  distanceCategory   String
+  location           String?
+  latitude           Decimal?   @db.Decimal(9, 6)
+  longitude          Decimal?   @db.Decimal(9, 6)
   swimDistanceM      Int?
   bikeDistanceM      Int?
   runDistanceM       Int?
@@ -122,53 +103,127 @@ model RaceCourse {
   runGpxUrl          String?
   bikeElevationGainM Int?
   runElevationGainM  Int?
-  courseNotes         String?
-
-  racePlans RacePlan[]
-
-  createdAt DateTime @default(now())
+  courseNotes        String?
+  createdAt          DateTime   @default(now())
+  racePlans          RacePlan[]
 
   @@index([raceName, raceYear])
 }
 
-// ─── Race Plan ─────────────────────────────────────────────────
-
 model RacePlan {
-  id         String    @id @default(cuid())
-  athleteId  String
-  athlete    Athlete   @relation(fields: [athleteId], references: [id], onDelete: Cascade)
-  courseId   String
-  course     RaceCourse @relation(fields: [courseId], references: [id])
-  raceDate   DateTime  @db.Date
-  goalType   String    @default("finish_strong") // finish_strong | pr_attempt | just_finish
-
-  // Conditions at generation time
-  weatherData Json?    // {temp_c, humidity, wind_speed, wind_dir, dew_point}
-  altitudeM   Int?
-
-  // Generated plan
-  swimPlan       Json?  // {target_pace, total_time, strategy}
-  bikePlan       Json?  // {target_power, segments[], total_time}
-  runPlan        Json?  // {target_pace, first_half, second_half, total_time}
-  nutritionPlan  Json?  // {carbs_hr, sodium_hr, fluid_hr, timeline[]}
-  transitionPlan Json?  // {t1_target, t2_target, checklists}
-
-  // Predictions
+  id                 String        @id @default(cuid())
+  athleteId          String
+  courseId           String
+  raceDate           DateTime      @db.Date
+  goalType           String        @default("finish_strong")
+  weatherData        Json?
+  altitudeM          Int?
+  swimPlan           Json?
+  bikePlan           Json?
+  runPlan            Json?
+  nutritionPlan      Json?
+  transitionPlan     Json?
+  statisticalContext Json?         // Data-driven cohort analysis (840K records)
   predictedFinishSec Int?
   confidenceLowSec   Int?
   confidenceHighSec  Int?
-  predictedSplits    Json?  // {swim, t1, bike, t2, run}
-
-  // AI narrative
-  narrativePlan   String?   // Claude-generated coach advice
-  weatherWarnings String[]
-
-  // Output
-  pdfUrl     String?
-  shareToken String?  @unique @db.VarChar(12)
-
-  createdAt DateTime @default(now())
+  predictedSplits    Json?
+  narrativePlan      String?
+  weatherWarnings    String[]
+  pdfUrl             String?
+  shareToken         String?       @unique @db.VarChar(12)
+  createdAt          DateTime      @default(now())
+  athlete            Athlete       @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  course             RaceCourse    @relation(fields: [courseId], references: [id])
+  planOutcomes       PlanOutcome[]
 
   @@index([athleteId, raceDate(sort: Desc)])
   @@index([shareToken])
+}
+
+// ─── Statistical Data Tables ───────────────────────────────────
+
+model RaceResult {
+  id                String   @id @default(cuid())
+  gender            String?
+  ageGroup          String?
+  age               Int?
+  country           String?
+  eventYear         Int
+  eventLocation     String?
+  swimTimeSec       Float
+  bikeTimeSec       Float
+  runTimeSec        Float
+  transitionTimeSec Float?
+  totalTimeSec      Float
+  source            String   @default("kaggle")
+  createdAt         DateTime @default(now())
+
+  @@index([eventYear, eventLocation])
+  @@index([gender, ageGroup])
+}
+
+model CohortDistribution {
+  id         String   @id @default(cuid())
+  gender     String
+  ageGroup   String
+  distance   String
+  discipline String
+  mu         Float
+  sigma      Float
+  n          Int
+  p10        Float
+  p25        Float
+  p50        Float
+  p75        Float
+  p90        Float
+  updatedAt  DateTime @updatedAt
+
+  @@unique([gender, ageGroup, distance, discipline])
+  @@index([gender, ageGroup])
+}
+
+model WeatherRecord {
+  id            String    @id @default(cuid())
+  eventLocation String
+  eventYear     Int
+  eventDate     DateTime?
+  tempC         Float?
+  humidityPct   Float?
+  windKph       Float?
+  conditions    String?
+  source        String?
+  createdAt     DateTime  @default(now())
+
+  @@index([eventYear, eventLocation])
+}
+
+model PlanOutcome {
+  id                String   @id @default(cuid())
+  planId            String
+  actualSwimSec     Float?
+  actualBikeSec     Float?
+  actualRunSec      Float?
+  actualTotalSec    Float?
+  weatherConditions String?
+  reportedAt        DateTime
+  createdAt         DateTime @default(now())
+  plan              RacePlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@index([planId])
+}
+
+model AthleteTrainingFeature {
+  id           String   @id @default(cuid())
+  athleteId    String
+  periodStart  DateTime
+  weeklyTssAvg Float?
+  longRideHrs  Float?
+  longRunKm    Float?
+  ftpTrend     Float?
+  volumeTrend  Float?
+  createdAt    DateTime @default(now())
+  athlete      Athlete  @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+
+  @@index([athleteId, periodStart(sort: Desc)])
 }
