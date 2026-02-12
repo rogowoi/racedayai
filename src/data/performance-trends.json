@@ -1,0 +1,1547 @@
+{
+  "metadata": {
+    "dataset": "Half Ironman / IRONMAN 70.3",
+    "date_generated": "2026-02-12 17:30:12",
+    "description": "Year-over-year performance trends analysis",
+    "total_records": 50000,
+    "years_range": "2004-2020",
+    "interpretation": "Negative year_coefficient = athletes getting faster over time. Positive = getting slower."
+  },
+  "overall_trend": {
+    "year_coefficient": -6.0446145917364555,
+    "intercept": 33289.25454070425,
+    "r2_score": 3.894817344696211e-05,
+    "interpretation": "-6.04 seconds per year (getting faster)",
+    "pct_change_per_year": -0.018157855065049407
+  },
+  "segment_trends": {
+    "swim": {
+      "year_coefficient": -1.0671992847679905,
+      "trend": "improving"
+    },
+    "bike": {
+      "year_coefficient": -5.165441458385764,
+      "trend": "improving"
+    },
+    "run": {
+      "year_coefficient": -8.983409931983108,
+      "trend": "improving"
+    }
+  },
+  "yearly_medians": {
+    "2004": {
+      "median_sec": 21494.0,
+      "mean_sec": 21176.105263157893,
+      "std_sec": 2599.0333246890746,
+      "min_sec": 16373.0,
+      "max_sec": 29783.0,
+      "count": 95,
+      "p50_min": 358.23,
+      "p25": 19067.5,
+      "p75": 22850.0
+    },
+    "2005": {
+      "median_sec": 20735.0,
+      "mean_sec": 21049.71573604061,
+      "std_sec": 2866.556899766347,
+      "min_sec": 15028.0,
+      "max_sec": 31911.0,
+      "count": 197,
+      "p50_min": 345.58,
+      "p25": 19076.0,
+      "p75": 22919.0
+    },
+    "2006": {
+      "median_sec": 20199.0,
+      "mean_sec": 20524.59259259259,
+      "std_sec": 3128.906454676522,
+      "min_sec": 13645.0,
+      "max_sec": 31500.0,
+      "count": 351,
+      "p50_min": 336.65,
+      "p25": 18192.5,
+      "p75": 22526.0
+    },
+    "2007": {
+      "median_sec": 20671.0,
+      "mean_sec": 20908.942211055277,
+      "std_sec": 3064.302090844963,
+      "min_sec": 14494.0,
+      "max_sec": 31026.0,
+      "count": 398,
+      "p50_min": 344.52,
+      "p25": 18474.5,
+      "p75": 22778.25
+    },
+    "2008": {
+      "median_sec": 21029.5,
+      "mean_sec": 21296.19019607843,
+      "std_sec": 2930.9320672795916,
+      "min_sec": 14528.0,
+      "max_sec": 32065.0,
+      "count": 510,
+      "p50_min": 350.49,
+      "p25": 19178.0,
+      "p75": 23076.25
+    },
+    "2009": {
+      "median_sec": 20588.5,
+      "mean_sec": 20802.95261121857,
+      "std_sec": 3219.643620384502,
+      "min_sec": 13492.0,
+      "max_sec": 33820.0,
+      "count": 1034,
+      "p50_min": 343.14,
+      "p25": 18441.0,
+      "p75": 22876.75
+    },
+    "2010": {
+      "median_sec": 21165.5,
+      "mean_sec": 21414.362561576356,
+      "std_sec": 3094.854704627886,
+      "min_sec": 13703.0,
+      "max_sec": 33634.0,
+      "count": 2030,
+      "p50_min": 352.76,
+      "p25": 19154.75,
+      "p75": 23331.0
+    },
+    "2011": {
+      "median_sec": 20875.0,
+      "mean_sec": 21116.34005535785,
+      "std_sec": 2955.668502605002,
+      "min_sec": 13887.0,
+      "max_sec": 32971.0,
+      "count": 2529,
+      "p50_min": 347.92,
+      "p25": 19036.0,
+      "p75": 22960.0
+    },
+    "2012": {
+      "median_sec": 20787.0,
+      "mean_sec": 21048.397532350285,
+      "std_sec": 2936.4912625336915,
+      "min_sec": 13619.0,
+      "max_sec": 33633.0,
+      "count": 3323,
+      "p50_min": 346.45,
+      "p25": 18951.5,
+      "p75": 22895.5
+    },
+    "2013": {
+      "median_sec": 20752.0,
+      "mean_sec": 21078.47009735744,
+      "std_sec": 3045.9192409987745,
+      "min_sec": 13585.0,
+      "max_sec": 34231.0,
+      "count": 3595,
+      "p50_min": 345.87,
+      "p25": 18945.0,
+      "p75": 22963.5
+    },
+    "2014": {
+      "median_sec": 20804.0,
+      "mean_sec": 21112.578039545646,
+      "std_sec": 3107.1670547547724,
+      "min_sec": 13331.0,
+      "max_sec": 33273.0,
+      "count": 4754,
+      "p50_min": 346.73,
+      "p25": 18848.25,
+      "p75": 23041.0
+    },
+    "2015": {
+      "median_sec": 20911.0,
+      "mean_sec": 21185.562265499375,
+      "std_sec": 3032.464794415473,
+      "min_sec": 13472.0,
+      "max_sec": 32362.0,
+      "count": 5597,
+      "p50_min": 348.52,
+      "p25": 18949.0,
+      "p75": 23048.0
+    },
+    "2016": {
+      "median_sec": 20929.0,
+      "mean_sec": 21167.21207236253,
+      "std_sec": 3109.502775943191,
+      "min_sec": 13439.0,
+      "max_sec": 33953.0,
+      "count": 5583,
+      "p50_min": 348.82,
+      "p25": 18943.5,
+      "p75": 23060.0
+    },
+    "2017": {
+      "median_sec": 20973.5,
+      "mean_sec": 21287.442417140945,
+      "std_sec": 3143.3531709769145,
+      "min_sec": 13401.0,
+      "max_sec": 33735.0,
+      "count": 5974,
+      "p50_min": 349.56,
+      "p25": 19024.5,
+      "p75": 23274.0
+    },
+    "2018": {
+      "median_sec": 20775.0,
+      "mean_sec": 21053.38716290806,
+      "std_sec": 3074.9223049484117,
+      "min_sec": 13379.0,
+      "max_sec": 34047.0,
+      "count": 6341,
+      "p50_min": 346.25,
+      "p25": 18821.0,
+      "p75": 23015.0
+    },
+    "2019": {
+      "median_sec": 20672.0,
+      "mean_sec": 20997.200915855752,
+      "std_sec": 3070.1681085360988,
+      "min_sec": 13078.0,
+      "max_sec": 33091.0,
+      "count": 6988,
+      "p50_min": 344.53,
+      "p25": 18788.75,
+      "p75": 22841.25
+    },
+    "2020": {
+      "median_sec": 19991.0,
+      "mean_sec": 20336.37089871612,
+      "std_sec": 2949.3291604233214,
+      "min_sec": 13614.0,
+      "max_sec": 29885.0,
+      "count": 701,
+      "p50_min": 333.18,
+      "p25": 18181.0,
+      "p75": 22366.0
+    }
+  },
+  "cohort_trends": {
+    "F_00": {
+      "year_coefficient": -0.478866501539923,
+      "trend": "getting faster",
+      "n_records": 379
+    },
+    "F_18-24": {
+      "year_coefficient": -32.33412281017737,
+      "trend": "getting faster",
+      "n_records": 499
+    },
+    "F_25-29": {
+      "year_coefficient": -0.6721713852936513,
+      "trend": "getting faster",
+      "n_records": 1556
+    },
+    "F_30-34": {
+      "year_coefficient": 30.11666360887069,
+      "trend": "getting slower",
+      "n_records": 2118
+    },
+    "F_35-39": {
+      "year_coefficient": 2.95558250691746,
+      "trend": "getting slower",
+      "n_records": 2188
+    },
+    "F_40-44": {
+      "year_coefficient": 10.279271486125774,
+      "trend": "getting slower",
+      "n_records": 2137
+    },
+    "F_45-49": {
+      "year_coefficient": 50.29853401683805,
+      "trend": "getting slower",
+      "n_records": 1491
+    },
+    "F_50-54": {
+      "year_coefficient": 39.133571853153846,
+      "trend": "getting slower",
+      "n_records": 965
+    },
+    "F_55-59": {
+      "year_coefficient": -42.06230933706898,
+      "trend": "getting faster",
+      "n_records": 476
+    },
+    "F_60-64": {
+      "year_coefficient": 2.5810587680280257,
+      "trend": "getting slower",
+      "n_records": 181
+    },
+    "M_00": {
+      "year_coefficient": -34.17783617910587,
+      "trend": "getting faster",
+      "n_records": 629
+    },
+    "M_18-24": {
+      "year_coefficient": 2.429471171693231,
+      "trend": "getting slower",
+      "n_records": 1358
+    },
+    "M_25-29": {
+      "year_coefficient": -16.413955065222993,
+      "trend": "getting faster",
+      "n_records": 3770
+    },
+    "M_30-34": {
+      "year_coefficient": -12.17154095533072,
+      "trend": "getting faster",
+      "n_records": 6096
+    },
+    "M_35-39": {
+      "year_coefficient": -31.692887248335055,
+      "trend": "getting faster",
+      "n_records": 7322
+    },
+    "M_40-44": {
+      "year_coefficient": -16.653869858872156,
+      "trend": "getting faster",
+      "n_records": 7416
+    },
+    "M_45-49": {
+      "year_coefficient": -17.484951868059238,
+      "trend": "getting faster",
+      "n_records": 5524
+    },
+    "M_50-54": {
+      "year_coefficient": -49.7573883540297,
+      "trend": "getting faster",
+      "n_records": 3351
+    },
+    "M_55-59": {
+      "year_coefficient": -46.4781038113939,
+      "trend": "getting faster",
+      "n_records": 1603
+    },
+    "M_60-64": {
+      "year_coefficient": -132.90397201832187,
+      "trend": "getting faster",
+      "n_records": 597
+    },
+    "M_65-69": {
+      "year_coefficient": -155.62498116740576,
+      "trend": "getting faster",
+      "n_records": 209
+    }
+  },
+  "cohort_yearly_breakdown": {
+    "F_00": {
+      "2009": {
+        "median_sec": 16315.5,
+        "count": 14
+      },
+      "2010": {
+        "median_sec": 16166.0,
+        "count": 16
+      },
+      "2011": {
+        "median_sec": 16612.0,
+        "count": 27
+      },
+      "2012": {
+        "median_sec": 16338.0,
+        "count": 24
+      },
+      "2013": {
+        "median_sec": 16628.5,
+        "count": 38
+      },
+      "2014": {
+        "median_sec": 17081.5,
+        "count": 38
+      },
+      "2015": {
+        "median_sec": 16850.0,
+        "count": 45
+      },
+      "2016": {
+        "median_sec": 16628.0,
+        "count": 46
+      },
+      "2017": {
+        "median_sec": 16995.0,
+        "count": 37
+      },
+      "2018": {
+        "median_sec": 16247.0,
+        "count": 31
+      },
+      "2019": {
+        "median_sec": 16450.5,
+        "count": 42
+      }
+    },
+    "F_18-24": {
+      "2009": {
+        "median_sec": 20603.0,
+        "count": 15
+      },
+      "2010": {
+        "median_sec": 22863.0,
+        "count": 12
+      },
+      "2011": {
+        "median_sec": 21609.0,
+        "count": 29
+      },
+      "2012": {
+        "median_sec": 21383.0,
+        "count": 40
+      },
+      "2013": {
+        "median_sec": 23208.0,
+        "count": 43
+      },
+      "2014": {
+        "median_sec": 22261.5,
+        "count": 52
+      },
+      "2015": {
+        "median_sec": 21747.0,
+        "count": 53
+      },
+      "2016": {
+        "median_sec": 22189.0,
+        "count": 39
+      },
+      "2017": {
+        "median_sec": 22465.5,
+        "count": 66
+      },
+      "2018": {
+        "median_sec": 21106.0,
+        "count": 60
+      },
+      "2019": {
+        "median_sec": 21238.0,
+        "count": 61
+      },
+      "2020": {
+        "median_sec": 19150.0,
+        "count": 10
+      }
+    },
+    "F_25-29": {
+      "2006": {
+        "median_sec": 19966.5,
+        "count": 14
+      },
+      "2007": {
+        "median_sec": 20263.0,
+        "count": 20
+      },
+      "2008": {
+        "median_sec": 20568.5,
+        "count": 26
+      },
+      "2009": {
+        "median_sec": 21558.0,
+        "count": 41
+      },
+      "2010": {
+        "median_sec": 22534.5,
+        "count": 84
+      },
+      "2011": {
+        "median_sec": 21946.0,
+        "count": 91
+      },
+      "2012": {
+        "median_sec": 22371.0,
+        "count": 119
+      },
+      "2013": {
+        "median_sec": 21574.0,
+        "count": 123
+      },
+      "2014": {
+        "median_sec": 21765.5,
+        "count": 136
+      },
+      "2015": {
+        "median_sec": 21966.0,
+        "count": 154
+      },
+      "2016": {
+        "median_sec": 22081.0,
+        "count": 175
+      },
+      "2017": {
+        "median_sec": 21805.5,
+        "count": 168
+      },
+      "2018": {
+        "median_sec": 21579.0,
+        "count": 179
+      },
+      "2019": {
+        "median_sec": 21875.0,
+        "count": 199
+      },
+      "2020": {
+        "median_sec": 21725.0,
+        "count": 17
+      }
+    },
+    "F_30-34": {
+      "2005": {
+        "median_sec": 20446.0,
+        "count": 12
+      },
+      "2006": {
+        "median_sec": 22046.0,
+        "count": 16
+      },
+      "2007": {
+        "median_sec": 21035.5,
+        "count": 14
+      },
+      "2008": {
+        "median_sec": 21778.0,
+        "count": 26
+      },
+      "2009": {
+        "median_sec": 22440.0,
+        "count": 57
+      },
+      "2010": {
+        "median_sec": 21169.0,
+        "count": 102
+      },
+      "2011": {
+        "median_sec": 21279.5,
+        "count": 116
+      },
+      "2012": {
+        "median_sec": 21839.5,
+        "count": 176
+      },
+      "2013": {
+        "median_sec": 21973.0,
+        "count": 172
+      },
+      "2014": {
+        "median_sec": 21739.5,
+        "count": 216
+      },
+      "2015": {
+        "median_sec": 22306.0,
+        "count": 221
+      },
+      "2016": {
+        "median_sec": 21936.0,
+        "count": 221
+      },
+      "2017": {
+        "median_sec": 21889.5,
+        "count": 228
+      },
+      "2018": {
+        "median_sec": 22043.0,
+        "count": 240
+      },
+      "2019": {
+        "median_sec": 22032.0,
+        "count": 277
+      },
+      "2020": {
+        "median_sec": 20154.0,
+        "count": 19
+      }
+    },
+    "F_35-39": {
+      "2006": {
+        "median_sec": 21751.0,
+        "count": 23
+      },
+      "2007": {
+        "median_sec": 23125.0,
+        "count": 19
+      },
+      "2008": {
+        "median_sec": 21867.5,
+        "count": 40
+      },
+      "2009": {
+        "median_sec": 22551.0,
+        "count": 43
+      },
+      "2010": {
+        "median_sec": 22584.0,
+        "count": 120
+      },
+      "2011": {
+        "median_sec": 22116.0,
+        "count": 130
+      },
+      "2012": {
+        "median_sec": 22054.0,
+        "count": 168
+      },
+      "2013": {
+        "median_sec": 22046.0,
+        "count": 158
+      },
+      "2014": {
+        "median_sec": 21936.5,
+        "count": 224
+      },
+      "2015": {
+        "median_sec": 21867.0,
+        "count": 243
+      },
+      "2016": {
+        "median_sec": 22333.0,
+        "count": 223
+      },
+      "2017": {
+        "median_sec": 22181.0,
+        "count": 243
+      },
+      "2018": {
+        "median_sec": 21838.0,
+        "count": 239
+      },
+      "2019": {
+        "median_sec": 21983.0,
+        "count": 277
+      },
+      "2020": {
+        "median_sec": 22475.5,
+        "count": 24
+      }
+    },
+    "F_40-44": {
+      "2005": {
+        "median_sec": 22623.0,
+        "count": 14
+      },
+      "2006": {
+        "median_sec": 19811.0,
+        "count": 16
+      },
+      "2007": {
+        "median_sec": 23506.0,
+        "count": 12
+      },
+      "2008": {
+        "median_sec": 22768.5,
+        "count": 22
+      },
+      "2009": {
+        "median_sec": 22243.0,
+        "count": 47
+      },
+      "2010": {
+        "median_sec": 22827.0,
+        "count": 88
+      },
+      "2011": {
+        "median_sec": 22447.0,
+        "count": 116
+      },
+      "2012": {
+        "median_sec": 22367.0,
+        "count": 161
+      },
+      "2013": {
+        "median_sec": 21867.0,
+        "count": 155
+      },
+      "2014": {
+        "median_sec": 22582.5,
+        "count": 208
+      },
+      "2015": {
+        "median_sec": 22072.0,
+        "count": 233
+      },
+      "2016": {
+        "median_sec": 22570.0,
+        "count": 225
+      },
+      "2017": {
+        "median_sec": 21694.0,
+        "count": 242
+      },
+      "2018": {
+        "median_sec": 22334.0,
+        "count": 261
+      },
+      "2019": {
+        "median_sec": 22132.0,
+        "count": 311
+      },
+      "2020": {
+        "median_sec": 22733.5,
+        "count": 24
+      }
+    },
+    "F_45-49": {
+      "2006": {
+        "median_sec": 20688.0,
+        "count": 13
+      },
+      "2007": {
+        "median_sec": 21603.5,
+        "count": 12
+      },
+      "2008": {
+        "median_sec": 22908.0,
+        "count": 15
+      },
+      "2009": {
+        "median_sec": 21566.5,
+        "count": 36
+      },
+      "2010": {
+        "median_sec": 21733.0,
+        "count": 55
+      },
+      "2011": {
+        "median_sec": 22330.0,
+        "count": 59
+      },
+      "2012": {
+        "median_sec": 22082.0,
+        "count": 65
+      },
+      "2013": {
+        "median_sec": 22607.0,
+        "count": 130
+      },
+      "2014": {
+        "median_sec": 23083.0,
+        "count": 153
+      },
+      "2015": {
+        "median_sec": 22411.0,
+        "count": 165
+      },
+      "2016": {
+        "median_sec": 22610.0,
+        "count": 189
+      },
+      "2017": {
+        "median_sec": 22841.0,
+        "count": 180
+      },
+      "2018": {
+        "median_sec": 22638.0,
+        "count": 181
+      },
+      "2019": {
+        "median_sec": 22561.0,
+        "count": 216
+      },
+      "2020": {
+        "median_sec": 22075.5,
+        "count": 14
+      }
+    },
+    "F_50-54": {
+      "2009": {
+        "median_sec": 23081.0,
+        "count": 15
+      },
+      "2010": {
+        "median_sec": 24512.0,
+        "count": 23
+      },
+      "2011": {
+        "median_sec": 22446.0,
+        "count": 51
+      },
+      "2012": {
+        "median_sec": 22254.5,
+        "count": 48
+      },
+      "2013": {
+        "median_sec": 22930.0,
+        "count": 65
+      },
+      "2014": {
+        "median_sec": 22423.0,
+        "count": 89
+      },
+      "2015": {
+        "median_sec": 22829.0,
+        "count": 88
+      },
+      "2016": {
+        "median_sec": 22452.5,
+        "count": 122
+      },
+      "2017": {
+        "median_sec": 22993.5,
+        "count": 142
+      },
+      "2018": {
+        "median_sec": 22722.5,
+        "count": 134
+      },
+      "2019": {
+        "median_sec": 23224.5,
+        "count": 162
+      }
+    },
+    "F_55-59": {
+      "2010": {
+        "median_sec": 25336.5,
+        "count": 12
+      },
+      "2011": {
+        "median_sec": 22785.0,
+        "count": 11
+      },
+      "2012": {
+        "median_sec": 23753.5,
+        "count": 16
+      },
+      "2013": {
+        "median_sec": 24864.0,
+        "count": 23
+      },
+      "2014": {
+        "median_sec": 23509.5,
+        "count": 32
+      },
+      "2015": {
+        "median_sec": 22690.5,
+        "count": 78
+      },
+      "2016": {
+        "median_sec": 23765.5,
+        "count": 62
+      },
+      "2017": {
+        "median_sec": 24090.0,
+        "count": 59
+      },
+      "2018": {
+        "median_sec": 23292.0,
+        "count": 78
+      },
+      "2019": {
+        "median_sec": 22726.0,
+        "count": 87
+      }
+    },
+    "F_60-64": {
+      "2011": {
+        "median_sec": 23844.0,
+        "count": 10
+      },
+      "2013": {
+        "median_sec": 25287.0,
+        "count": 10
+      },
+      "2014": {
+        "median_sec": 23858.5,
+        "count": 16
+      },
+      "2015": {
+        "median_sec": 23032.5,
+        "count": 16
+      },
+      "2016": {
+        "median_sec": 25255.0,
+        "count": 22
+      },
+      "2017": {
+        "median_sec": 25277.0,
+        "count": 29
+      },
+      "2018": {
+        "median_sec": 23584.5,
+        "count": 34
+      },
+      "2019": {
+        "median_sec": 24322.0,
+        "count": 25
+      }
+    },
+    "F_65-69": {
+      "2019": {
+        "median_sec": 24900.0,
+        "count": 11
+      }
+    },
+    "M_00": {
+      "2008": {
+        "median_sec": 15434.0,
+        "count": 10
+      },
+      "2009": {
+        "median_sec": 14943.0,
+        "count": 20
+      },
+      "2010": {
+        "median_sec": 14980.0,
+        "count": 33
+      },
+      "2011": {
+        "median_sec": 14997.5,
+        "count": 34
+      },
+      "2012": {
+        "median_sec": 15167.0,
+        "count": 43
+      },
+      "2013": {
+        "median_sec": 14927.0,
+        "count": 47
+      },
+      "2014": {
+        "median_sec": 14869.5,
+        "count": 62
+      },
+      "2015": {
+        "median_sec": 15091.0,
+        "count": 59
+      },
+      "2016": {
+        "median_sec": 15005.5,
+        "count": 78
+      },
+      "2017": {
+        "median_sec": 14874.0,
+        "count": 71
+      },
+      "2018": {
+        "median_sec": 14794.0,
+        "count": 75
+      },
+      "2019": {
+        "median_sec": 14638.5,
+        "count": 72
+      },
+      "2020": {
+        "median_sec": 14276.5,
+        "count": 12
+      }
+    },
+    "M_18-24": {
+      "2006": {
+        "median_sec": 18663.5,
+        "count": 14
+      },
+      "2007": {
+        "median_sec": 20197.5,
+        "count": 16
+      },
+      "2008": {
+        "median_sec": 19434.0,
+        "count": 17
+      },
+      "2009": {
+        "median_sec": 18347.0,
+        "count": 31
+      },
+      "2010": {
+        "median_sec": 20132.0,
+        "count": 73
+      },
+      "2011": {
+        "median_sec": 20495.5,
+        "count": 56
+      },
+      "2012": {
+        "median_sec": 20568.5,
+        "count": 92
+      },
+      "2013": {
+        "median_sec": 20423.5,
+        "count": 86
+      },
+      "2014": {
+        "median_sec": 20089.0,
+        "count": 126
+      },
+      "2015": {
+        "median_sec": 20188.0,
+        "count": 164
+      },
+      "2016": {
+        "median_sec": 19831.0,
+        "count": 139
+      },
+      "2017": {
+        "median_sec": 19808.0,
+        "count": 155
+      },
+      "2018": {
+        "median_sec": 19995.5,
+        "count": 176
+      },
+      "2019": {
+        "median_sec": 20174.0,
+        "count": 183
+      },
+      "2020": {
+        "median_sec": 19457.0,
+        "count": 24
+      }
+    },
+    "M_25-29": {
+      "2004": {
+        "median_sec": 22034.5,
+        "count": 12
+      },
+      "2005": {
+        "median_sec": 21131.0,
+        "count": 14
+      },
+      "2006": {
+        "median_sec": 18479.0,
+        "count": 27
+      },
+      "2007": {
+        "median_sec": 19079.5,
+        "count": 52
+      },
+      "2008": {
+        "median_sec": 20195.5,
+        "count": 48
+      },
+      "2009": {
+        "median_sec": 19574.0,
+        "count": 75
+      },
+      "2010": {
+        "median_sec": 20912.0,
+        "count": 151
+      },
+      "2011": {
+        "median_sec": 20246.5,
+        "count": 188
+      },
+      "2012": {
+        "median_sec": 20270.0,
+        "count": 287
+      },
+      "2013": {
+        "median_sec": 20358.0,
+        "count": 299
+      },
+      "2014": {
+        "median_sec": 20141.0,
+        "count": 358
+      },
+      "2015": {
+        "median_sec": 20335.5,
+        "count": 398
+      },
+      "2016": {
+        "median_sec": 19917.0,
+        "count": 387
+      },
+      "2017": {
+        "median_sec": 20089.0,
+        "count": 414
+      },
+      "2018": {
+        "median_sec": 20118.0,
+        "count": 474
+      },
+      "2019": {
+        "median_sec": 19726.0,
+        "count": 529
+      },
+      "2020": {
+        "median_sec": 19129.0,
+        "count": 57
+      }
+    },
+    "M_30-34": {
+      "2004": {
+        "median_sec": 20295.0,
+        "count": 13
+      },
+      "2005": {
+        "median_sec": 20840.0,
+        "count": 30
+      },
+      "2006": {
+        "median_sec": 19019.0,
+        "count": 31
+      },
+      "2007": {
+        "median_sec": 20856.0,
+        "count": 39
+      },
+      "2008": {
+        "median_sec": 21372.0,
+        "count": 55
+      },
+      "2009": {
+        "median_sec": 19790.0,
+        "count": 117
+      },
+      "2010": {
+        "median_sec": 20513.0,
+        "count": 253
+      },
+      "2011": {
+        "median_sec": 20137.5,
+        "count": 318
+      },
+      "2012": {
+        "median_sec": 19704.5,
+        "count": 460
+      },
+      "2013": {
+        "median_sec": 20050.5,
+        "count": 410
+      },
+      "2014": {
+        "median_sec": 20147.0,
+        "count": 578
+      },
+      "2015": {
+        "median_sec": 20210.5,
+        "count": 742
+      },
+      "2016": {
+        "median_sec": 20408.0,
+        "count": 666
+      },
+      "2017": {
+        "median_sec": 20329.0,
+        "count": 729
+      },
+      "2018": {
+        "median_sec": 19873.0,
+        "count": 738
+      },
+      "2019": {
+        "median_sec": 20018.0,
+        "count": 835
+      },
+      "2020": {
+        "median_sec": 19466.5,
+        "count": 82
+      }
+    },
+    "M_35-39": {
+      "2004": {
+        "median_sec": 21383.0,
+        "count": 15
+      },
+      "2005": {
+        "median_sec": 20067.0,
+        "count": 39
+      },
+      "2006": {
+        "median_sec": 19855.0,
+        "count": 64
+      },
+      "2007": {
+        "median_sec": 21194.0,
+        "count": 69
+      },
+      "2008": {
+        "median_sec": 20261.0,
+        "count": 87
+      },
+      "2009": {
+        "median_sec": 20528.0,
+        "count": 149
+      },
+      "2010": {
+        "median_sec": 20727.0,
+        "count": 324
+      },
+      "2011": {
+        "median_sec": 20451.0,
+        "count": 388
+      },
+      "2012": {
+        "median_sec": 20486.0,
+        "count": 507
+      },
+      "2013": {
+        "median_sec": 20242.0,
+        "count": 536
+      },
+      "2014": {
+        "median_sec": 20228.0,
+        "count": 700
+      },
+      "2015": {
+        "median_sec": 20126.0,
+        "count": 787
+      },
+      "2016": {
+        "median_sec": 20420.0,
+        "count": 849
+      },
+      "2017": {
+        "median_sec": 20166.0,
+        "count": 817
+      },
+      "2018": {
+        "median_sec": 20237.0,
+        "count": 932
+      },
+      "2019": {
+        "median_sec": 20089.0,
+        "count": 957
+      },
+      "2020": {
+        "median_sec": 19376.0,
+        "count": 102
+      }
+    },
+    "M_40-44": {
+      "2004": {
+        "median_sec": 21148.0,
+        "count": 15
+      },
+      "2005": {
+        "median_sec": 19792.5,
+        "count": 26
+      },
+      "2006": {
+        "median_sec": 19470.5,
+        "count": 52
+      },
+      "2007": {
+        "median_sec": 20065.0,
+        "count": 55
+      },
+      "2008": {
+        "median_sec": 21248.0,
+        "count": 69
+      },
+      "2009": {
+        "median_sec": 20345.0,
+        "count": 155
+      },
+      "2010": {
+        "median_sec": 20869.0,
+        "count": 297
+      },
+      "2011": {
+        "median_sec": 20604.0,
+        "count": 396
+      },
+      "2012": {
+        "median_sec": 20498.0,
+        "count": 493
+      },
+      "2013": {
+        "median_sec": 20466.5,
+        "count": 558
+      },
+      "2014": {
+        "median_sec": 20584.0,
+        "count": 763
+      },
+      "2015": {
+        "median_sec": 20657.0,
+        "count": 844
+      },
+      "2016": {
+        "median_sec": 20634.0,
+        "count": 882
+      },
+      "2017": {
+        "median_sec": 20420.0,
+        "count": 852
+      },
+      "2018": {
+        "median_sec": 20363.5,
+        "count": 884
+      },
+      "2019": {
+        "median_sec": 20191.0,
+        "count": 966
+      },
+      "2020": {
+        "median_sec": 19991.0,
+        "count": 109
+      }
+    },
+    "M_45-49": {
+      "2005": {
+        "median_sec": 21597.0,
+        "count": 17
+      },
+      "2006": {
+        "median_sec": 20628.0,
+        "count": 29
+      },
+      "2007": {
+        "median_sec": 21143.0,
+        "count": 35
+      },
+      "2008": {
+        "median_sec": 20291.0,
+        "count": 39
+      },
+      "2009": {
+        "median_sec": 20421.5,
+        "count": 110
+      },
+      "2010": {
+        "median_sec": 20992.0,
+        "count": 186
+      },
+      "2011": {
+        "median_sec": 20601.0,
+        "count": 268
+      },
+      "2012": {
+        "median_sec": 20482.0,
+        "count": 312
+      },
+      "2013": {
+        "median_sec": 20902.0,
+        "count": 401
+      },
+      "2014": {
+        "median_sec": 20453.0,
+        "count": 522
+      },
+      "2015": {
+        "median_sec": 20779.5,
+        "count": 642
+      },
+      "2016": {
+        "median_sec": 20610.0,
+        "count": 607
+      },
+      "2017": {
+        "median_sec": 21086.0,
+        "count": 737
+      },
+      "2018": {
+        "median_sec": 20495.0,
+        "count": 737
+      },
+      "2019": {
+        "median_sec": 20270.0,
+        "count": 803
+      },
+      "2020": {
+        "median_sec": 20371.0,
+        "count": 73
+      }
+    },
+    "M_50-54": {
+      "2006": {
+        "median_sec": 20624.0,
+        "count": 19
+      },
+      "2007": {
+        "median_sec": 21412.0,
+        "count": 13
+      },
+      "2008": {
+        "median_sec": 21430.5,
+        "count": 22
+      },
+      "2009": {
+        "median_sec": 21057.0,
+        "count": 62
+      },
+      "2010": {
+        "median_sec": 21597.0,
+        "count": 112
+      },
+      "2011": {
+        "median_sec": 21366.0,
+        "count": 140
+      },
+      "2012": {
+        "median_sec": 20845.0,
+        "count": 199
+      },
+      "2013": {
+        "median_sec": 20891.0,
+        "count": 209
+      },
+      "2014": {
+        "median_sec": 20703.0,
+        "count": 278
+      },
+      "2015": {
+        "median_sec": 20902.0,
+        "count": 381
+      },
+      "2016": {
+        "median_sec": 20920.0,
+        "count": 372
+      },
+      "2017": {
+        "median_sec": 21138.0,
+        "count": 450
+      },
+      "2018": {
+        "median_sec": 20823.0,
+        "count": 498
+      },
+      "2019": {
+        "median_sec": 20627.0,
+        "count": 530
+      },
+      "2020": {
+        "median_sec": 20034.0,
+        "count": 57
+      }
+    },
+    "M_55-59": {
+      "2006": {
+        "median_sec": 20567.0,
+        "count": 10
+      },
+      "2008": {
+        "median_sec": 21903.0,
+        "count": 11
+      },
+      "2009": {
+        "median_sec": 22823.0,
+        "count": 22
+      },
+      "2010": {
+        "median_sec": 22206.5,
+        "count": 48
+      },
+      "2011": {
+        "median_sec": 21179.5,
+        "count": 60
+      },
+      "2012": {
+        "median_sec": 21538.5,
+        "count": 64
+      },
+      "2013": {
+        "median_sec": 21576.0,
+        "count": 93
+      },
+      "2014": {
+        "median_sec": 21425.0,
+        "count": 129
+      },
+      "2015": {
+        "median_sec": 21685.0,
+        "count": 177
+      },
+      "2016": {
+        "median_sec": 21334.0,
+        "count": 185
+      },
+      "2017": {
+        "median_sec": 21692.0,
+        "count": 210
+      },
+      "2018": {
+        "median_sec": 21548.0,
+        "count": 248
+      },
+      "2019": {
+        "median_sec": 21042.5,
+        "count": 294
+      },
+      "2020": {
+        "median_sec": 20703.0,
+        "count": 39
+      }
+    },
+    "M_60-64": {
+      "2009": {
+        "median_sec": 22588.0,
+        "count": 11
+      },
+      "2010": {
+        "median_sec": 23918.0,
+        "count": 29
+      },
+      "2011": {
+        "median_sec": 23719.0,
+        "count": 27
+      },
+      "2012": {
+        "median_sec": 22345.0,
+        "count": 22
+      },
+      "2013": {
+        "median_sec": 22876.0,
+        "count": 23
+      },
+      "2014": {
+        "median_sec": 22463.0,
+        "count": 48
+      },
+      "2015": {
+        "median_sec": 21767.0,
+        "count": 71
+      },
+      "2016": {
+        "median_sec": 22779.0,
+        "count": 57
+      },
+      "2017": {
+        "median_sec": 21927.0,
+        "count": 89
+      },
+      "2018": {
+        "median_sec": 21685.0,
+        "count": 95
+      },
+      "2019": {
+        "median_sec": 21451.0,
+        "count": 96
+      },
+      "2020": {
+        "median_sec": 19265.0,
+        "count": 14
+      }
+    },
+    "M_65-69": {
+      "2014": {
+        "median_sec": 22571.0,
+        "count": 18
+      },
+      "2015": {
+        "median_sec": 22967.0,
+        "count": 23
+      },
+      "2016": {
+        "median_sec": 22474.5,
+        "count": 26
+      },
+      "2017": {
+        "median_sec": 22994.0,
+        "count": 33
+      },
+      "2018": {
+        "median_sec": 22084.5,
+        "count": 30
+      },
+      "2019": {
+        "median_sec": 22600.0,
+        "count": 39
+      }
+    },
+    "M_70-74": {
+      "2015": {
+        "median_sec": 25206.0,
+        "count": 10
+      },
+      "2017": {
+        "median_sec": 23632.0,
+        "count": 11
+      },
+      "2018": {
+        "median_sec": 24271.5,
+        "count": 12
+      },
+      "2019": {
+        "median_sec": 23950.0,
+        "count": 11
+      }
+    }
+  }
+}
