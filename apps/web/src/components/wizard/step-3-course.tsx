@@ -79,6 +79,15 @@ interface RwgpsGpxResponse {
   };
 }
 
+/* ─── Expected bike distances by category (meters) ─────── */
+
+const EXPECTED_BIKE_M: Record<string, number> = {
+  sprint: 20000,
+  olympic: 40000,
+  "70.3": 90000,
+  "140.6": 180000,
+};
+
 /* ─── Component ──────────────────────────────────────────── */
 
 export function Step3Course() {
@@ -243,6 +252,13 @@ export function Step3Course() {
   const activeGpxSource = (() => {
     if (fileName) return "upload";
     if (rwgpsGpxStatus === "loaded" && rwgpsGpxData?.available) return "rwgps";
+    // Auth-required RWGPS routes can still provide metadata
+    if (
+      rwgpsGpxStatus === "error" &&
+      rwgpsGpxData?.error === "auth_required" &&
+      selectedRwgps
+    )
+      return "rwgps-metadata";
     if (gpxStatus === "loaded" && gpxData?.available) return "registry";
     return "none";
   })();
@@ -279,7 +295,15 @@ export function Step3Course() {
               rwgpsType: rwgpsGpxData.rwgpsType,
               ...rwgpsGpxData.courseData,
             }
-          : null;
+          : activeGpxSource === "rwgps-metadata" && selectedRwgps
+            ? {
+                source: "ridewithgps",
+                rwgpsId: selectedRwgps.id,
+                rwgpsType: selectedRwgps.type,
+                totalDistanceM: selectedRwgps.distanceM,
+                elevationGainM: selectedRwgps.elevationGainM,
+              }
+            : null;
 
       const res = await fetch("/api/plans/generate", {
         method: "POST",
@@ -294,6 +318,13 @@ export function Step3Course() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
+        // Redirect to login if not authenticated
+        if (res.status === 401) {
+          router.push(
+            `/login?callbackUrl=${encodeURIComponent("/wizard")}`,
+          );
+          return;
+        }
         throw new Error(data.error || "Failed to generate plan");
       }
 
@@ -491,19 +522,42 @@ export function Step3Course() {
               </div>
             )}
 
-            {/* RWGPS GPX error */}
+            {/* RWGPS GPX info/error */}
             {rwgpsGpxStatus === "error" && rwgpsGpxData && (
-              <div className="p-3 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/20">
-                <p className="text-sm text-amber-700 dark:text-amber-300">
-                  {rwgpsGpxData.message ||
-                    "Could not fetch GPX from this route."}
+              <div
+                className={`p-3 rounded-lg border ${
+                  rwgpsGpxData.error === "auth_required"
+                    ? "border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/20"
+                    : "border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/20"
+                }`}
+              >
+                <p
+                  className={`text-sm ${
+                    rwgpsGpxData.error === "auth_required"
+                      ? "text-blue-700 dark:text-blue-300"
+                      : "text-amber-700 dark:text-amber-300"
+                  }`}
+                >
+                  {rwgpsGpxData.error === "auth_required"
+                    ? "✓ Using course metadata (detailed GPX requires RideWithGPS login)"
+                    : rwgpsGpxData.message ||
+                      "Could not fetch GPX from this route."}
                 </p>
+                {selectedRwgps && rwgpsGpxData.error === "auth_required" && (
+                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                    Your plan will be generated using {formatDist(selectedRwgps.distanceM)} distance and {selectedRwgps.elevationGainM}m elevation from this route.
+                  </p>
+                )}
                 {rwgpsGpxData.viewUrl && (
                   <a
                     href={rwgpsGpxData.viewUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs underline text-amber-600 dark:text-amber-400 mt-1 inline-flex items-center gap-1"
+                    className={`text-xs underline mt-1 inline-flex items-center gap-1 ${
+                      rwgpsGpxData.error === "auth_required"
+                        ? "text-blue-600 dark:text-blue-400"
+                        : "text-amber-600 dark:text-amber-400"
+                    }`}
                   >
                     View on RideWithGPS
                     <ExternalLink className="h-3 w-3" />
@@ -526,52 +580,85 @@ export function Step3Course() {
                       <p className="text-xs text-muted-foreground">
                         {rwgpsTotal.toLocaleString()} results — showing top{" "}
                         {rwgpsResults.length}
+                        {raceData.distanceCategory && (
+                          <span>, sorted by distance match</span>
+                        )}
                       </p>
                       <div className="max-h-64 overflow-y-auto rounded-lg border divide-y">
-                        {rwgpsResults.map((route) => (
-                          <button
-                            key={`${route.type}-${route.id}`}
-                            type="button"
-                            onClick={() => handleSelectRwgpsRoute(route)}
-                            className="w-full text-left p-3 hover:bg-muted/50 transition-colors focus:bg-muted/50 focus:outline-none"
-                          >
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="min-w-0 flex-1">
-                                <p className="text-sm font-medium truncate">
-                                  {route.name}
-                                </p>
-                                <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                                  <span className="flex items-center gap-1">
-                                    <Route className="h-3 w-3" />
-                                    {formatDist(route.distanceM)}
-                                  </span>
-                                  <span className="flex items-center gap-1">
-                                    <Mountain className="h-3 w-3" />
-                                    {route.elevationGainM}m
-                                  </span>
-                                  {route.locality && (
-                                    <span className="flex items-center gap-1 truncate">
-                                      <MapPin className="h-3 w-3 shrink-0" />
-                                      {route.locality}
-                                      {route.region && `, ${route.region}`}
+                        {(() => {
+                          const expectedM =
+                            EXPECTED_BIKE_M[raceData.distanceCategory];
+                          const sorted = expectedM
+                            ? [...rwgpsResults].sort(
+                                (a, b) =>
+                                  Math.abs(a.distanceM - expectedM) -
+                                  Math.abs(b.distanceM - expectedM),
+                              )
+                            : rwgpsResults;
+
+                          return sorted.map((route, idx) => {
+                            const isCloseMatch =
+                              expectedM &&
+                              Math.abs(route.distanceM - expectedM) /
+                                expectedM <
+                                0.15;
+
+                            return (
+                              <button
+                                key={`${route.type}-${route.id}`}
+                                type="button"
+                                onClick={() => handleSelectRwgpsRoute(route)}
+                                className="w-full text-left p-3 hover:bg-muted/50 transition-colors focus:bg-muted/50 focus:outline-none"
+                              >
+                                <div className="flex items-start justify-between gap-2">
+                                  <div className="min-w-0 flex-1">
+                                    <div className="flex items-center gap-2">
+                                      <p className="text-sm font-medium truncate">
+                                        {route.name}
+                                      </p>
+                                      {isCloseMatch && idx === 0 && (
+                                        <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                                          Best match
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                                      <span
+                                        className={`flex items-center gap-1 ${isCloseMatch ? "text-green-600 dark:text-green-400 font-medium" : ""}`}
+                                      >
+                                        <Route className="h-3 w-3" />
+                                        {formatDist(route.distanceM)}
+                                      </span>
+                                      <span className="flex items-center gap-1">
+                                        <Mountain className="h-3 w-3" />
+                                        {route.elevationGainM}m
+                                      </span>
+                                      {route.locality && (
+                                        <span className="flex items-center gap-1 truncate">
+                                          <MapPin className="h-3 w-3 shrink-0" />
+                                          {route.locality}
+                                          {route.region &&
+                                            `, ${route.region}`}
+                                        </span>
+                                      )}
+                                    </div>
+                                    {route.userName && (
+                                      <p className="text-xs text-muted-foreground mt-0.5">
+                                        by {route.userName}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <div className="flex items-center gap-1 shrink-0">
+                                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground px-1.5 py-0.5 rounded bg-muted">
+                                      {route.type}
                                     </span>
-                                  )}
+                                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                                  </div>
                                 </div>
-                                {route.userName && (
-                                  <p className="text-xs text-muted-foreground mt-0.5">
-                                    by {route.userName}
-                                  </p>
-                                )}
-                              </div>
-                              <div className="flex items-center gap-1 shrink-0">
-                                <span className="text-[10px] uppercase tracking-wider text-muted-foreground px-1.5 py-0.5 rounded bg-muted">
-                                  {route.type}
-                                </span>
-                                <ArrowRight className="h-4 w-4 text-muted-foreground" />
-                              </div>
-                            </div>
-                          </button>
-                        ))}
+                              </button>
+                            );
+                          });
+                        })()}
                       </div>
                     </>
                   )}
@@ -582,9 +669,11 @@ export function Step3Course() {
           {/* ───── Section 3: Manual GPX Upload ───── */}
           <div className="space-y-2">
             <Label>
-              {activeGpxSource !== "none"
-                ? "Upload Custom GPX (Override)"
-                : "Course GPX File (Optional)"}
+              {activeGpxSource === "rwgps-metadata"
+                ? "Upload GPX for Detailed Elevation (Optional)"
+                : activeGpxSource !== "none"
+                  ? "Upload Custom GPX (Override)"
+                  : "Course GPX File (Optional)"}
             </Label>
             <div className="grid w-full items-center gap-1.5">
               <label
@@ -629,10 +718,22 @@ export function Step3Course() {
         </div>
 
         {submitError && (
-          <div className="p-3 rounded-lg border border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950/20">
-            <p className="text-sm text-red-700 dark:text-red-300">
-              {submitError}
-            </p>
+          <div className="p-4 rounded-lg border border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950/20 space-y-2">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-red-700 dark:text-red-300">
+                  {submitError}
+                </p>
+                <p className="text-xs text-red-600/80 dark:text-red-400/80">
+                  {submitError.includes("Unauthorized")
+                    ? "Please sign in to generate a race plan."
+                    : submitError.includes("limit")
+                      ? "Upgrade your plan to create more race plans."
+                      : "Check your connection and try again. If the issue persists, try refreshing the page."}
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
@@ -640,7 +741,7 @@ export function Step3Course() {
           <Button
             variant="outline"
             type="button"
-            className="w-full"
+            className="w-full min-w-0 shrink"
             onClick={() => setStep(2)}
             disabled={isSubmitting}
           >
@@ -648,7 +749,7 @@ export function Step3Course() {
           </Button>
           <Button
             type="submit"
-            className="w-full"
+            className="w-full min-w-0 shrink"
             size="lg"
             disabled={isSubmitting}
           >
