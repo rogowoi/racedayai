@@ -115,6 +115,10 @@ model RacePlan {
   athleteId          String
   courseId           String
   raceDate           DateTime      @db.Date
+  status             String        @default("completed") // pending | generating | completed | failed
+  errorMessage       String?
+  generationInput    Json?         // Stores wizard inputs for async processing
+  gpxFileKey         String?       // R2 object key for uploaded GPX
   goalType           String        @default("finish_strong")
   weatherData        Json?
   altitudeM          Int?

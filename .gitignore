@@ -1,5 +1,5 @@
 # dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -12,11 +12,14 @@
 /coverage
 
 # next.js
-/.next/
+.next/
 /out/
 
 # production
 /build
+
+# turbo
+.turbo/
 
 # misc
 .DS_Store
@@ -30,6 +33,7 @@ yarn-error.log*
 
 # env files
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -55,6 +59,13 @@ prisma/generated/
 docs/*
 *.pyc
 creds.json
+__pycache__/
+
+# research notebooks
+research/notebooks/.ipynb_checkpoints/
 
 # project planning
 plans/
+
+# scraped training data
+data/scraped/

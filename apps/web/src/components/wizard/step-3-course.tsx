@@ -18,8 +18,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { generateRacePlan } from "@/app/actions/generate-plan";
-import { SubmitButton } from "@/components/ui/submit-button";
+import { useRouter } from "next/navigation";
 
 /* ─── Types ──────────────────────────────────────────────── */
 
@@ -84,7 +83,11 @@ interface RwgpsGpxResponse {
 
 export function Step3Course() {
   const { fitnessData, raceData, setStep } = useWizardStore();
+  const router = useRouter();
   const [fileName, setFileName] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const gpxFileRef = useRef<HTMLInputElement>(null);
 
   // GPX auto-fetch state (from registry)
   const [gpxStatus, setGpxStatus] = useState<
@@ -244,6 +247,66 @@ export function Step3Course() {
     return "none";
   })();
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      // Upload GPX to R2 if user selected a file
+      let gpxFileKey: string | null = null;
+      const file = gpxFileRef.current?.files?.[0];
+      if (file) {
+        const urlRes = await fetch("/api/gpx/upload-url", { method: "POST" });
+        if (!urlRes.ok) throw new Error("Failed to get upload URL");
+        const { key, uploadUrl } = await urlRes.json();
+
+        const uploadRes = await fetch(uploadUrl, {
+          method: "PUT",
+          headers: { "Content-Type": "application/gpx+xml" },
+          body: file,
+        });
+        if (!uploadRes.ok) throw new Error("Failed to upload GPX file");
+        gpxFileKey = key;
+      }
+
+      // Build RWGPS course data if selected
+      const rwgpsCourseData =
+        activeGpxSource === "rwgps" && rwgpsGpxData?.courseData
+          ? {
+              source: "ridewithgps",
+              rwgpsId: rwgpsGpxData.rwgpsId,
+              rwgpsType: rwgpsGpxData.rwgpsType,
+              ...rwgpsGpxData.courseData,
+            }
+          : null;
+
+      const res = await fetch("/api/plans/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fitnessData,
+          raceData,
+          rwgpsCourseData,
+          gpxFileKey,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to generate plan");
+      }
+
+      const { planId } = await res.json();
+      router.push(`/plan/${planId}`);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Something went wrong",
+      );
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center space-y-2">
@@ -255,27 +318,7 @@ export function Step3Course() {
         </p>
       </div>
 
-      <form action={generateRacePlan} className="space-y-6">
-        {/* Hidden inputs for store data */}
-        <input
-          type="hidden"
-          name="fitnessData"
-          value={JSON.stringify(fitnessData)}
-        />
-        <input type="hidden" name="raceData" value={JSON.stringify(raceData)} />
-        {/* Pass RWGPS GPX info so generate-plan can use it */}
-        {activeGpxSource === "rwgps" && rwgpsGpxData?.courseData && (
-          <input
-            type="hidden"
-            name="rwgpsCourseData"
-            value={JSON.stringify({
-              source: "ridewithgps",
-              rwgpsId: rwgpsGpxData.rwgpsId,
-              rwgpsType: rwgpsGpxData.rwgpsType,
-              ...rwgpsGpxData.courseData,
-            })}
-          />
-        )}
+      <form onSubmit={handleSubmit} className="space-y-6">
 
         <div className="space-y-4">
           {/* ───── Section 1: Auto-fetched course data for known races ───── */}
@@ -573,8 +616,8 @@ export function Step3Course() {
                   )}
                 </div>
                 <input
+                  ref={gpxFileRef}
                   id="gpx-upload"
-                  name="gpxFile"
                   type="file"
                   className="hidden"
                   accept=".gpx"
@@ -585,18 +628,39 @@ export function Step3Course() {
           </div>
         </div>
 
+        {submitError && (
+          <div className="p-3 rounded-lg border border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950/20">
+            <p className="text-sm text-red-700 dark:text-red-300">
+              {submitError}
+            </p>
+          </div>
+        )}
+
         <div className="pt-6 flex gap-3">
           <Button
             variant="outline"
             type="button"
             className="w-full"
             onClick={() => setStep(2)}
+            disabled={isSubmitting}
           >
             Back
           </Button>
-          <SubmitButton className="w-full" size="lg">
-            Generate Plan
-          </SubmitButton>
+          <Button
+            type="submit"
+            className="w-full"
+            size="lg"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Generating Plan...
+              </>
+            ) : (
+              "Generate Plan"
+            )}
+          </Button>
         </div>
       </form>
     </div>

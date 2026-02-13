@@ -111,6 +111,18 @@ export async function getPlanUsage(userId: string) {
 }
 
 /**
+ * Decrement the user's plan count (used when async generation fails)
+ */
+export async function decrementPlanCount(userId: string): Promise<void> {
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      plansCreatedThisSeason: { decrement: 1 },
+    },
+  });
+}
+
+/**
  * Reset plan count when user upgrades (start fresh season)
  */
 export async function resetPlanCount(userId: string): Promise<void> {

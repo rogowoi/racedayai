@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { ShareButton } from "@/components/plan/share-button";
 import { StatisticalInsights } from "@/components/plan/statistical-insights";
+import { PlanGenerating } from "@/components/plan/plan-generating";
 import Link from "next/link";
 import { Metadata } from "next";
 import { generateRacePlanSchema, jsonLdScript } from "@/lib/schema";
@@ -93,6 +94,18 @@ export default async function PlanPage({
   const plan = await getRacePlan(id);
 
   if (!plan) notFound();
+
+  // Show generating UI for plans still in progress
+  if (plan.status !== "completed") {
+    return (
+      <div className="min-h-screen flex flex-col bg-muted/30">
+        <Navbar />
+        <main className="flex-1 container mx-auto px-4 py-8">
+          <PlanGenerating planId={id} />
+        </main>
+      </div>
+    );
+  }
 
   const {
     course,
