@@ -18,5 +18,8 @@
   },
   "devDependencies": {
     "turbo": "^2"
+  },
+  "dependencies": {
+    "inngest-cli": "^1.17.0"
   }
 }
