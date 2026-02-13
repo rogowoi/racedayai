@@ -202,7 +202,7 @@ export function Step2Race() {
         </div>
       </div>
 
-      <div className="pt-6 flex flex-col sm:flex-row gap-3">
+      <div className="pt-6 flex flex-col sm:flex-row gap-3 [&_button]:shrink [&_button]:min-w-0">
         <Button
           variant="outline"
           className="w-full"

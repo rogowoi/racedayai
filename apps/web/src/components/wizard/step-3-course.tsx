@@ -751,7 +751,7 @@ export function Step3Course() {
           </div>
         )}
 
-        <div className="pt-6 flex flex-col sm:flex-row gap-3">
+        <div className="pt-6 flex flex-col sm:flex-row gap-3 [&_button]:shrink [&_button]:min-w-0">
           <Button
             variant="outline"
             type="button"
