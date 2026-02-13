@@ -242,7 +242,7 @@ export function StatisticalInsights({
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-muted-foreground">
-                    Best case (P10)
+                    Best case
                   </span>
                   <span className="text-sm font-semibold text-green-600">
                     {formatTime(confidenceInterval.p10)}
@@ -250,7 +250,7 @@ export function StatisticalInsights({
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-muted-foreground">
-                    Most likely (P50)
+                    Most likely
                   </span>
                   <span className="text-lg font-bold">
                     {formatTime(confidenceInterval.p50)}
@@ -258,7 +258,7 @@ export function StatisticalInsights({
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-muted-foreground">
-                    Conservative (P90)
+                    Conservative
                   </span>
                   <span className="text-sm font-semibold text-amber-600">
                     {formatTime(confidenceInterval.p90)}
@@ -319,11 +319,11 @@ export function StatisticalInsights({
         <div className="text-xs text-muted-foreground bg-muted/50 rounded-lg px-4 py-3 flex items-center gap-2">
           <BarChart3 className="h-3.5 w-3.5 shrink-0" />
           <span>
-            Data-driven bike intensity factor:{" "}
+            Data-driven bike power target:{" "}
             <span className="font-semibold text-foreground">
               {(recommendedIF * 100).toFixed(1)}% of FTP
             </span>{" "}
-            — derived from cohort performance, replacing heuristic defaults.
+            — based on what similar athletes actually ride, not textbook theory.
           </span>
         </div>
       )}

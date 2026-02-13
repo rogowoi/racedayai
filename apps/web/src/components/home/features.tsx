@@ -50,14 +50,14 @@ export function Features() {
             Why athletes fail on race day
           </p>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            Training gets you to the start line.
+            Training gets you to the start line.{" "}
             <br className="hidden sm:block" />
             <span className="text-muted-foreground">
               We get you to the finish line.
             </span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            The average age-grouper leaves 15\u201330 minutes on the course from
+            The average age-grouper leaves 15–30 minutes on the course from
             poor execution. Here&apos;s how we fix that.
           </p>
         </div>

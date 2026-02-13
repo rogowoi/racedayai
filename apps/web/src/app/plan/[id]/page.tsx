@@ -8,6 +8,7 @@ import { Download } from "lucide-react";
 import { ShareButton } from "@/components/plan/share-button";
 import { StatisticalInsights } from "@/components/plan/statistical-insights";
 import { PlanGenerating } from "@/components/plan/plan-generating";
+import { TssWithTooltip } from "@/components/plan/tss-with-tooltip";
 import Link from "next/link";
 import { Metadata } from "next";
 import { generateRacePlanSchema, jsonLdScript } from "@/lib/schema";
@@ -276,10 +277,7 @@ export default async function PlanPage({
                     {bike?.targetSpeedKph} km/h
                   </div>
                 </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">TSS</div>
-                  <div className="text-lg font-semibold">{bike?.tss}</div>
-                </div>
+                <TssWithTooltip tss={bike?.tss} />
               </CardContent>
             </Card>
 

@@ -19,16 +19,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Smartphone, AlertCircle, CheckCircle2 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Smartphone, AlertCircle, CheckCircle2, HelpCircle } from "lucide-react";
 import { loginWithStrava } from "@/app/actions/auth-actions";
 import { GarminConnectButton } from "@/components/garmin-connect-button";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 export function Step1Fitness() {
   const { fitnessData, setFitnessData, setStep } = useWizardStore();
   const searchParams = useSearchParams();
   const garminError = searchParams.get("garmin_error");
   const garminConnected = searchParams.get("garmin_connected");
+  const [weightUnit, setWeightUnit] = useState<"kg" | "lb">("kg");
 
   const handleNext = () => {
     // Basic validation
@@ -38,17 +46,36 @@ export function Step1Fitness() {
     setStep(2);
   };
 
+  const handleWeightChange = (value: number) => {
+    // Always store as kg internally
+    const kgValue = weightUnit === "lb" ? value / 2.20462 : value;
+    setFitnessData({ weight: Math.round(kgValue * 10) / 10 });
+  };
+
+  const getDisplayWeight = () => {
+    if (!fitnessData.weight) return "";
+    if (weightUnit === "lb") {
+      return Math.round(fitnessData.weight * 2.20462);
+    }
+    return fitnessData.weight;
+  };
+
+  const toggleWeightUnit = () => {
+    setWeightUnit((prev) => (prev === "kg" ? "lb" : "kg"));
+  };
+
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight">
-          Your Fitness Profile
-        </h1>
-        <p className="text-muted-foreground">
-          Connect your accounts or enter data manually to get accurate pacing
-          targets.
-        </p>
-      </div>
+    <TooltipProvider>
+      <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="text-center space-y-2">
+          <h1 className="text-2xl font-bold tracking-tight">
+            Your Fitness Profile
+          </h1>
+          <p className="text-muted-foreground">
+            Connect your accounts or enter data manually to get accurate pacing
+            targets.
+          </p>
+        </div>
 
       <Tabs defaultValue="manual" className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-6">
@@ -99,26 +126,57 @@ export function Step1Fitness() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="weight">Weight (kg)</Label>
-                  <Input
-                    id="weight"
-                    type="number"
-                    placeholder="75"
-                    value={fitnessData.weight || ""}
-                    onChange={(e) =>
-                      setFitnessData({ weight: Number(e.target.value) })
-                    }
-                  />
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="weight">Weight</Label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 px-2 text-xs"
+                      onClick={toggleWeightUnit}
+                    >
+                      {weightUnit === "kg" ? "Switch to lb" : "Switch to kg"}
+                    </Button>
+                  </div>
+                  <div className="relative">
+                    <Input
+                      id="weight"
+                      type="number"
+                      placeholder={weightUnit === "kg" ? "75" : "165"}
+                      value={getDisplayWeight()}
+                      onChange={(e) =>
+                        handleWeightChange(Number(e.target.value))
+                      }
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                      {weightUnit}
+                    </span>
+                  </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="ftp">Bike FTP (W)</Label>
+                  <div className="flex items-center gap-1.5">
+                    <Label htmlFor="ftp">Bike FTP (W)</Label>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button type="button" className="text-muted-foreground hover:text-foreground">
+                          <HelpCircle className="h-3.5 w-3.5" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-[250px]">
+                        <p>
+                          Functional Threshold Power: the highest power you can
+                          sustain for ~1 hour. Used to calculate your bike pacing.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                   <Input
                     id="ftp"
                     type="number"
-                    placeholder="250"
+                    placeholder="250 (optional)"
                     value={fitnessData.ftp || ""}
                     onChange={(e) =>
                       setFitnessData({ ftp: Number(e.target.value) })
@@ -126,11 +184,26 @@ export function Step1Fitness() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="pace">Run Threshold</Label>
+                  <div className="flex items-center gap-1.5">
+                    <Label htmlFor="pace">Run Threshold (min/km)</Label>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button type="button" className="text-muted-foreground hover:text-foreground">
+                          <HelpCircle className="h-3.5 w-3.5" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-[250px]">
+                        <p>
+                          Your threshold pace: the fastest pace you can hold for
+                          ~1 hour of running. Used to calculate your run pacing.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                   <Input
                     id="pace"
                     type="text"
-                    placeholder="4:45 /km"
+                    placeholder="4:45 (optional)"
                     value={fitnessData.thresholdPace || ""}
                     onChange={(e) =>
                       setFitnessData({ thresholdPace: e.target.value })
@@ -138,11 +211,26 @@ export function Step1Fitness() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="css">Swim CSS</Label>
+                  <div className="flex items-center gap-1.5">
+                    <Label htmlFor="css">Swim CSS (min/100m)</Label>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button type="button" className="text-muted-foreground hover:text-foreground">
+                          <HelpCircle className="h-3.5 w-3.5" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-[250px]">
+                        <p>
+                          Critical Swim Speed: your sustainable swim pace per 100
+                          meters. Used to calculate your swim pacing strategy.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                   <Input
                     id="css"
                     type="text"
-                    placeholder="1:45 /100m"
+                    placeholder="1:45 (optional)"
                     value={fitnessData.css || ""}
                     onChange={(e) => setFitnessData({ css: e.target.value })}
                   />
@@ -206,8 +294,8 @@ export function Step1Fitness() {
                   type="submit"
                   className="w-full h-14 justify-start gap-4 text-base font-normal"
                 >
-                  <div className="h-8 w-8 rounded-full bg-orange-500/10 flex items-center justify-center">
-                    <Smartphone className="h-5 w-5 text-orange-600" />
+                  <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Smartphone className="h-5 w-5 text-primary" />
                   </div>
                   Connect Strava
                 </Button>
@@ -221,11 +309,12 @@ export function Step1Fitness() {
         </TabsContent>
       </Tabs>
 
-      <div className="pt-6">
-        <Button size="lg" className="w-full" onClick={handleNext}>
-          Next: Race Details
-        </Button>
+        <div className="pt-6">
+          <Button size="lg" className="w-full" onClick={handleNext}>
+            Next: Race Details
+          </Button>
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 }

@@ -69,7 +69,7 @@ export function GarminConnectButton({
         <div className="h-8 w-8 rounded-full bg-blue-500/10 flex items-center justify-center">
           <Watch className="h-5 w-5 text-blue-600" />
         </div>
-        Garmin Connect (Coming Soon)
+        Garmin Connect (Coming 2026)
       </Button>
     );
   }

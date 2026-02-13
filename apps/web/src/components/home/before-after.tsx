@@ -7,7 +7,7 @@ export function BeforeAfter() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-14">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            The difference between finishing strong
+            The difference between finishing strong{" "}
             <br className="hidden sm:block" />
             and walking the marathon.
           </h2>
