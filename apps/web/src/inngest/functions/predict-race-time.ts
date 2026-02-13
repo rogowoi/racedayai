@@ -5,7 +5,7 @@
  */
 
 import { inngest } from "@/inngest/client";
-import { db } from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { predictRaceTime } from "@/lib/ml/predict";
 import type { Distance, UserInput } from "@/lib/ml/types";
 
@@ -24,7 +24,7 @@ export const predictRaceTimeFn = inngest.createFunction(
 
     // Step 1: Load athlete profile from DB
     const athlete = await step.run("load-athlete", async () => {
-      const athleteRecord = await db.athlete.findUnique({
+      const athleteRecord = await prisma.athlete.findUnique({
         where: { userId },
       });
 
@@ -39,30 +39,33 @@ export const predictRaceTimeFn = inngest.createFunction(
     const priorRaces = await step.run("load-race-history", async () => {
       // TODO: Query race history from DB
       // For now, return empty array
-      return [];
+      return [] as { distance: Distance; time: number }[];
     });
 
     // Step 3: Run ML prediction
     const prediction = await step.run("predict", async () => {
       const input: UserInput = {
-        gender: athlete.gender as "M" | "F" | undefined,
-        age: athlete.age || undefined,
-        ftp: athlete.ftp || undefined,
-        weight: athlete.weight || undefined,
-        css: athlete.css || undefined,
-        thresholdPace: athlete.thresholdPace || undefined,
+        gender: undefined, // TODO: Add gender field to Athlete model
+        age: undefined, // TODO: Add age field to Athlete model
+        ftp: athlete.ftpWatts || undefined,
+        weight: athlete.weightKg ? Number(athlete.weightKg) : undefined,
+        css: athlete.cssPer100mSec || undefined,
+        thresholdPace: athlete.thresholdPaceSec || undefined,
         priorRaces,
       };
 
       return predictRaceTime(input, distance);
     });
 
-    // Step 4: Save prediction to DB
+    // Step 4: Save prediction to DB using existing schema fields
     await step.run("save-prediction", async () => {
-      await db.racePlan.update({
+      await prisma.racePlan.update({
         where: { id: planId },
         data: {
-          mlPrediction: prediction as any, // Prisma Json type
+          predictedFinishSec: Math.round(prediction.totalSeconds),
+          confidenceLowSec: Math.round(prediction.quantiles.p05),
+          confidenceHighSec: Math.round(prediction.quantiles.p95),
+          predictedSplits: prediction.segments as any, // Json type
         },
       });
     });
