@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 import WizardLayoutClient from "./wizard-layout";
 
 export const metadata: Metadata = {
@@ -31,10 +33,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function WizardLayout({
+export default async function WizardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login?callbackUrl=/wizard");
+  }
+
   return <WizardLayoutClient>{children}</WizardLayoutClient>;
 }
