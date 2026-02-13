@@ -5,18 +5,17 @@ RaceDayAI - Ironman Race Results Scraper
 Scrapes race results from ironman.com using the configured scraper provider.
 Parses athlete results into structured records and exports to CSV/JSON.
 
+Handles multiple Wikipedia table formats:
+  1. Standard results: | Rank | Country | Swim | Bike | Run | Finish |
+  2. Podium tables:    | Year | Gold | Time | Silver | Time | Bronze | Time |
+  3. Split-header:     | Rank | Time | Name | Country | Split times |
+                       | Swim | T1 | Bike | T2 | Run |
+  4. Medal-icon ranks: Gold/silver/bronze images instead of numeric ranks
+
 Usage:
-    # Test connection
-    python scripts/scrapers/ironman_results.py --test
-
-    # Scrape a single results page
-    python scripts/scrapers/ironman_results.py --url "https://www.ironman.com/races/..." --api-key "jina_xxx"
-
-    # Scrape from a list of known result URLs
-    python scripts/scrapers/ironman_results.py --discover --api-key "jina_xxx" --limit 5
-
-    # Export results
-    python scripts/scrapers/ironman_results.py --url "..." --api-key "jina_xxx" --output results.csv
+    python research/scrapers/ironman_results.py --url "https://..." --api-key "jina_xxx"
+    python research/scrapers/ironman_results.py --url "https://..." --api-key "jina_xxx" --raw
+    python research/scrapers/ironman_results.py --url "https://..." --api-key "jina_xxx" --output results.csv
 
 Environment:
     JINA_API_KEY=jina_xxx  (or pass --api-key)
@@ -44,6 +43,7 @@ class RaceResultRecord:
     gender: str = ""
     age_group: str = ""
     country: str = ""
+    athlete_name: str = ""
     swim_sec: Optional[float] = None
     bike_sec: Optional[float] = None
     run_sec: Optional[float] = None
@@ -55,7 +55,7 @@ class RaceResultRecord:
     gender_rank: Optional[int] = None
     event_name: str = ""
     event_year: Optional[int] = None
-    event_distance: str = ""  # "70.3" or "140.6"
+    event_distance: str = ""  # "70.3" or "140.6" or "olympic" etc.
     source_url: str = ""
 
 
@@ -95,6 +95,19 @@ def time_to_seconds(time_str: str) -> Optional[float]:
     return None
 
 
+def _clean_athlete_name(raw: str) -> str:
+    """Clean athlete name from wiki markdown artifacts."""
+    # Strip markdown images like ![1st place, gold medalist(s)](...)
+    raw = re.sub(r"!\[.*?\]\(.*?\)", "", raw)
+    # Strip markdown links: [Name](url) -> Name
+    raw = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", raw)
+    # Remove wiki disambiguation text like "Tim O'Donnell (triathlete)"
+    raw = re.sub(r'\s*"[^"]*"\)?', "", raw)
+    # Remove trailing parenthesized text like "(triathlete)"
+    raw = re.sub(r"\s*\([^)]*\)\s*$", "", raw)
+    return raw.strip()
+
+
 def _split_tables(table_lines: list[str]) -> list[list[str]]:
     """Split a list of markdown table lines into separate tables.
 
@@ -124,21 +137,112 @@ def _split_tables(table_lines: list[str]) -> list[list[str]]:
     return tables
 
 
+def _parse_header_positional(header_line: str) -> list[str]:
+    """Parse header line preserving column positions (keep empty cells)."""
+    raw_hdr = header_line.split("|")
+    # Strip leading/trailing empty strings from pipe boundaries
+    if raw_hdr and raw_hdr[0].strip() == "":
+        raw_hdr = raw_hdr[1:]
+    if raw_hdr and raw_hdr[-1].strip() == "":
+        raw_hdr = raw_hdr[:-1]
+    return [h.strip().lower() for h in raw_hdr]
+
+
+def _parse_cells_positional(line: str) -> list[str]:
+    """Parse data line preserving column positions (keep empty cells)."""
+    raw_parts = line.split("|")
+    if raw_parts and raw_parts[0].strip() == "":
+        raw_parts = raw_parts[1:]
+    if raw_parts and raw_parts[-1].strip() == "":
+        raw_parts = raw_parts[:-1]
+    return [c.strip() for c in raw_parts]
+
+
+def _is_separator_line(cells: list[str]) -> bool:
+    """Check if cells represent a markdown table separator line."""
+    return bool(cells and all(re.match(r"^[-:]+$", c) for c in cells if c))
+
+
+def _merge_split_header_tables(tables: list[list[str]]) -> list[list[str]]:
+    """Pre-process: merge consecutive tables where first has rank/athlete
+    but no splits, and second has split columns (Swim/T1/Bike/T2/Run).
+
+    Wikipedia Ironman WC year pages use this format:
+      Table 1: | Rank | Time | Name | Country | Split times |
+      Table 2: | Swim | T1 | Bike | T2 | Run |
+    with data rows attached to table 2.
+    """
+    merged_tables = []
+    skip_next = False
+
+    for idx in range(len(tables)):
+        if skip_next:
+            skip_next = False
+            continue
+
+        tbl = tables[idx]
+        if not tbl:
+            merged_tables.append(tbl)
+            continue
+
+        header = _parse_header_positional(tbl[0])
+        header_col_map = _map_columns(header)
+
+        if idx + 1 < len(tables) and tables[idx + 1]:
+            next_header = _parse_header_positional(tables[idx + 1][0])
+            next_col_map = _map_columns(next_header)
+
+            has_splits_in_next = any(k in next_col_map for k in ("swim", "bike", "run"))
+            has_rank_in_current = any(k in header_col_map for k in ("rank", "athlete"))
+            no_splits_in_current = not any(k in header_col_map for k in ("swim", "bike", "run"))
+
+            if has_splits_in_next and has_rank_in_current and no_splits_in_current:
+                # Drop the last column of base header (the colspan placeholder like "split times")
+                base_headers = header[:-1]
+                merged_header_parts = base_headers + next_header
+                merged_header_line = "| " + " | ".join(merged_header_parts) + " |"
+
+                # Collect data rows from BOTH tables (skip separator lines)
+                next_tbl = tables[idx + 1]
+                all_data = []
+                for line in tbl[1:]:
+                    cells = _parse_cells_positional(line)
+                    if not _is_separator_line(cells):
+                        all_data.append(line)
+                for line in next_tbl[1:]:
+                    cells = _parse_cells_positional(line)
+                    if not _is_separator_line(cells):
+                        all_data.append(line)
+
+                sep_line = "| " + " | ".join(["---"] * len(merged_header_parts)) + " |"
+                merged_tbl = [merged_header_line, sep_line] + all_data
+                merged_tables.append(merged_tbl)
+                skip_next = True
+                continue
+
+        merged_tables.append(tbl)
+
+    return merged_tables
+
+
 def _map_columns(headers: list[str]) -> dict:
     """Map header names to our standard field names."""
     col_map = {}
     for i, h in enumerate(headers):
         hl = h.lower().replace(" ", "")
+
         if "swim" in hl:
             col_map["swim"] = i
-        elif "bike" in hl or "cycling" in hl:
+        elif "bike" in hl or "cycling" in hl or "cycle" in hl:
             col_map["bike"] = i
         elif "run" in hl and "rank" not in hl:
             col_map["run"] = i
         elif ("finish" in hl or "total" in hl) and "time" in hl:
             col_map["total"] = i
-        elif hl in ("time",) and "total" not in col_map:
+        elif hl.startswith("time") and "total" not in col_map:
             col_map["total"] = i
+        elif hl.startswith("splittimes") or hl.startswith("split"):
+            pass  # skip "split times" colspan placeholder
         elif "t1" in hl or "transition1" in hl:
             col_map["t1"] = i
         elif "t2" in hl or "transition2" in hl:
@@ -151,10 +255,14 @@ def _map_columns(headers: list[str]) -> dict:
             col_map["ag_rank"] = i
         elif "age" in hl and ("group" in hl or "grp" in hl or "div" in hl or "cat" in hl):
             col_map["age_group"] = i
-        elif hl in ("rank", "#", "bib", "overallrank", "place"):
+        elif hl in ("rank", "overallrank", "place"):
+            col_map["rank"] = i
+        elif hl in ("#", "bib") and "rank" not in col_map:
             col_map["rank"] = i
         elif "genderrank" in hl:
             col_map["gender_rank"] = i
+        elif "athlete" in hl or "triathlete" in hl or hl in ("name", "winner"):
+            col_map["athlete"] = i
         elif hl in ("year", "edition"):
             col_map["year"] = i
         elif hl in ("gold", "winner", "1st"):
@@ -166,6 +274,34 @@ def _map_columns(headers: list[str]) -> dict:
     return col_map
 
 
+def _parse_rank_cell(rank_cell: str) -> Optional[int]:
+    """Parse rank from a cell, handling medal icons and numeric values."""
+    if not rank_cell:
+        return None
+
+    # Try direct integer
+    try:
+        return int(rank_cell)
+    except (ValueError, TypeError):
+        pass
+
+    # Handle medal icon text (Wikipedia uses image alt text)
+    rank_cell_lower = rank_cell.lower()
+    if "gold" in rank_cell_lower or "1st" in rank_cell_lower:
+        return 1
+    elif "silver" in rank_cell_lower or "2nd" in rank_cell_lower:
+        return 2
+    elif "bronze" in rank_cell_lower or "3rd" in rank_cell_lower:
+        return 3
+
+    # Try extracting number from text
+    m = re.search(r"\d+", rank_cell)
+    if m:
+        return int(m.group())
+
+    return None
+
+
 def _parse_podium_table(table_lines: list[str], event_name: str, event_distance: str,
                         source_url: str) -> list[RaceResultRecord]:
     """Parse Wikipedia-style podium tables: Year | Gold | Time | Silver | Time | Bronze | Time."""
@@ -174,7 +310,7 @@ def _parse_podium_table(table_lines: list[str], event_name: str, event_distance:
         return records
 
     header_line = table_lines[0]
-    headers = [h.strip().lower() for h in header_line.split("|") if h.strip()]
+    headers = _parse_header_positional(header_line)
     col_map = _map_columns(headers)
 
     # Detect podium format: has gold/silver/bronze or multiple "time" columns
@@ -185,12 +321,10 @@ def _parse_podium_table(table_lines: list[str], event_name: str, event_distance:
         return records
 
     # For podium tables, identify placement + time column pairs
-    # Format: Year | Gold | Time | Silver | Time | Bronze | Time
     placements = []
     for i, h in enumerate(headers):
         hl = h.strip().lower()
         if hl in ("gold", "winner", "1st", "silver", "2nd", "bronze", "3rd"):
-            # Find the next "time" column
             time_idx = None
             for j in range(i + 1, len(headers)):
                 if headers[j].strip().lower() == "time":
@@ -208,8 +342,8 @@ def _parse_podium_table(table_lines: list[str], event_name: str, event_distance:
 
     data_lines = []
     for line in table_lines[1:]:
-        cells = [c.strip() for c in line.split("|") if c.strip()]
-        if cells and not all(re.match(r"^[-:]+$", c) for c in cells):
+        cells = _parse_cells_positional(line)
+        if cells and not _is_separator_line(cells):
             data_lines.append(cells)
 
     for cells in data_lines:
@@ -225,6 +359,9 @@ def _parse_podium_table(table_lines: list[str], event_name: str, event_distance:
                 continue
             total = time_to_seconds(cells[time_col])
             if total:
+                athlete = ""
+                if _name_col < len(cells):
+                    athlete = _clean_athlete_name(cells[_name_col])
                 record = RaceResultRecord(
                     event_name=event_name,
                     event_year=year,
@@ -232,6 +369,7 @@ def _parse_podium_table(table_lines: list[str], event_name: str, event_distance:
                     source_url=source_url,
                     total_sec=total,
                     overall_rank=rank,
+                    athlete_name=athlete,
                 )
                 records.append(record)
 
@@ -246,7 +384,8 @@ def parse_results_markdown(content: str, event_name: str = "", event_year: int =
     Handles multiple table formats:
     1. Standard results: | Rank | Country | Swim | Bike | Run | Finish | ...
     2. Podium tables:    | Year | Gold | Time | Silver | Time | Bronze | Time |
-    3. Record tables:    | Event | Record | Speed | Athlete | ...
+    3. Split-header:     merged from two consecutive tables
+    4. Medal icon ranks: gold/silver/bronze image alt text
 
     Automatically detects format from headers and parses accordingly.
     Handles pages with multiple tables (e.g., Wikipedia with men's + women's results).
@@ -262,14 +401,18 @@ def parse_results_markdown(content: str, event_name: str = "", event_year: int =
 
     # Split into separate tables
     tables = _split_tables(table_lines)
-    print(f"  Found {len(tables)} table(s) in content")
+
+    # Pre-process: merge split-header tables (Ironman WC year pages)
+    tables = _merge_split_header_tables(tables)
+
+    print(f"  Found {len(tables)} table(s) in content (after merge)")
 
     for table_idx, tbl in enumerate(tables):
         if not tbl:
             continue
 
         header_line = tbl[0]
-        headers = [h.strip().lower() for h in header_line.split("|") if h.strip()]
+        headers = _parse_header_positional(header_line)
         col_map = _map_columns(headers)
 
         # Detect table type
@@ -278,7 +421,6 @@ def parse_results_markdown(content: str, event_name: str = "", event_year: int =
         has_results = any(k in col_map for k in ("swim", "bike", "run", "total"))
 
         if has_podium or len(time_cols) >= 2:
-            # Podium format
             podium_records = _parse_podium_table(tbl, event_name, event_distance, source_url)
             if podium_records:
                 print(f"  Table {table_idx + 1}: podium format, {len(podium_records)} records")
@@ -291,11 +433,11 @@ def parse_results_markdown(content: str, event_name: str = "", event_year: int =
 
         print(f"  Table {table_idx + 1}: standard results, columns={col_map}")
 
-        # Parse standard results table
+        # Parse standard results table (position-aware)
         data_lines = []
         for line in tbl[1:]:
-            cells = [c.strip() for c in line.split("|") if c.strip()]
-            if cells and not all(re.match(r"^[-:]+$", c) for c in cells):
+            cells = _parse_cells_positional(line)
+            if cells and not _is_separator_line(cells):
                 data_lines.append(cells)
 
         for cells in data_lines:
@@ -320,16 +462,15 @@ def parse_results_markdown(content: str, event_name: str = "", event_year: int =
                 if "t2" in col_map and col_map["t2"] < len(cells):
                     record.t2_sec = time_to_seconds(cells[col_map["t2"]])
                 if "country" in col_map and col_map["country"] < len(cells):
-                    record.country = cells[col_map["country"]]
+                    record.country = _clean_athlete_name(cells[col_map["country"]])
                 if "gender" in col_map and col_map["gender"] < len(cells):
                     record.gender = cells[col_map["gender"]]
                 if "age_group" in col_map and col_map["age_group"] < len(cells):
                     record.age_group = cells[col_map["age_group"]]
+                if "athlete" in col_map and col_map["athlete"] < len(cells):
+                    record.athlete_name = _clean_athlete_name(cells[col_map["athlete"]])
                 if "rank" in col_map and col_map["rank"] < len(cells):
-                    try:
-                        record.overall_rank = int(cells[col_map["rank"]])
-                    except (ValueError, TypeError):
-                        pass
+                    record.overall_rank = _parse_rank_cell(cells[col_map["rank"]])
                 if "ag_rank" in col_map and col_map["ag_rank"] < len(cells):
                     try:
                         record.age_group_rank = int(cells[col_map["ag_rank"]])
@@ -353,7 +494,6 @@ def parse_results_markdown(content: str, event_name: str = "", event_year: int =
 def _parse_freeform(content: str, event_name: str, event_year: int,
                     event_distance: str, source_url: str) -> list[RaceResultRecord]:
     """Fallback parser for non-table formatted results."""
-    # Look for time patterns in content
     time_pattern = re.compile(r"(\d{1,2}:\d{2}:\d{2})")
     matches = time_pattern.findall(content)
 
@@ -420,7 +560,7 @@ def main():
     parser.add_argument("--output", help="Output file path (.csv or .json)")
     parser.add_argument("--event-name", default="", help="Event name for metadata")
     parser.add_argument("--event-year", type=int, help="Event year")
-    parser.add_argument("--event-distance", default="70.3", help="Race distance: 70.3 or 140.6")
+    parser.add_argument("--event-distance", default="70.3", help="Race distance: 70.3, 140.6, olympic")
     parser.add_argument("--target-selector", help="CSS selector to target on the page")
     parser.add_argument("--remove-selector", default="nav, footer, .cookie-banner, .header",
                         help="CSS selector to remove")
@@ -487,7 +627,7 @@ def main():
 
     if records:
         sample = records[0]
-        print(f"  Sample: gender={sample.gender} ag={sample.age_group} "
+        print(f"  Sample: name={sample.athlete_name} gender={sample.gender} "
               f"swim={sample.swim_sec}s bike={sample.bike_sec}s "
               f"run={sample.run_sec}s total={sample.total_sec}s")
 
