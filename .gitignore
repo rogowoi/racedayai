@@ -69,3 +69,10 @@ research/notebooks/.ipynb_checkpoints/
 
 # scraped training data
 research/data/
+
+# ML model artifacts (large files - deploy separately)
+research/artifacts/
+apps/web/src/data/ml-models/*.json
+!apps/web/src/data/ml-models/imputation_tables.json
+!apps/web/src/data/ml-models/feature_config.json
+!apps/web/src/data/ml-models/model_metadata.json
