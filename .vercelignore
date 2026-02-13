@@ -1,0 +1,6 @@
+research/notebooks/**
+research/data/**
+*.ipynb
+*.csv
+docs/**
+plans/**
