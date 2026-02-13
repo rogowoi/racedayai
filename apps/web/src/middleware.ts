@@ -71,6 +71,12 @@ export function middleware(request: NextRequest) {
   if (pathname.startsWith("/api")) {
     const clientIp = getClientIp(request);
 
+    // Exclude status polling endpoints from rate limiting
+    // These are called frequently during plan generation
+    if (pathname.match(/\/api\/plans\/[^/]+\/status$/)) {
+      return NextResponse.next();
+    }
+
     // Auth routes: 10 requests per minute
     if (pathname.startsWith("/api/auth")) {
       const key = `auth:${clientIp}`;
