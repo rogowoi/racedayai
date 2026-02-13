@@ -10,13 +10,26 @@ import { readFile } from "fs/promises";
 import { join } from "path";
 
 /**
- * Load JSON file (supports both Node.js and browser)
+ * Load JSON file (supports Node.js local, Vercel Blob, and browser)
  */
 async function loadJSON(path: string): Promise<any> {
-  // Node.js environment (tsx, next server)
+  const fileName = path.split("/").pop()!;
+
+  // Production: Load from Vercel Blob
+  if (typeof window === "undefined" && process.env.VERCEL && process.env.BLOB_READ_WRITE_TOKEN) {
+    const version = process.env.MODEL_VERSION || "v1.0.0";
+    const blobUrl = `https://${process.env.BLOB_READ_WRITE_TOKEN}/${version}/ml-models/${fileName}`;
+
+    const response = await fetch(blobUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to load model from Blob: ${fileName} (${response.statusText})`);
+    }
+    return response.json();
+  }
+
+  // Local Node.js environment (development, tsx, next dev)
   if (typeof window === "undefined") {
     const basePath = process.cwd();
-    const fileName = path.split("/").pop()!;
     const fullPath = join(basePath, "src", "data", "ml-models", fileName);
     const content = await readFile(fullPath, "utf-8");
     return JSON.parse(content);

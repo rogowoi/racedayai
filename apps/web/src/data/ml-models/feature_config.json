@@ -1,0 +1,52 @@
+{
+  "features": [
+    "pb_total_sec",
+    "gender_enc",
+    "age_band",
+    "run_strength_z",
+    "bike_strength_z",
+    "swim_strength_z",
+    "total_races",
+    "consistency_cv",
+    "improvement_slope",
+    "dnf_rate",
+    "cluster_id",
+    "country_enc",
+    "year"
+  ],
+  "encodings": {
+    "gender": {
+      "M": 1,
+      "F": 0
+    },
+    "age_band": {
+      "18-24": 0,
+      "25-29": 1,
+      "30-34": 2,
+      "35-39": 3,
+      "40-44": 4,
+      "45-49": 5,
+      "50-54": 6,
+      "55-59": 7,
+      "60-64": 8,
+      "65-69": 9,
+      "70-74": 10,
+      "75+": 11
+    }
+  },
+  "defaults": {
+    "pb_total_sec": null,
+    "gender_enc": 1,
+    "age_band": 2,
+    "run_strength_z": 0.0,
+    "bike_strength_z": 0.0,
+    "swim_strength_z": 0.0,
+    "total_races": 1,
+    "consistency_cv": 0.15,
+    "improvement_slope": 0.0,
+    "dnf_rate": 0.0,
+    "cluster_id": 0,
+    "country_enc": 0,
+    "year": 2024
+  }
+}

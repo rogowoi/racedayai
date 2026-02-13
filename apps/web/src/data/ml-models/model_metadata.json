@@ -1,0 +1,27 @@
+{
+  "version": "0.1.0",
+  "created_at": "2026-02-13T22:49:38.996167",
+  "distances": [
+    "70.3"
+  ],
+  "distance_configs": {
+    "70.3": {
+      "swim_distance_m": 1900,
+      "bike_distance_km": 90,
+      "run_distance_km": 21.1,
+      "typical_bike_if": 0.78
+    }
+  },
+  "models": {
+    "total": "Total time prediction (baseline)",
+    "swim": "Multi-output: [swim_sec, swim_pace_per_100m]",
+    "bike": "Multi-output: [bike_sec, avg_watts, normalized_watts]",
+    "run": "Multi-output: [run_sec, run_pace_per_km]",
+    "quantiles": "Confidence intervals: p05, p25, p50, p75, p95"
+  },
+  "chaining": {
+    "swim": "Uses BASE_FEATURES only",
+    "bike": "Uses BASE_FEATURES + swim_sec_pred",
+    "run": "Uses BASE_FEATURES + swim_sec_pred + bike_sec_pred"
+  }
+}

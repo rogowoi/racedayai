@@ -1,0 +1,9 @@
+{
+  "cohort_medians": {},
+  "strength_defaults": {
+    "swim_strength_z": 0.0,
+    "bike_strength_z": 0.0,
+    "run_strength_z": 0.0
+  },
+  "transition_estimates": {}
+}

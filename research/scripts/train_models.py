@@ -60,9 +60,13 @@ def load_processed_data(distance: str) -> pd.DataFrame:
     logger.info(f"Loading processed data from {data_path}")
     df = pd.read_csv(data_path)
 
-    # Filter to distance (convert to float for comparison)
-    distance_float = float(distance) if distance not in ["sprint", "olympic"] else distance
-    df = df[df["event_distance"] == distance_float].copy()
+    # Filter to distance (handle both string and float formats)
+    if distance in ["sprint", "olympic"]:
+        df = df[df["event_distance"] == distance].copy()
+    else:
+        # Handle mixed string/float for 70.3 and 140.6
+        distance_float = float(distance)
+        df = df[(df["event_distance"] == distance) | (df["event_distance"] == distance_float)].copy()
     logger.info(f"Loaded {len(df):,} records for {distance}")
 
     return df
