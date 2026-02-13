@@ -65,7 +65,7 @@ __pycache__/
 research/notebooks/.ipynb_checkpoints/
 
 # project planning
-plans/
+/plans/
 
 # scraped training data
-data/scraped/
+research/data/
