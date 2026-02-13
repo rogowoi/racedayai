@@ -34,7 +34,20 @@ export function Step2Race() {
     bikeElevationGainM: number | null;
     runElevationGainM: number | null;
     hasGpx: boolean;
+    typicalMonth: number | null;
   }) => {
+    // Compute a default date from typicalMonth if available and no date is set
+    let defaultDate: Date | null = null;
+    if (race.typicalMonth && !raceData.date) {
+      const now = new Date();
+      const year =
+        race.typicalMonth > now.getMonth() + 1
+          ? now.getFullYear()
+          : now.getFullYear() + 1;
+      // Default to 1st of the typical month
+      defaultDate = new Date(year, race.typicalMonth - 1, 1);
+    }
+
     setRaceData({
       name: race.name,
       selectedRaceId: race.id,
@@ -49,6 +62,7 @@ export function Step2Race() {
       bikeElevationGainM: race.bikeElevationGainM,
       runElevationGainM: race.runElevationGainM,
       hasGpx: race.hasGpx,
+      ...(defaultDate ? { date: defaultDate } : {}),
     });
   };
 
@@ -125,9 +139,20 @@ export function Step2Race() {
               id="raceDate"
               type="date"
               className="pl-10 block w-full"
+              value={
+                raceData.date
+                  ? new Date(raceData.date).toISOString().split("T")[0]
+                  : ""
+              }
               onChange={(e) => setRaceData({ date: e.target.valueAsDate })}
             />
           </div>
+          {isKnownRace && raceData.date && (
+            <p className="text-xs text-muted-foreground">
+              Pre-filled from typical race month — please confirm the exact
+              date.
+            </p>
+          )}
         </div>
 
         {/* Distance Selector */}
@@ -177,7 +202,7 @@ export function Step2Race() {
         </div>
       </div>
 
-      <div className="pt-6 flex gap-3">
+      <div className="pt-6 flex flex-col sm:flex-row gap-3">
         <Button
           variant="outline"
           className="w-full"
@@ -186,7 +211,6 @@ export function Step2Race() {
           Back
         </Button>
         <Button
-          size="lg"
           className="w-full"
           onClick={handleNext}
           disabled={!raceData.name}

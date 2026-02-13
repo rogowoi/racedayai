@@ -91,34 +91,44 @@ const EXPECTED_BIKE_M: Record<string, number> = {
 /* ─── Component ──────────────────────────────────────────── */
 
 export function Step3Course() {
-  const { fitnessData, raceData, setStep } = useWizardStore();
+  const { fitnessData, raceData, courseData, setStep, setCourseData } =
+    useWizardStore();
   const router = useRouter();
-  const [fileName, setFileName] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const gpxFileRef = useRef<HTMLInputElement>(null);
 
-  // GPX auto-fetch state (from registry)
-  const [gpxStatus, setGpxStatus] = useState<
-    "idle" | "loading" | "loaded" | "unavailable" | "error"
-  >("idle");
-  const [gpxData, setGpxData] = useState<GpxResponse | null>(null);
+  // Extract persisted course data from store
+  const {
+    fileName,
+    gpxStatus,
+    gpxData,
+    selectedRwgps,
+    rwgpsGpxStatus,
+    rwgpsGpxData,
+  } = courseData;
 
-  // RideWithGPS search state
+  // Helper functions to update course data in store
+  const setFileName = (fileName: string | null) =>
+    setCourseData({ fileName });
+  const setGpxStatus = (
+    gpxStatus: "idle" | "loading" | "loaded" | "unavailable" | "error",
+  ) => setCourseData({ gpxStatus });
+  const setGpxData = (gpxData: GpxResponse | null) => setCourseData({ gpxData });
+  const setSelectedRwgps = (selectedRwgps: RwgpsRoute | null) =>
+    setCourseData({ selectedRwgps });
+  const setRwgpsGpxStatus = (
+    rwgpsGpxStatus: "idle" | "loading" | "loaded" | "error",
+  ) => setCourseData({ rwgpsGpxStatus });
+  const setRwgpsGpxData = (rwgpsGpxData: RwgpsGpxResponse | null) =>
+    setCourseData({ rwgpsGpxData });
+
+  // RideWithGPS search state (transient, doesn't need persistence)
   const [rwgpsQuery, setRwgpsQuery] = useState("");
   const [rwgpsResults, setRwgpsResults] = useState<RwgpsRoute[]>([]);
   const [rwgpsSearching, setRwgpsSearching] = useState(false);
   const [rwgpsSearched, setRwgpsSearched] = useState(false);
   const [rwgpsTotal, setRwgpsTotal] = useState(0);
-
-  // RideWithGPS selected route & GPX fetch
-  const [selectedRwgps, setSelectedRwgps] = useState<RwgpsRoute | null>(null);
-  const [rwgpsGpxStatus, setRwgpsGpxStatus] = useState<
-    "idle" | "loading" | "loaded" | "error"
-  >("idle");
-  const [rwgpsGpxData, setRwgpsGpxData] = useState<RwgpsGpxResponse | null>(
-    null,
-  );
 
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -207,6 +217,10 @@ export function Step3Course() {
   const handleSelectRwgpsRoute = async (route: RwgpsRoute) => {
     setSelectedRwgps(route);
     setRwgpsGpxStatus("loading");
+
+    // Clear search results after selection
+    setRwgpsResults([]);
+    setRwgpsSearched(false);
 
     try {
       const res = await fetch(
@@ -737,11 +751,11 @@ export function Step3Course() {
           </div>
         )}
 
-        <div className="pt-6 flex gap-3">
+        <div className="pt-6 flex flex-col sm:flex-row gap-3">
           <Button
             variant="outline"
             type="button"
-            className="w-full min-w-0 shrink"
+            className="w-full"
             onClick={() => setStep(2)}
             disabled={isSubmitting}
           >
@@ -749,8 +763,7 @@ export function Step3Course() {
           </Button>
           <Button
             type="submit"
-            className="w-full min-w-0 shrink"
-            size="lg"
+            className="w-full"
             disabled={isSubmitting}
           >
             {isSubmitting ? (

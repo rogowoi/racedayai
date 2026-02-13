@@ -61,7 +61,7 @@ export default function WizardLayoutClient({
       </header>
 
       {/* Content */}
-      <main className="flex-1 w-full max-w-md mx-auto p-4 md:py-8">
+      <main className="flex-1 w-full max-w-md mx-auto p-4 md:py-8 pb-8 md:pb-12">
         {children}
       </main>
     </div>
