@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import {
   Menu,
   Zap,
@@ -95,61 +95,75 @@ export async function Navbar() {
             <div className="flex flex-col h-full gap-4 pt-4">
               <div className="flex flex-col gap-4 text-base font-medium">
                 {session && (
-                  <Link
-                    href="/dashboard"
-                    className="flex items-center gap-3 py-2 text-primary font-semibold"
-                  >
-                    <LayoutDashboard className="h-5 w-5" />
-                    My Dashboard
-                  </Link>
+                  <SheetClose asChild>
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center gap-3 py-2 text-primary font-semibold"
+                    >
+                      <LayoutDashboard className="h-5 w-5" />
+                      My Dashboard
+                    </Link>
+                  </SheetClose>
                 )}
-                <Link
-                  href="#features"
-                  className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
-                >
-                  <TrendingUp className="h-5 w-5 text-muted-foreground" />
-                  Features
-                </Link>
-                <Link
-                  href="#how-it-works"
-                  className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
-                >
-                  <Map className="h-5 w-5 text-muted-foreground" />
-                  How it Works
-                </Link>
-                <Link
-                  href="#pricing"
-                  className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
-                >
-                  <DollarSign className="h-5 w-5 text-muted-foreground" />
-                  Pricing
-                </Link>
+                <SheetClose asChild>
+                  <Link
+                    href="#features"
+                    className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
+                  >
+                    <TrendingUp className="h-5 w-5 text-muted-foreground" />
+                    Features
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link
+                    href="#how-it-works"
+                    className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
+                  >
+                    <Map className="h-5 w-5 text-muted-foreground" />
+                    How it Works
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link
+                    href="#pricing"
+                    className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
+                  >
+                    <DollarSign className="h-5 w-5 text-muted-foreground" />
+                    Pricing
+                  </Link>
+                </SheetClose>
               </div>
 
               <div className="flex flex-col gap-3 mt-auto">
                 {!session ? (
                   <>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-center"
-                      asChild
-                    >
-                      <Link href="/login">Log in</Link>
-                    </Button>
+                    <SheetClose asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-center"
+                        asChild
+                      >
+                        <Link href="/login">Log in</Link>
+                      </Button>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Button className="w-full font-semibold" size="lg" asChild>
+                        <Link href="/wizard">
+                          Build My Race Plan
+                          <ArrowRight className="ml-1.5 h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </SheetClose>
+                  </>
+                ) : (
+                  <SheetClose asChild>
                     <Button className="w-full font-semibold" size="lg" asChild>
                       <Link href="/wizard">
-                        Build My Race Plan
+                        Build New Plan
                         <ArrowRight className="ml-1.5 h-4 w-4" />
                       </Link>
                     </Button>
-                  </>
-                ) : (
-                  <Button className="w-full font-semibold" size="lg" asChild>
-                    <Link href="/wizard">
-                      Build New Plan
-                      <ArrowRight className="ml-1.5 h-4 w-4" />
-                    </Link>
-                  </Button>
+                  </SheetClose>
                 )}
               </div>
             </div>

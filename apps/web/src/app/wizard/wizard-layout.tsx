@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { X, ChevronLeft, Zap } from "lucide-react";
+import { X, ChevronLeft, Zap, LayoutDashboard } from "lucide-react";
 import { useWizardStore } from "@/stores/wizard-store";
 
 export default function WizardLayoutClient({
@@ -43,12 +43,26 @@ export default function WizardLayoutClient({
             </span>
           </div>
 
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/">
-              <X className="h-5 w-5" />
-              <span className="sr-only">Exit</span>
-            </Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
+              <Link href="/dashboard" className="flex items-center gap-1.5">
+                <LayoutDashboard className="h-4 w-4" />
+                <span>Dashboard</span>
+              </Link>
+            </Button>
+            <Button variant="ghost" size="icon" asChild className="sm:hidden">
+              <Link href="/dashboard">
+                <LayoutDashboard className="h-5 w-5" />
+                <span className="sr-only">Go to Dashboard</span>
+              </Link>
+            </Button>
+            <Button variant="ghost" size="icon" asChild>
+              <Link href="/">
+                <X className="h-5 w-5" />
+                <span className="sr-only">Exit</span>
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* Progress Bar */}

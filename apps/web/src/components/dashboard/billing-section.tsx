@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -10,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PLANS, type PlanKey } from "@/lib/plans";
-import { Check, Loader2 } from "lucide-react";
+import { Check, Loader2, ArrowRight, LayoutDashboard } from "lucide-react";
 
 interface BillingSectionProps {
   currentPlan: string;
@@ -91,11 +92,27 @@ export function BillingSection({
   return (
     <div className="space-y-6">
       {showSuccess && (
-        <div className="bg-green-100 border border-green-200 text-green-800 px-4 py-3 rounded-md flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
-          <Check className="h-5 w-5" />
-          <p className="font-medium">
-            Payment successful! Your subscription has been updated.
-          </p>
+        <div className="bg-green-100 border border-green-200 text-green-800 px-4 py-4 rounded-md animate-in fade-in slide-in-from-top-2">
+          <div className="flex items-center gap-2 mb-3">
+            <Check className="h-5 w-5 flex-shrink-0" />
+            <p className="font-medium">
+              Payment successful! Your subscription has been updated.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2 ml-7">
+            <Button size="sm" variant="default" asChild className="bg-green-700 hover:bg-green-800">
+              <Link href="/wizard">
+                Create Your First Plan
+                <ArrowRight className="ml-1.5 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button size="sm" variant="outline" asChild className="border-green-700 text-green-800 hover:bg-green-50">
+              <Link href="/dashboard">
+                <LayoutDashboard className="mr-1.5 h-4 w-4" />
+                Go to Dashboard
+              </Link>
+            </Button>
+          </div>
         </div>
       )}
 
