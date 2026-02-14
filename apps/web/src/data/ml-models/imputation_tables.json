@@ -1,9 +1,579 @@
 {
-  "cohort_medians": {},
+  "cohort_medians": {
+    "sprint": {
+      "F": {
+        "1.0": {
+          "total_sec": 5483.0,
+          "swim_sec": 904.0,
+          "bike_sec": 2628.5,
+          "run_sec": 1543.0
+        },
+        "2.0": {
+          "total_sec": 4352.0,
+          "swim_sec": 708.0,
+          "bike_sec": 2200.0,
+          "run_sec": 1298.0
+        },
+        "3.0": {
+          "total_sec": 5309.0,
+          "swim_sec": 927.0,
+          "bike_sec": 2509.5,
+          "run_sec": 1535.0
+        },
+        "4.0": {
+          "total_sec": 5327.0,
+          "swim_sec": 925.0,
+          "bike_sec": 2501.5,
+          "run_sec": 1550.0
+        },
+        "6.0": {
+          "total_sec": 5334.5,
+          "swim_sec": 943.0,
+          "bike_sec": 2488.0,
+          "run_sec": 1554.0
+        },
+        "5.0": {
+          "total_sec": 5289.0,
+          "swim_sec": 926.0,
+          "bike_sec": 2470.0,
+          "run_sec": 1526.5
+        },
+        "7.0": {
+          "total_sec": 5544.0,
+          "swim_sec": 974.0,
+          "bike_sec": 2519.0,
+          "run_sec": 1637.5
+        },
+        "8.0": {
+          "total_sec": 5776.0,
+          "swim_sec": 1019.5,
+          "bike_sec": 2604.0,
+          "run_sec": 1712.0
+        },
+        "0.0": {
+          "total_sec": 6116.0,
+          "swim_sec": 970.0,
+          "bike_sec": 2960.0,
+          "run_sec": 1682.0
+        },
+        "9.0": {
+          "total_sec": 6132.0,
+          "swim_sec": 1050.0,
+          "bike_sec": 2754.0,
+          "run_sec": 1817.5
+        },
+        "10.0": {
+          "total_sec": 6361.0,
+          "swim_sec": 1120.0,
+          "bike_sec": 2773.5,
+          "run_sec": 1980.0
+        }
+      },
+      "M": {
+        "3.0": {
+          "total_sec": 4895.0,
+          "swim_sec": 877.0,
+          "bike_sec": 2313.0,
+          "run_sec": 1398.0
+        },
+        "4.0": {
+          "total_sec": 4845.5,
+          "swim_sec": 858.0,
+          "bike_sec": 2298.0,
+          "run_sec": 1391.0
+        },
+        "1.0": {
+          "total_sec": 4901.0,
+          "swim_sec": 854.0,
+          "bike_sec": 2371.0,
+          "run_sec": 1363.5
+        },
+        "5.0": {
+          "total_sec": 4816.0,
+          "swim_sec": 866.0,
+          "bike_sec": 2264.0,
+          "run_sec": 1382.0
+        },
+        "2.0": {
+          "total_sec": 4465.0,
+          "swim_sec": 775.0,
+          "bike_sec": 2190.0,
+          "run_sec": 1290.0
+        },
+        "7.0": {
+          "total_sec": 4895.5,
+          "swim_sec": 879.0,
+          "bike_sec": 2277.0,
+          "run_sec": 1418.0
+        },
+        "6.0": {
+          "total_sec": 4826.0,
+          "swim_sec": 856.0,
+          "bike_sec": 2264.0,
+          "run_sec": 1386.0
+        },
+        "8.0": {
+          "total_sec": 5094.5,
+          "swim_sec": 918.0,
+          "bike_sec": 2322.0,
+          "run_sec": 1481.0
+        },
+        "9.0": {
+          "total_sec": 5346.0,
+          "swim_sec": 951.0,
+          "bike_sec": 2414.0,
+          "run_sec": 1586.0
+        },
+        "0.0": {
+          "total_sec": 5460.0,
+          "swim_sec": 931.0,
+          "bike_sec": 2679.0,
+          "run_sec": 1459.5
+        },
+        "10.0": {
+          "total_sec": 5743.0,
+          "swim_sec": 1030.0,
+          "bike_sec": 2511.0,
+          "run_sec": 1713.0
+        }
+      }
+    },
+    "olympic": {
+      "F": {
+        "1.0": {
+          "total_sec": 10162.5,
+          "swim_sec": 1748.0,
+          "bike_sec": 4821.0,
+          "run_sec": 3143.0
+        },
+        "5.0": {
+          "total_sec": 10420.0,
+          "swim_sec": 1870.0,
+          "bike_sec": 4850.5,
+          "run_sec": 3277.0
+        },
+        "0.0": {
+          "total_sec": 10668.0,
+          "swim_sec": 1777.0,
+          "bike_sec": 5027.0,
+          "run_sec": 3423.5
+        },
+        "3.0": {
+          "total_sec": 10268.0,
+          "swim_sec": 1826.0,
+          "bike_sec": 4819.0,
+          "run_sec": 3211.5
+        },
+        "2.0": {
+          "total_sec": 8079.0,
+          "swim_sec": 1300.0,
+          "bike_sec": 4198.0,
+          "run_sec": 2485.0
+        },
+        "4.0": {
+          "total_sec": 10363.0,
+          "swim_sec": 1859.0,
+          "bike_sec": 4829.0,
+          "run_sec": 3257.5
+        },
+        "6.0": {
+          "total_sec": 10613.0,
+          "swim_sec": 1916.0,
+          "bike_sec": 4873.0,
+          "run_sec": 3336.0
+        },
+        "7.0": {
+          "total_sec": 10754.0,
+          "swim_sec": 1951.0,
+          "bike_sec": 4953.0,
+          "run_sec": 3409.5
+        },
+        "8.0": {
+          "total_sec": 11071.5,
+          "swim_sec": 1968.5,
+          "bike_sec": 5012.0,
+          "run_sec": 3538.0
+        },
+        "9.0": {
+          "total_sec": 11676.5,
+          "swim_sec": 2071.0,
+          "bike_sec": 5236.0,
+          "run_sec": 3814.0
+        },
+        "10.0": {
+          "total_sec": 12101.0,
+          "swim_sec": 2121.5,
+          "bike_sec": 5375.0,
+          "run_sec": 4045.0
+        }
+      },
+      "M": {
+        "2.0": {
+          "total_sec": 7423.0,
+          "swim_sec": 1229.0,
+          "bike_sec": 3841.0,
+          "run_sec": 2268.0
+        },
+        "3.0": {
+          "total_sec": 9618.0,
+          "swim_sec": 1751.0,
+          "bike_sec": 4418.0,
+          "run_sec": 3040.0
+        },
+        "5.0": {
+          "total_sec": 9709.0,
+          "swim_sec": 1770.0,
+          "bike_sec": 4422.0,
+          "run_sec": 3100.0
+        },
+        "1.0": {
+          "total_sec": 9366.0,
+          "swim_sec": 1673.0,
+          "bike_sec": 4381.0,
+          "run_sec": 2911.0
+        },
+        "4.0": {
+          "total_sec": 9643.0,
+          "swim_sec": 1765.0,
+          "bike_sec": 4408.0,
+          "run_sec": 3053.0
+        },
+        "0.0": {
+          "total_sec": 9633.0,
+          "swim_sec": 1670.0,
+          "bike_sec": 4483.0,
+          "run_sec": 3018.0
+        },
+        "6.0": {
+          "total_sec": 9788.0,
+          "swim_sec": 1788.0,
+          "bike_sec": 4458.0,
+          "run_sec": 3124.0
+        },
+        "7.0": {
+          "total_sec": 9952.5,
+          "swim_sec": 1819.0,
+          "bike_sec": 4539.0,
+          "run_sec": 3175.5
+        },
+        "8.0": {
+          "total_sec": 10166.0,
+          "swim_sec": 1864.5,
+          "bike_sec": 4651.0,
+          "run_sec": 3193.0
+        },
+        "9.0": {
+          "total_sec": 10468.0,
+          "swim_sec": 1897.5,
+          "bike_sec": 4736.0,
+          "run_sec": 3327.0
+        },
+        "10.0": {
+          "total_sec": 11136.0,
+          "swim_sec": 2010.5,
+          "bike_sec": 4955.0,
+          "run_sec": 3574.0
+        }
+      }
+    },
+    "70.3": {
+      "F": {
+        "4.0": {
+          "total_sec": 22226.0,
+          "swim_sec": 2432.0,
+          "bike_sec": 11292.0,
+          "run_sec": 7858.0
+        },
+        "2.0": {
+          "total_sec": 21183.0,
+          "swim_sec": 2267.0,
+          "bike_sec": 11021.0,
+          "run_sec": 7296.0
+        },
+        "1.0": {
+          "total_sec": 21844.0,
+          "swim_sec": 2291.0,
+          "bike_sec": 11341.0,
+          "run_sec": 7605.0
+        },
+        "7.0": {
+          "total_sec": 23356.0,
+          "swim_sec": 2510.0,
+          "bike_sec": 11659.0,
+          "run_sec": 8548.0
+        },
+        "5.0": {
+          "total_sec": 22511.0,
+          "swim_sec": 2453.0,
+          "bike_sec": 11368.0,
+          "run_sec": 8019.0
+        },
+        "0.0": {
+          "total_sec": 21886.0,
+          "swim_sec": 2211.0,
+          "bike_sec": 11378.0,
+          "run_sec": 7709.0
+        },
+        "6.0": {
+          "total_sec": 22893.5,
+          "swim_sec": 2474.0,
+          "bike_sec": 11482.0,
+          "run_sec": 8247.5
+        },
+        "3.0": {
+          "total_sec": 22031.0,
+          "swim_sec": 2403.0,
+          "bike_sec": 11275.0,
+          "run_sec": 7735.0
+        },
+        "8.0": {
+          "total_sec": 24198.5,
+          "swim_sec": 2556.0,
+          "bike_sec": 12022.0,
+          "run_sec": 8947.0
+        },
+        "9.0": {
+          "total_sec": 25205.0,
+          "swim_sec": 2617.0,
+          "bike_sec": 12293.0,
+          "run_sec": 9477.0
+        },
+        "10.0": {
+          "total_sec": 26097.0,
+          "swim_sec": 2735.0,
+          "bike_sec": 12451.0,
+          "run_sec": 10028.5
+        }
+      },
+      "M": {
+        "5.0": {
+          "total_sec": 20674.0,
+          "swim_sec": 2298.0,
+          "bike_sec": 10383.0,
+          "run_sec": 7338.0
+        },
+        "0.0": {
+          "total_sec": 19956.0,
+          "swim_sec": 2128.0,
+          "bike_sec": 10255.0,
+          "run_sec": 6974.0
+        },
+        "6.0": {
+          "total_sec": 20988.0,
+          "swim_sec": 2319.0,
+          "bike_sec": 10496.0,
+          "run_sec": 7499.0
+        },
+        "3.0": {
+          "total_sec": 20242.0,
+          "swim_sec": 2269.0,
+          "bike_sec": 10231.0,
+          "run_sec": 7117.0
+        },
+        "7.0": {
+          "total_sec": 21446.0,
+          "swim_sec": 2352.0,
+          "bike_sec": 10657.0,
+          "run_sec": 7745.0
+        },
+        "4.0": {
+          "total_sec": 20442.0,
+          "swim_sec": 2288.0,
+          "bike_sec": 10290.0,
+          "run_sec": 7221.0
+        },
+        "8.0": {
+          "total_sec": 22085.5,
+          "swim_sec": 2406.0,
+          "bike_sec": 10893.0,
+          "run_sec": 8073.0
+        },
+        "1.0": {
+          "total_sec": 20106.5,
+          "swim_sec": 2198.0,
+          "bike_sec": 10291.0,
+          "run_sec": 6990.0
+        },
+        "2.0": {
+          "total_sec": 19778.0,
+          "swim_sec": 2204.0,
+          "bike_sec": 10135.0,
+          "run_sec": 6838.0
+        },
+        "9.0": {
+          "total_sec": 22929.0,
+          "swim_sec": 2495.0,
+          "bike_sec": 11232.0,
+          "run_sec": 8421.0
+        },
+        "10.0": {
+          "total_sec": 24315.5,
+          "swim_sec": 2608.0,
+          "bike_sec": 11798.5,
+          "run_sec": 9200.5
+        }
+      }
+    },
+    "140.6": {
+      "F": {
+        "2.0": {
+          "total_sec": 42826.0,
+          "swim_sec": 4281.0,
+          "bike_sec": 22046.5,
+          "run_sec": 15686.0
+        },
+        "3.0": {
+          "total_sec": 44437.0,
+          "swim_sec": 4509.0,
+          "bike_sec": 22741.0,
+          "run_sec": 16406.5
+        },
+        "5.0": {
+          "total_sec": 45825.0,
+          "swim_sec": 4684.0,
+          "bike_sec": 23092.5,
+          "run_sec": 17165.0
+        },
+        "1.0": {
+          "total_sec": 44102.0,
+          "swim_sec": 4307.0,
+          "bike_sec": 22736.0,
+          "run_sec": 16291.0
+        },
+        "4.0": {
+          "total_sec": 45067.5,
+          "swim_sec": 4590.0,
+          "bike_sec": 22880.5,
+          "run_sec": 16764.0
+        },
+        "6.0": {
+          "total_sec": 46632.5,
+          "swim_sec": 4764.0,
+          "bike_sec": 23450.0,
+          "run_sec": 17614.0
+        },
+        "0.0": {
+          "total_sec": 44933.0,
+          "swim_sec": 4279.5,
+          "bike_sec": 23042.0,
+          "run_sec": 16892.5
+        },
+        "8.0": {
+          "total_sec": 50023.5,
+          "swim_sec": 5067.0,
+          "bike_sec": 24883.0,
+          "run_sec": 19266.0
+        },
+        "7.0": {
+          "total_sec": 48099.0,
+          "swim_sec": 4871.5,
+          "bike_sec": 24020.0,
+          "run_sec": 18371.5
+        },
+        "9.0": {
+          "total_sec": 52530.0,
+          "swim_sec": 5313.0,
+          "bike_sec": 25716.0,
+          "run_sec": 20474.0
+        },
+        "10.0": {
+          "total_sec": 53533.0,
+          "swim_sec": 5158.0,
+          "bike_sec": 25756.0,
+          "run_sec": 20828.0
+        }
+      },
+      "M": {
+        "2.0": {
+          "total_sec": 40436.0,
+          "swim_sec": 4149.0,
+          "bike_sec": 20399.0,
+          "run_sec": 15006.0
+        },
+        "5.0": {
+          "total_sec": 42309.0,
+          "swim_sec": 4371.0,
+          "bike_sec": 21052.0,
+          "run_sec": 15984.0
+        },
+        "4.0": {
+          "total_sec": 41704.0,
+          "swim_sec": 4301.0,
+          "bike_sec": 20872.0,
+          "run_sec": 15630.0
+        },
+        "1.0": {
+          "total_sec": 40686.0,
+          "swim_sec": 4084.0,
+          "bike_sec": 20631.0,
+          "run_sec": 15146.0
+        },
+        "3.0": {
+          "total_sec": 41102.0,
+          "swim_sec": 4222.0,
+          "bike_sec": 20699.0,
+          "run_sec": 15314.0
+        },
+        "6.0": {
+          "total_sec": 43098.0,
+          "swim_sec": 4452.0,
+          "bike_sec": 21359.0,
+          "run_sec": 16429.0
+        },
+        "0.0": {
+          "total_sec": 41650.0,
+          "swim_sec": 4085.0,
+          "bike_sec": 21035.5,
+          "run_sec": 15640.0
+        },
+        "7.0": {
+          "total_sec": 44347.0,
+          "swim_sec": 4564.0,
+          "bike_sec": 21812.5,
+          "run_sec": 16995.0
+        },
+        "8.0": {
+          "total_sec": 45812.0,
+          "swim_sec": 4714.0,
+          "bike_sec": 22458.5,
+          "run_sec": 17615.0
+        },
+        "9.0": {
+          "total_sec": 47344.0,
+          "swim_sec": 4856.0,
+          "bike_sec": 23101.0,
+          "run_sec": 18368.5
+        },
+        "10.0": {
+          "total_sec": 50085.0,
+          "swim_sec": 5123.0,
+          "bike_sec": 24348.0,
+          "run_sec": 19679.0
+        }
+      }
+    }
+  },
   "strength_defaults": {
     "swim_strength_z": 0.0,
     "bike_strength_z": 0.0,
     "run_strength_z": 0.0
   },
-  "transition_estimates": {}
+  "transition_estimates": {
+    "sprint": {
+      "t1": 142.0,
+      "t2": 95.0
+    },
+    "olympic": {
+      "t1": 176.0,
+      "t2": 118.0
+    },
+    "70.3": {
+      "t1": 295.0,
+      "t2": 215.0
+    },
+    "140.6": {
+      "t1": 362.0,
+      "t2": 290.0
+    }
+  }
 }
