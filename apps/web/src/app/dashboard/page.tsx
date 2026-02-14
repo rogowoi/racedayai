@@ -65,12 +65,21 @@ export default async function DashboardPage() {
                 Welcome back, {user?.name || "Athlete"}
               </p>
             </div>
-            <Button asChild size="lg">
-              <Link href="/wizard">
-                <Plus className="mr-2 h-4 w-4" />
-                Create Race Plan
-              </Link>
-            </Button>
+            {plansRemaining === 0 ? (
+              <Button asChild size="lg" variant="default">
+                <Link href="/pricing">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Upgrade to Create Plans
+                </Link>
+              </Button>
+            ) : (
+              <Button asChild size="lg">
+                <Link href="/wizard">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create Race Plan
+                </Link>
+              </Button>
+            )}
           </div>
 
           {/* Stats Grid */}

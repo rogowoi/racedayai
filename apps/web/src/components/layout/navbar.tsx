@@ -138,6 +138,12 @@ export async function Navbar() {
               >
                 Log in
               </Link>
+              <Link
+                href="/signup"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Sign Up
+              </Link>
               <Button className="font-semibold" asChild>
                 <Link href="/wizard">
                   Build My Plan
@@ -248,6 +254,15 @@ export async function Navbar() {
                         asChild
                       >
                         <Link href="/login">Log in</Link>
+                      </Button>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-center"
+                        asChild
+                      >
+                        <Link href="/signup">Sign Up</Link>
                       </Button>
                     </SheetClose>
                     <SheetClose asChild>

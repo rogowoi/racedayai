@@ -10,10 +10,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signUp } from "@/app/actions/auth-actions";
-import { Zap, Loader2, AlertCircle } from "lucide-react";
+import { signUp, loginWithStrava } from "@/app/actions/auth-actions";
+import { Zap, Loader2, AlertCircle, Activity, Check, X } from "lucide-react";
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
@@ -26,12 +26,40 @@ function SignUpForm() {
     error: null,
   });
 
+  const [password, setPassword] = useState("");
+
   const planLabel =
     plan === "season"
       ? "Season Pass"
       : plan === "unlimited"
         ? "Pro"
         : null;
+
+  // Password strength checks
+  const hasMinLength = password.length >= 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+  const strengthChecks = [hasMinLength, hasUpperCase, hasLowerCase, hasNumber];
+  const strengthScore = strengthChecks.filter(Boolean).length;
+
+  const getStrengthColor = () => {
+    if (strengthScore === 0) return "";
+    if (strengthScore <= 1) return "bg-red-500";
+    if (strengthScore === 2) return "bg-orange-500";
+    if (strengthScore === 3) return "bg-yellow-500";
+    return "bg-green-500";
+  };
+
+  const getStrengthLabel = () => {
+    if (strengthScore === 0) return "";
+    if (strengthScore <= 1) return "Weak";
+    if (strengthScore === 2) return "Fair";
+    if (strengthScore === 3) return "Good";
+    return "Strong";
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -62,9 +90,34 @@ function SignUpForm() {
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Sign Up</CardTitle>
-            <CardDescription>Enter your details to get started</CardDescription>
+            <CardDescription>Choose your preferred sign-up method</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-6">
+            {/* Strava first — it's the path of least resistance for triathletes */}
+            <form action={loginWithStrava}>
+              <Button
+                variant="outline"
+                type="submit"
+                className="w-full h-14 justify-start gap-4 text-base font-normal"
+              >
+                <div className="h-8 w-8 rounded-full bg-orange-500/10 flex items-center justify-center">
+                  <Activity className="h-5 w-5 text-orange-600" />
+                </div>
+                Continue with Strava
+              </Button>
+            </form>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or sign up with email
+                </span>
+              </div>
+            </div>
+
             <form action={formAction} className="space-y-4">
               {state.error && (
                 <div className="flex items-center gap-2 rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
@@ -116,7 +169,46 @@ function SignUpForm() {
                   required
                   disabled={isPending}
                   autoComplete="new-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
+                {password && (
+                  <>
+                    <div className="flex gap-1 mt-2">
+                      {[...Array(4)].map((_, i) => (
+                        <div
+                          key={i}
+                          className={`h-1 flex-1 rounded-full transition-colors ${
+                            i < strengthScore ? getStrengthColor() : "bg-muted"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    {strengthScore > 0 && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Password strength: <span className="font-medium">{getStrengthLabel()}</span>
+                      </p>
+                    )}
+                    <div className="space-y-1 mt-2">
+                      <div className={`flex items-center gap-1.5 text-xs ${hasMinLength ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}>
+                        {hasMinLength ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                        At least 8 characters
+                      </div>
+                      <div className={`flex items-center gap-1.5 text-xs ${hasUpperCase ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}>
+                        {hasUpperCase ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                        One uppercase letter
+                      </div>
+                      <div className={`flex items-center gap-1.5 text-xs ${hasLowerCase ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}>
+                        {hasLowerCase ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                        One lowercase letter
+                      </div>
+                      <div className={`flex items-center gap-1.5 text-xs ${hasNumber ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}>
+                        {hasNumber ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                        One number
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               <Button

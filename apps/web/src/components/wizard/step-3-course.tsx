@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 /* ─── Types ──────────────────────────────────────────────── */
 
@@ -96,6 +97,10 @@ export function Step3Course() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [duplicateWarning, setDuplicateWarning] = useState<{
+    message: string;
+    existingPlanId: string;
+  } | null>(null);
   const gpxFileRef = useRef<HTMLInputElement>(null);
 
   // Extract persisted course data from store
@@ -277,10 +282,11 @@ export function Step3Course() {
     return "none";
   })();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, ignoreDuplicate = false) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitError(null);
+    setDuplicateWarning(null);
 
     try {
       // Upload GPX to R2 if user selected a file
@@ -327,6 +333,7 @@ export function Step3Course() {
           raceData,
           rwgpsCourseData,
           gpxFileKey,
+          ignoreDuplicate,
         }),
       });
 
@@ -337,6 +344,15 @@ export function Step3Course() {
           router.push(
             `/login?callbackUrl=${encodeURIComponent("/wizard")}`,
           );
+          return;
+        }
+        // Handle duplicate detection
+        if (res.status === 409 && data.error === "duplicate") {
+          setDuplicateWarning({
+            message: data.message,
+            existingPlanId: data.existingPlanId,
+          });
+          setIsSubmitting(false);
           return;
         }
         throw new Error(data.error || "Failed to generate plan");
@@ -731,6 +747,41 @@ export function Step3Course() {
           </div>
         </div>
 
+        {duplicateWarning && (
+          <div className="p-4 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/20 space-y-3">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-amber-700 dark:text-amber-300">
+                  Duplicate Plan Detected
+                </p>
+                <p className="text-xs text-amber-600/80 dark:text-amber-400/80">
+                  {duplicateWarning.message}
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => router.push(`/plan/${duplicateWarning.existingPlanId}`)}
+              >
+                View Existing Plan
+              </Button>
+              <Button
+                type="button"
+                variant="default"
+                size="sm"
+                onClick={(e) => handleSubmit(e as any, true)}
+                disabled={isSubmitting}
+              >
+                Create Anyway
+              </Button>
+            </div>
+          </div>
+        )}
+
         {submitError && (
           <div className="p-4 rounded-lg border border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950/20 space-y-2">
             <div className="flex items-start gap-2">
@@ -743,7 +794,12 @@ export function Step3Course() {
                   {submitError.includes("Unauthorized")
                     ? "Please sign in to generate a race plan."
                     : submitError.includes("limit")
-                      ? "Upgrade your plan to create more race plans."
+                      ? <>
+                          <Link href="/pricing" className="underline hover:text-red-700 dark:hover:text-red-300 font-medium">
+                            Upgrade your plan
+                          </Link>{" "}
+                          to create more race plans.
+                        </>
                       : "Check your connection and try again. If the issue persists, try refreshing the page."}
                 </p>
               </div>

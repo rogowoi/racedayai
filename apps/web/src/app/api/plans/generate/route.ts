@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const { fitnessData, raceData, rwgpsCourseData, gpxFileKey } = body;
+  const { fitnessData, raceData, rwgpsCourseData, gpxFileKey, ignoreDuplicate } = body;
 
   if (!fitnessData || !raceData) {
     return NextResponse.json(
@@ -48,6 +48,41 @@ export async function POST(req: Request) {
   }
 
   try {
+    // Check for duplicate plans (same race name and date)
+    if (!ignoreDuplicate) {
+      const rd = raceData as Record<string, unknown>;
+      const raceDate = rd.date ? new Date(rd.date as string) : new Date();
+
+      // Get athlete to check for existing plans
+      const athlete = await prisma.athlete.findUnique({
+        where: { userId },
+        include: {
+          racePlans: {
+            where: {
+              raceDate: {
+                gte: new Date(raceDate.getFullYear(), raceDate.getMonth(), raceDate.getDate()),
+                lt: new Date(raceDate.getFullYear(), raceDate.getMonth(), raceDate.getDate() + 1),
+              },
+              course: {
+                raceName: rd.name as string,
+              },
+            },
+          },
+        },
+      });
+
+      if (athlete && athlete.racePlans.length > 0) {
+        return NextResponse.json(
+          {
+            error: "duplicate",
+            message: `You already have a plan for ${rd.name} on ${raceDate.toLocaleDateString()}. Creating a duplicate will use another plan slot.`,
+            existingPlanId: athlete.racePlans[0].id,
+          },
+          { status: 409 },
+        );
+      }
+    }
+
     // Upsert athlete profile
     await prisma.athlete.upsert({
       where: { userId },
