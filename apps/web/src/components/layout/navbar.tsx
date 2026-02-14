@@ -9,8 +9,21 @@ import {
   Map,
   DollarSign,
   LayoutDashboard,
+  User,
+  Settings,
+  CreditCard,
+  LogOut,
 } from "lucide-react";
 import { auth } from "@/auth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { logout } from "@/app/actions/auth-actions";
 
 export async function Navbar() {
   const session = await auth();
@@ -61,26 +74,78 @@ export async function Navbar() {
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-4">
           {session ? (
-            <Link
-              href="/dashboard"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Dashboard
-            </Link>
+            <>
+              <Button className="font-semibold" asChild>
+                <Link href="/wizard">
+                  Build My Plan
+                  <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Link>
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full">
+                    <User className="h-5 w-5" />
+                    <span className="sr-only">User menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {session.user?.name || "User"}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {session.user?.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard" className="cursor-pointer">
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/settings" className="cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/settings#billing" className="cursor-pointer">
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      Billing
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <form action={logout} className="w-full">
+                      <button type="submit" className="flex w-full items-center cursor-pointer">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Logout
+                      </button>
+                    </form>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
           ) : (
-            <Link
-              href="/login"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Log in
-            </Link>
+            <>
+              <Link
+                href="/login"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Log in
+              </Link>
+              <Button className="font-semibold" asChild>
+                <Link href="/wizard">
+                  Build My Plan
+                  <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Link>
+              </Button>
+            </>
           )}
-          <Button className="font-semibold" asChild>
-            <Link href="/wizard">
-              Build My Plan
-              <ArrowRight className="ml-1.5 h-4 w-4" />
-            </Link>
-          </Button>
         </div>
 
         {/* Mobile Menu */}
@@ -93,17 +158,56 @@ export async function Navbar() {
           </SheetTrigger>
           <SheetContent side="right" className="w-[85vw] max-w-[400px] p-6">
             <div className="flex flex-col h-full gap-4 pt-4">
+              {session && (
+                <div className="pb-4 border-b">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <User className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="flex flex-col">
+                      <p className="text-sm font-medium leading-none">
+                        {session.user?.name || "User"}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground mt-1">
+                        {session.user?.email}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="flex flex-col gap-4 text-base font-medium">
                 {session && (
-                  <SheetClose asChild>
-                    <Link
-                      href="/dashboard"
-                      className="flex items-center gap-3 py-2 text-primary font-semibold"
-                    >
-                      <LayoutDashboard className="h-5 w-5" />
-                      My Dashboard
-                    </Link>
-                  </SheetClose>
+                  <>
+                    <SheetClose asChild>
+                      <Link
+                        href="/dashboard"
+                        className="flex items-center gap-3 py-2 text-primary font-semibold"
+                      >
+                        <LayoutDashboard className="h-5 w-5" />
+                        My Dashboard
+                      </Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link
+                        href="/dashboard/settings"
+                        className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
+                      >
+                        <Settings className="h-5 w-5 text-muted-foreground" />
+                        Settings
+                      </Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link
+                        href="/dashboard/settings#billing"
+                        className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
+                      >
+                        <CreditCard className="h-5 w-5 text-muted-foreground" />
+                        Billing
+                      </Link>
+                    </SheetClose>
+                    <div className="h-px bg-border my-2" />
+                  </>
                 )}
                 <SheetClose asChild>
                   <Link
@@ -156,14 +260,26 @@ export async function Navbar() {
                     </SheetClose>
                   </>
                 ) : (
-                  <SheetClose asChild>
-                    <Button className="w-full font-semibold" size="lg" asChild>
-                      <Link href="/wizard">
-                        Build New Plan
-                        <ArrowRight className="ml-1.5 h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </SheetClose>
+                  <>
+                    <SheetClose asChild>
+                      <Button className="w-full font-semibold" size="lg" asChild>
+                        <Link href="/wizard">
+                          Build New Plan
+                          <ArrowRight className="ml-1.5 h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </SheetClose>
+                    <form action={logout} className="w-full">
+                      <Button
+                        type="submit"
+                        variant="outline"
+                        className="w-full justify-center"
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Logout
+                      </Button>
+                    </form>
+                  </>
                 )}
               </div>
             </div>
