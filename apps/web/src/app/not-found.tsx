@@ -34,7 +34,7 @@ export default function NotFound() {
             <Link href="/wizard">Build a Race Plan</Link>
           </Button>
         </div>
-
+      </div>
       </div>
     </div>
   );
