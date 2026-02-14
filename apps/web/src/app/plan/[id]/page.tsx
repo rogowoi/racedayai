@@ -9,6 +9,8 @@ import { ShareButton } from "@/components/plan/share-button";
 import { StatisticalInsights } from "@/components/plan/statistical-insights";
 import { PlanGenerating } from "@/components/plan/plan-generating";
 import { TssWithTooltip } from "@/components/plan/tss-with-tooltip";
+import { RenamePlanSheet } from "@/components/plan/rename-plan-sheet";
+import { DeletePlanButton } from "@/components/plan/delete-plan-button";
 import Link from "next/link";
 import { Metadata } from "next";
 import { generateRacePlanSchema, jsonLdScript } from "@/lib/schema";
@@ -157,12 +159,26 @@ export default async function PlanPage({
               </p>
             </div>
             <div className="flex gap-2">
+              <RenamePlanSheet
+                planId={id}
+                currentName={course.raceName}
+                variant="outline"
+                size="sm"
+              />
               <ShareButton planId={id} existingShareToken={plan.shareToken} />
               <Button variant="outline" size="sm" asChild>
                 <a href={`/api/plans/${id}/pdf`} download>
                   <Download className="mr-2 h-4 w-4" /> PDF
                 </a>
               </Button>
+              <DeletePlanButton
+                planId={id}
+                raceName={course.raceName}
+                variant="outline"
+                size="sm"
+                showIcon={true}
+                redirectToDashboard={true}
+              />
             </div>
           </div>
 

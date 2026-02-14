@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Calendar, TrendingUp, Settings } from "lucide-react";
 import { PLANS, getPlanLimits } from "@/lib/stripe";
+import { RenamePlanSheet } from "@/components/plan/rename-plan-sheet";
+import { DeletePlanButton } from "@/components/plan/delete-plan-button";
 
 export const metadata = {
   title: "Dashboard",
@@ -197,9 +199,26 @@ export default async function DashboardPage() {
                           <span>{plan.createdAt.toLocaleDateString()}</span>
                         </div>
                       </div>
-                      <Button variant="outline" className="w-full" asChild>
-                        <Link href={`/plan/${plan.id}`}>View Plan</Link>
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button variant="outline" className="flex-1" asChild>
+                          <Link href={`/plan/${plan.id}`}>View Plan</Link>
+                        </Button>
+                        <RenamePlanSheet
+                          planId={plan.id}
+                          currentName={plan.course.raceName}
+                          variant="outline"
+                          size="default"
+                          showIcon={false}
+                        />
+                        <DeletePlanButton
+                          planId={plan.id}
+                          raceName={plan.course.raceName}
+                          variant="outline"
+                          size="default"
+                          showIcon={false}
+                          redirectToDashboard={false}
+                        />
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
