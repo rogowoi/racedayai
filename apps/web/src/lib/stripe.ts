@@ -12,9 +12,7 @@ const requiredEnvVars = {
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   STRIPE_SEASON_ANNUAL_PRICE_ID: process.env.STRIPE_SEASON_ANNUAL_PRICE_ID,
-  STRIPE_SEASON_MONTHLY_PRICE_ID: process.env.STRIPE_SEASON_MONTHLY_PRICE_ID,
   STRIPE_UNLIMITED_ANNUAL_PRICE_ID: process.env.STRIPE_UNLIMITED_ANNUAL_PRICE_ID,
-  STRIPE_UNLIMITED_MONTHLY_PRICE_ID: process.env.STRIPE_UNLIMITED_MONTHLY_PRICE_ID,
 };
 
 const missingVars = Object.entries(requiredEnvVars)
@@ -33,22 +31,19 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 /**
- * Server-only: resolve a Stripe price ID for a given plan + billing period.
+ * Server-only: resolve a Stripe annual price ID for a given plan.
  */
 export function getStripePriceId(
   plan: "season" | "unlimited",
-  billing: "monthly" | "annual" = "annual",
 ): string {
   const map: Record<string, string | undefined> = {
-    "season-annual": process.env.STRIPE_SEASON_ANNUAL_PRICE_ID,
-    "season-monthly": process.env.STRIPE_SEASON_MONTHLY_PRICE_ID,
-    "unlimited-annual": process.env.STRIPE_UNLIMITED_ANNUAL_PRICE_ID,
-    "unlimited-monthly": process.env.STRIPE_UNLIMITED_MONTHLY_PRICE_ID,
+    season: process.env.STRIPE_SEASON_ANNUAL_PRICE_ID,
+    unlimited: process.env.STRIPE_UNLIMITED_ANNUAL_PRICE_ID,
   };
 
-  const priceId = map[`${plan}-${billing}`];
+  const priceId = map[plan];
   if (!priceId) {
-    throw new Error(`No Stripe price ID configured for ${plan}-${billing}`);
+    throw new Error(`No Stripe annual price ID configured for ${plan}`);
   }
   return priceId;
 }

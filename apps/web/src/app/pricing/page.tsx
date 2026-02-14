@@ -45,7 +45,7 @@ export default async function PricingPage() {
           </div>
         </section>
 
-        {/* Client component: billing toggle + pricing cards */}
+        {/* Client component: annual pricing cards */}
         <PricingCards isLoggedIn={isLoggedIn} />
 
         {/* Value anchor */}

@@ -137,11 +137,9 @@ export async function signUp(
   // If the user chose a paid plan during signup, send them to settings
   // with an auto-upgrade param so checkout triggers immediately.
   const plan = formData.get("plan") as string | null;
-  const billing = formData.get("billing") as string | null;
 
   if (plan && (plan === "season" || plan === "unlimited")) {
-    const billingParam = billing === "monthly" ? "monthly" : "annual";
-    redirect(`/dashboard/settings?upgrade=${plan}&billing=${billingParam}`);
+    redirect(`/dashboard/settings?upgrade=${plan}`);
   }
 
   redirect("/onboarding");

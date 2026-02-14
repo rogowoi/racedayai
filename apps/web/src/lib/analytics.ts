@@ -120,7 +120,7 @@ export interface PaywallProps extends Record<string, unknown> {
 
 export interface CheckoutProps extends Record<string, unknown> {
   plan: "season" | "unlimited";
-  billing?: "monthly" | "annual";
+  billing?: "annual";
   amount?: number;
 }
 

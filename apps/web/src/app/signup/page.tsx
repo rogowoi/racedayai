@@ -20,7 +20,6 @@ import { Suspense } from "react";
 function SignUpForm() {
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan"); // "season" | "unlimited" | null
-  const billing = searchParams.get("billing"); // "monthly" | "annual" | null
 
   const [state, formAction, isPending] = useActionState(signUp, {
     error: null,
@@ -128,9 +127,6 @@ function SignUpForm() {
 
               {/* Pass plan selection through to the server action */}
               {plan && <input type="hidden" name="plan" value={plan} />}
-              {billing && (
-                <input type="hidden" name="billing" value={billing} />
-              )}
 
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>

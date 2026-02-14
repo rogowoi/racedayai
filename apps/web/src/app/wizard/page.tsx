@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 
 export default function WizardPage() {
   const step = useWizardStore((state) => state.step);
+  const setStep = useWizardStore((state) => state.setStep);
   const [mounted, setMounted] = useState(false);
   const [checking, setChecking] = useState(true);
   const [planLimit, setPlanLimit] = useState<{
@@ -51,6 +52,12 @@ export default function WizardPage() {
 
     checkLimits();
   }, [router]);
+
+  useEffect(() => {
+    if (planLimit && !planLimit.canCreate && step !== 1) {
+      setStep(1);
+    }
+  }, [planLimit, setStep, step]);
 
   if (!mounted || checking) {
     return (

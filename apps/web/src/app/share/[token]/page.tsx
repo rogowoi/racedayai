@@ -80,6 +80,8 @@ export default async function SharedPlanPage({
   const run = runPlan as SwimRunPlan | null;
   const swim = swimPlan as SwimRunPlan | null;
   const nutrition = nutritionPlan as NutritionPlan | null;
+  const weatherSource = weather?.source ?? "unavailable";
+  const isWeatherUnavailable = weatherSource === "unavailable";
 
   return (
     <div className="min-h-screen flex flex-col bg-muted/30">
@@ -141,11 +143,14 @@ export default async function SharedPlanPage({
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold flex items-center gap-2">
-                  {weather?.tempC}°C
+                  {isWeatherUnavailable ? "--" : `${weather?.tempC}°C`}
                   <span className="text-sm font-normal text-muted-foreground">
-                    {weather?.humidity}% Hum
+                    {isWeatherUnavailable ? "--" : `${weather?.humidity}% Hum`}
                   </span>
                 </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {isWeatherUnavailable ? "Weather unavailable" : weatherSource === "historical_estimate" ? "Historical estimate" : "Forecast"}
+                </p>
               </CardContent>
             </Card>
             <Card>

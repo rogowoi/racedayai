@@ -1,18 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Check, X, ArrowRight } from "lucide-react";
 import { analytics, AnalyticsEvent } from "@/lib/analytics";
+import { getAnnualSavingsLabel } from "@/lib/plans";
 
 interface PricingCardsProps {
   isLoggedIn?: boolean;
 }
 
 export function PricingCards({ isLoggedIn = false }: PricingCardsProps) {
-  const [billing, setBilling] = useState<"monthly" | "annual">("annual");
-
   // Track pricing page viewed
   useEffect(() => {
     analytics.track(AnalyticsEvent.PRICING_PAGE_VIEWED, {
@@ -22,48 +21,17 @@ export function PricingCards({ isLoggedIn = false }: PricingCardsProps) {
 
   // Logged-in users go straight to checkout via settings, new users go to signup
   const getUpgradeHref = (plan: string) =>
-    isLoggedIn
-      ? `/dashboard/settings?upgrade=${plan}&billing=${billing}`
-      : `/signup?plan=${plan}&billing=${billing}`;
+    isLoggedIn ? `/dashboard/settings?upgrade=${plan}` : `/signup?plan=${plan}`;
 
   const handlePlanClick = (plan: "season" | "unlimited") => {
     analytics.track(AnalyticsEvent.PRICING_PLAN_SELECTED, {
       plan,
-      billing,
+      billing: "annual",
     });
   };
 
   return (
     <>
-      {/* Billing toggle */}
-      <section className="pb-4">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-center items-center gap-3">
-            <button
-              onClick={() => setBilling("annual")}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                billing === "annual"
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80"
-              }`}
-            >
-              Annual
-              <span className="ml-1.5 text-xs opacity-80">(Save 33%)</span>
-            </button>
-            <button
-              onClick={() => setBilling("monthly")}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                billing === "monthly"
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80"
-              }`}
-            >
-              Monthly
-            </button>
-          </div>
-        </div>
-      </section>
-
       {/* Pricing cards */}
       <section className="py-8 md:py-12">
         <div className="container mx-auto px-4">
@@ -133,22 +101,23 @@ export function PricingCards({ isLoggedIn = false }: PricingCardsProps) {
               <div className="mb-6">
                 <h2 className="text-xl font-bold mb-1">Season Pass</h2>
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-4xl font-extrabold">
-                    ${billing === "annual" ? "39" : "4.99"}
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    /{billing === "annual" ? "year" : "month"}
-                  </span>
+                  <span className="text-4xl font-extrabold">$39</span>
+                  <span className="text-sm text-muted-foreground">/year</span>
                 </div>
+                {getAnnualSavingsLabel("season") && (
+                  <div className="mb-1">
+                    <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-800">
+                      {getAnnualSavingsLabel("season")}
+                    </span>
+                  </div>
+                )}
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-sm text-muted-foreground line-through">
                     $150/plan with a coach
                   </span>
                 </div>
                 <p className="text-sm font-medium text-primary">
-                  {billing === "annual"
-                    ? "Just $6.50 per race \u00B7 6 races per season"
-                    : "$4.99/mo \u00B7 cancel anytime"}
+                  Just $6.50 per race \u00B7 6 races per season
                 </p>
               </div>
 
@@ -192,13 +161,16 @@ export function PricingCards({ isLoggedIn = false }: PricingCardsProps) {
               <div className="mb-6">
                 <h2 className="text-xl font-bold mb-1">Pro</h2>
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-4xl font-extrabold">
-                    ${billing === "annual" ? "99" : "12.99"}
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    /{billing === "annual" ? "year" : "month"}
-                  </span>
+                  <span className="text-4xl font-extrabold">$99</span>
+                  <span className="text-sm text-muted-foreground">/year</span>
                 </div>
+                {getAnnualSavingsLabel("unlimited") && (
+                  <div className="mb-1">
+                    <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-800">
+                      {getAnnualSavingsLabel("unlimited")}
+                    </span>
+                  </div>
+                )}
                 <div className="mb-3">
                   <span className="text-sm text-muted-foreground line-through">
                     $600+/year for coaching

@@ -6,7 +6,9 @@ export type WeatherData = {
   precipitationProb: number;
   weatherCode: number;
   dewPoint?: number;
-  isEstimated?: boolean; // True if using mock/historical data instead of forecast
+  isEstimated?: boolean; // Kept for backward compatibility
+  source: "forecast" | "historical_estimate" | "unavailable";
+  sourceReason?: string;
 };
 
 // Open-Meteo API
@@ -31,7 +33,7 @@ export async function getRaceWeather(
 
   if (diffDays > 10) {
     // Too far for accurate forecast. Use historical data from previous year(s)
-    console.warn("Date too far for forecast. Using historical data.");
+    console.info("[weather] source=historical_estimate reason=out_of_forecast_range");
 
     try {
       // Get historical data from the same date in previous years (up to 2 years back)
@@ -77,21 +79,27 @@ export async function getRaceWeather(
           precipitationProb: 0,
           weatherCode: 1,
           isEstimated: true,
+          source: "historical_estimate",
+          sourceReason: "out_of_forecast_range",
         };
       }
     } catch (e) {
-      console.error("Historical weather error:", e);
+      console.error("[weather] source=unavailable reason=historical_fetch_failed", e);
     }
 
-    // Final fallback if historical data fails
+    // Final fallback if historical data fails.
+    // We keep neutral values for engine calculations, but UI can hide these
+    // because source is explicitly unavailable.
     return {
-      tempC: 22,
-      humidity: 60,
-      windSpeedKph: 15,
-      windDir: 90,
+      tempC: 20,
+      humidity: 50,
+      windSpeedKph: 10,
+      windDir: 0,
       precipitationProb: 0,
-      weatherCode: 1,
-      isEstimated: true,
+      weatherCode: 0,
+      isEstimated: false,
+      source: "unavailable",
+      sourceReason: "historical_fetch_failed",
     };
   }
 
@@ -114,10 +122,13 @@ export async function getRaceWeather(
       precipitationProb: data.daily.precipitation_probability_max[0],
       weatherCode: data.daily.weather_code[0],
       dewPoint: hourly.dew_point_2m[noonIndex],
+      isEstimated: false,
+      source: "forecast",
+      sourceReason: "forecast_api",
     };
   } catch (e) {
-    console.error("Weather error:", e);
-    // Fallback
+    console.error("[weather] source=unavailable reason=forecast_fetch_failed", e);
+    // Keep neutral values for engine calculations; UI can show unavailable state.
     return {
       tempC: 20,
       humidity: 50,
@@ -125,6 +136,9 @@ export async function getRaceWeather(
       windDir: 0,
       precipitationProb: 0,
       weatherCode: 0,
+      isEstimated: false,
+      source: "unavailable",
+      sourceReason: "forecast_fetch_failed",
     };
   }
 }

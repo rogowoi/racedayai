@@ -44,19 +44,19 @@ export async function Navbar() {
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           <Link
-            href="#features"
+            href="/#features"
             className="transition-colors hover:text-primary"
           >
             Features
           </Link>
           <Link
-            href="#how-it-works"
+            href="/#how-it-works"
             className="transition-colors hover:text-primary"
           >
             How it Works
           </Link>
           <Link
-            href="#pricing"
+            href="/#pricing"
             className="transition-colors hover:text-primary"
           >
             Pricing
@@ -217,7 +217,7 @@ export async function Navbar() {
                 )}
                 <SheetClose asChild>
                   <Link
-                    href="#features"
+                    href="/#features"
                     className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
                   >
                     <TrendingUp className="h-5 w-5 text-muted-foreground" />
@@ -226,7 +226,7 @@ export async function Navbar() {
                 </SheetClose>
                 <SheetClose asChild>
                   <Link
-                    href="#how-it-works"
+                    href="/#how-it-works"
                     className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
                   >
                     <Map className="h-5 w-5 text-muted-foreground" />
@@ -235,7 +235,7 @@ export async function Navbar() {
                 </SheetClose>
                 <SheetClose asChild>
                   <Link
-                    href="#pricing"
+                    href="/#pricing"
                     className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
                   >
                     <DollarSign className="h-5 w-5 text-muted-foreground" />

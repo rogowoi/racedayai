@@ -5,6 +5,11 @@ import { BillingSection } from "@/components/dashboard/billing-section";
 import { getPlanUsage, resetPlanCount } from "@/lib/plan-limits";
 import { ConnectedAccountsSection } from "@/components/dashboard/connected-accounts-section";
 import { Navbar } from "@/components/layout/navbar";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Settings",
+};
 
 export default async function SettingsPage({
   searchParams,
@@ -85,12 +90,6 @@ export default async function SettingsPage({
             typeof params.upgrade === "string" &&
             (params.upgrade === "season" || params.upgrade === "unlimited")
               ? (params.upgrade as "season" | "unlimited")
-              : undefined
-          }
-          autoUpgradeBilling={
-            typeof params.billing === "string" &&
-            (params.billing === "monthly" || params.billing === "annual")
-              ? (params.billing as "monthly" | "annual")
               : undefined
           }
         />

@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { PostHogProvider, PostHogPageView } from "@/providers/posthog-provider";
 import { Suspense } from "react";
+import { HashScrollHandler } from "@/components/layout/hash-scroll-handler";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -121,6 +122,7 @@ export default function RootLayout({
           <Suspense fallback={null}>
             <PostHogPageView />
           </Suspense>
+          <HashScrollHandler />
           {children}
         </PostHogProvider>
         <SpeedInsights />

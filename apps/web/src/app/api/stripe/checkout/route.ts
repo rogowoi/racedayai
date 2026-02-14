@@ -30,9 +30,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const body = (await req.json()) as { plan: string; billing: "monthly" | "annual" };
+    const body = (await req.json()) as { plan: string };
     const plan = body.plan as PlanKey;
-    const billing = body.billing ?? "annual";
 
     if (!PLANS[plan]) {
       return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
@@ -45,15 +44,15 @@ export async function POST(req: Request) {
       );
     }
 
-    const priceId = getStripePriceId(plan as "season" | "unlimited", billing);
+    const priceId = getStripePriceId(plan as "season" | "unlimited");
 
     // Get amount for tracking
-    const planPrice = billing === "annual" ? PLANS[plan].annualPrice : PLANS[plan].monthlyPrice;
+    const planPrice = PLANS[plan].annualPrice;
 
     // Track checkout started
     trackServerEvent(session.user.id, AnalyticsEvent.CHECKOUT_STARTED, {
       plan,
-      billing,
+      billing: "annual",
       amount: planPrice,
     }).catch(() => {});
 
