@@ -60,7 +60,7 @@ export async function POST(req: Request) {
           const planData = PLANS[plan as keyof typeof PLANS];
           trackServerEvent(userId, AnalyticsEvent.CHECKOUT_COMPLETED, {
             plan,
-            amount: session.amount_total ? session.amount_total / 100 : planData?.price?.annual || 0,
+            amount: session.amount_total ? session.amount_total / 100 : planData?.annualPrice || 0,
           }).catch(() => {});
 
           console.log(`User ${userId} upgraded to ${plan}`);

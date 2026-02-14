@@ -68,7 +68,7 @@ export type AnalyticsEventName =
   (typeof AnalyticsEvent)[keyof typeof AnalyticsEvent];
 
 // User properties interface
-export interface UserProperties {
+export interface UserProperties extends Record<string, unknown> {
   email?: string;
   plan?: "free" | "season" | "unlimited";
   plansCreatedThisSeason?: number;
@@ -80,24 +80,24 @@ export interface UserProperties {
 }
 
 // Event properties interfaces
-export interface WizardStepCompletedProps {
+export interface WizardStepCompletedProps extends Record<string, unknown> {
   step: 1 | 2 | 3;
   hasData: boolean;
 }
 
-export interface RaceSelectedProps {
+export interface RaceSelectedProps extends Record<string, unknown> {
   source: "database" | "manual";
   raceId?: string;
   raceName?: string;
   distance?: string;
 }
 
-export interface GpxUploadProps {
+export interface GpxUploadProps extends Record<string, unknown> {
   source: "manual" | "database" | "rwgps";
   routeId?: number;
 }
 
-export interface PlanGenerationProps {
+export interface PlanGenerationProps extends Record<string, unknown> {
   planId?: string;
   distance?: string;
   hasGpx?: boolean;
@@ -106,19 +106,19 @@ export interface PlanGenerationProps {
   error?: string;
 }
 
-export interface PlanViewedProps {
+export interface PlanViewedProps extends Record<string, unknown> {
   planId: string;
   isOwner: boolean;
   viaShareLink: boolean;
 }
 
-export interface PaywallProps {
+export interface PaywallProps extends Record<string, unknown> {
   plansUsed: number;
   plansLimit: number;
   triggerPoint?: string;
 }
 
-export interface CheckoutProps {
+export interface CheckoutProps extends Record<string, unknown> {
   plan: "season" | "unlimited";
   billing?: "monthly" | "annual";
   amount?: number;

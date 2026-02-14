@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     const priceId = getStripePriceId(plan as "season" | "unlimited", billing);
 
     // Get amount for tracking
-    const planPrice = PLANS[plan].price?.[billing];
+    const planPrice = billing === "annual" ? PLANS[plan].annualPrice : PLANS[plan].monthlyPrice;
 
     // Track checkout started
     trackServerEvent(session.user.id, AnalyticsEvent.CHECKOUT_STARTED, {
