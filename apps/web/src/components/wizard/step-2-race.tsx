@@ -62,7 +62,7 @@ export function Step2Race() {
       bikeElevationGainM: race.bikeElevationGainM,
       runElevationGainM: race.runElevationGainM,
       hasGpx: race.hasGpx,
-      ...(defaultDate ? { date: defaultDate } : {}),
+      ...(defaultDate ? { date: defaultDate, dateWasAutofilled: true } : {}),
     });
   };
 
@@ -144,10 +144,19 @@ export function Step2Race() {
                   ? new Date(raceData.date).toISOString().split("T")[0]
                   : ""
               }
-              onChange={(e) => setRaceData({ date: e.target.valueAsDate })}
+              onChange={(e) => setRaceData({ date: e.target.valueAsDate, dateWasAutofilled: false })}
             />
           </div>
-          {isKnownRace && raceData.date && (
+          {raceData.date && (
+            <p className="text-xs text-muted-foreground">
+              {new Date(raceData.date).toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          )}
+          {raceData.dateWasAutofilled && (
             <p className="text-xs text-muted-foreground">
               Pre-filled from typical race month — please confirm the exact
               date.

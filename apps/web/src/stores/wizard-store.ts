@@ -16,6 +16,7 @@ type FitnessData = {
 type RaceData = {
   name: string;
   date: Date | null;
+  dateWasAutofilled: boolean; // True if date was auto-set from race selection
   distanceCategory: "sprint" | "olympic" | "70.3" | "140.6";
   gpxFile: File | null; // Note: Files can't be persisted to localStorage easily
   // Auto-populated from race registry when a known race is selected
@@ -114,6 +115,7 @@ type WizardState = {
 const defaultRaceData: Omit<RaceData, "gpxFile"> = {
   name: "",
   date: null,
+  dateWasAutofilled: false,
   distanceCategory: "70.3",
   selectedRaceId: null,
   raceLocation: null,
