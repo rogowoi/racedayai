@@ -30,7 +30,7 @@ async function loadJSON(path: string): Promise<any> {
   // Local Node.js environment (development, tsx, next dev)
   if (typeof window === "undefined") {
     const basePath = process.cwd();
-    const fullPath = join(basePath, "src", "data", "ml-models", fileName);
+    const fullPath = join(basePath, "apps", "web", "src", "data", "ml-models", fileName);
     const content = await readFile(fullPath, "utf-8");
     return JSON.parse(content);
   }
