@@ -5,6 +5,7 @@ import { generateOrganizationSchema, jsonLdScript } from "@/lib/schema";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { PostHogProvider, PostHogPageView } from "@/providers/posthog-provider";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -117,7 +118,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <PostHogProvider>
-          <PostHogPageView />
+          <Suspense fallback={null}>
+            <PostHogPageView />
+          </Suspense>
           {children}
         </PostHogProvider>
         <SpeedInsights />
