@@ -54,3 +54,18 @@ export function getPlanLimits(plan: string) {
 export function isPaidPlan(plan: string): boolean {
   return plan === "season" || plan === "unlimited";
 }
+
+export function getAnnualSavingsPercent(plan: PlanKey): number | null {
+  const config = PLANS[plan];
+  if (config.monthlyPrice <= 0) return null;
+
+  const annualFromMonthly = config.monthlyPrice * 12;
+  const savingsPct = ((annualFromMonthly - config.annualPrice) / annualFromMonthly) * 100;
+  return Math.round(savingsPct);
+}
+
+export function getAnnualSavingsLabel(plan: PlanKey): string | null {
+  const savingsPct = getAnnualSavingsPercent(plan);
+  if (savingsPct === null || savingsPct <= 0) return null;
+  return `Save ${savingsPct}%`;
+}
