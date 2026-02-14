@@ -16,9 +16,9 @@ async function loadJSON(path: string): Promise<any> {
   const fileName = path.split("/").pop()!;
 
   // Production: Load from Vercel Blob
-  if (typeof window === "undefined" && process.env.VERCEL && process.env.BLOB_READ_WRITE_TOKEN) {
+  if (typeof window === "undefined" && process.env.VERCEL) {
     const version = process.env.MODEL_VERSION || "v1.0.0";
-    const blobUrl = `https://${process.env.BLOB_READ_WRITE_TOKEN}/${version}/ml-models/${fileName}`;
+    const blobUrl = `https://6azhd1xfgmdyqpi5.public.blob.vercel-storage.com/${version}/ml-models/${fileName}`;
 
     const response = await fetch(blobUrl);
     if (!response.ok) {

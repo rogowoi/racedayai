@@ -32,13 +32,27 @@ import { readFile } from "fs/promises";
 import { join } from "path";
 
 /**
- * Load JSON file (supports both Node.js and browser)
+ * Load JSON file (supports Vercel Blob, Node.js, and browser)
  */
 async function loadJSON(path: string): Promise<any> {
-  // Node.js environment (tsx, next server)
+  const fileName = path.split("/").pop()!;
+
+  // Production: Load from Vercel Blob
+  if (typeof window === "undefined" && process.env.VERCEL) {
+    const version = process.env.MODEL_VERSION || "v1.0.0";
+    const blobUrl = `https://6azhd1xfgmdyqpi5.public.blob.vercel-storage.com/${version}/ml-models/${fileName}`;
+
+    const response = await fetch(blobUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to load from Blob: ${fileName} (${response.statusText})`);
+    }
+    return response.json();
+  }
+
+  // Local Node.js environment (tsx, next dev)
   if (typeof window === "undefined") {
     const basePath = process.cwd();
-    const fullPath = join(basePath, "src", "data", "ml-models", path.split("/").pop()!);
+    const fullPath = join(basePath, "src", "data", "ml-models", fileName);
     const content = await readFile(fullPath, "utf-8");
     return JSON.parse(content);
   }
