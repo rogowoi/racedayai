@@ -4,8 +4,8 @@ import { Navbar } from "@/components/layout/navbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
 import { ShareButton } from "@/components/plan/share-button";
+import { PdfDownloadButton } from "@/components/plan/pdf-download-button";
 import { StatisticalInsights } from "@/components/plan/statistical-insights";
 import { PlanGenerating } from "@/components/plan/plan-generating";
 import { TssWithTooltip } from "@/components/plan/tss-with-tooltip";
@@ -125,6 +125,9 @@ export default async function PlanPage({
   const swim = swimPlan as SwimRunPlan | null;
   const nutrition = nutritionPlan as NutritionPlan | null;
   const statisticalContext = rawStats as FullStatisticalContext | null;
+  const weatherSource = weather?.source ?? "unavailable";
+  const isWeatherUnavailable = weatherSource === "unavailable";
+  const isWeatherEstimated = weatherSource === "historical_estimate";
 
   const racePlanSchema = generateRacePlanSchema({
     raceName: course.raceName,
@@ -166,11 +169,7 @@ export default async function PlanPage({
                 size="sm"
               />
               <ShareButton planId={id} existingShareToken={plan.shareToken} />
-              <Button variant="outline" size="sm" asChild>
-                <a href={`/api/plans/${id}/pdf`} download>
-                  <Download className="mr-2 h-4 w-4" /> PDF
-                </a>
-              </Button>
+              <PdfDownloadButton planId={id} />
               <DeletePlanButton
                 planId={id}
                 raceName={course.raceName}
@@ -212,17 +211,27 @@ export default async function PlanPage({
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold flex items-center gap-2">
-                  {weather?.tempC ?? "--"}°C
+                  {isWeatherUnavailable ? "--" : `${weather?.tempC ?? "--"}°C`}
                   <span className="text-sm font-normal text-muted-foreground">
-                    {weather?.humidity ?? "--"}% Hum
+                    {isWeatherUnavailable ? "--" : `${weather?.humidity ?? "--"}% Hum`}
                   </span>
                 </div>
-                <p className="text-xs text-amber-600 mt-1 font-medium">
-                  {weather?.isEstimated
-                    ? "Estimated (Historical Average)"
-                    : (weather?.tempC ?? 0) > 25
-                      ? "Heat Adjustment Active"
-                      : "Optimal Conditions"}
+                <p className={`text-xs mt-1 font-medium ${
+                  isWeatherUnavailable
+                    ? "text-muted-foreground"
+                    : isWeatherEstimated
+                      ? "text-blue-600 dark:text-blue-400"
+                      : (weather?.tempC ?? 0) > 25
+                        ? "text-amber-600 dark:text-amber-400"
+                        : "text-green-600 dark:text-green-400"
+                }`}>
+                  {isWeatherUnavailable
+                    ? "Weather data will update closer to race day"
+                    : isWeatherEstimated
+                      ? "Historical average (forecast available 10 days before race)"
+                      : (weather?.tempC ?? 0) > 25
+                        ? "Heat adjustment active — pacing and hydration adjusted"
+                        : "Live forecast — targets optimized for conditions"}
                 </p>
               </CardContent>
             </Card>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { X, ChevronLeft, Zap, LayoutDashboard } from "lucide-react";
 import { useWizardStore } from "@/stores/wizard-store";
+import { useState, useEffect } from "react";
 
 export default function WizardLayoutClient({
   children,
@@ -13,6 +14,22 @@ export default function WizardLayoutClient({
   const step = useWizardStore((state) => state.step);
   const totalSteps = 3;
   const progress = (step / totalSteps) * 100;
+  const [showStepIndicator, setShowStepIndicator] = useState(true);
+
+  // Check if we're showing the paywall (plan limit reached)
+  useEffect(() => {
+    async function checkIfPaywallShown() {
+      try {
+        const res = await fetch("/api/plans/check-limit");
+        const data = await res.json();
+        // Hide step indicator if user can't create plans (paywall state)
+        setShowStepIndicator(data.canCreate !== false);
+      } catch {
+        setShowStepIndicator(true);
+      }
+    }
+    checkIfPaywallShown();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -20,7 +37,7 @@ export default function WizardLayoutClient({
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-3">
-            {step > 1 && (
+            {showStepIndicator && step > 1 && (
               <Button
                 variant="ghost"
                 size="icon"
@@ -37,10 +54,14 @@ export default function WizardLayoutClient({
                 RaceDay<span className="text-primary">AI</span>
               </span>
             </Link>
-            <span className="text-muted-foreground">|</span>
-            <span className="font-semibold text-sm">
-              Step {step} of {totalSteps}
-            </span>
+            {showStepIndicator && (
+              <>
+                <span className="text-muted-foreground">|</span>
+                <span className="font-semibold text-sm">
+                  Step {step} of {totalSteps}
+                </span>
+              </>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -66,12 +87,14 @@ export default function WizardLayoutClient({
         </div>
 
         {/* Progress Bar */}
-        <div className="h-1 w-full bg-muted">
-          <div
-            className="h-full bg-primary transition-all duration-500 ease-out"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+        {showStepIndicator && (
+          <div className="h-1 w-full bg-muted">
+            <div
+              className="h-full bg-primary transition-all duration-500 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        )}
       </header>
 
       {/* Content */}

@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Navbar } from "@/components/layout/navbar";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="flex-1 flex items-center justify-center bg-muted/30 px-4">
       <div className="max-w-md w-full text-center space-y-6">
         {/* Logo/Icon */}
         <div className="flex justify-center">
@@ -32,10 +35,6 @@ export default function NotFound() {
           </Button>
         </div>
 
-        {/* Branding */}
-        <div className="pt-6 border-t">
-          <p className="text-xs text-muted-foreground">RaceDayAI</p>
-        </div>
       </div>
     </div>
   );

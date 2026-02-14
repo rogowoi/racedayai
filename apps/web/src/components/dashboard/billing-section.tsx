@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PLANS, type PlanKey } from "@/lib/plans";
+import { PLANS, getAnnualSavingsLabel, type PlanKey } from "@/lib/plans";
 import { Check, Loader2, ArrowRight, LayoutDashboard } from "lucide-react";
 
 interface BillingSectionProps {
@@ -22,7 +22,6 @@ interface BillingSectionProps {
   showSuccess?: boolean;
   showCancelled?: boolean;
   autoUpgradePlan?: "season" | "unlimited";
-  autoUpgradeBilling?: "monthly" | "annual";
 }
 
 export function BillingSection({
@@ -34,21 +33,17 @@ export function BillingSection({
   showSuccess,
   showCancelled,
   autoUpgradePlan,
-  autoUpgradeBilling,
 }: BillingSectionProps) {
   const [loading, setLoading] = useState<string | null>(null);
-  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">(
-    autoUpgradeBilling ?? "annual",
-  );
   const autoUpgradeTriggered = useRef(false);
 
-  const handleUpgrade = async (planKey: PlanKey, billing?: "monthly" | "annual") => {
+  const handleUpgrade = async (planKey: PlanKey) => {
     setLoading(planKey);
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planKey, billing: billing ?? billingPeriod }),
+        body: JSON.stringify({ plan: planKey }),
       });
 
       if (res.ok) {
@@ -66,10 +61,10 @@ export function BillingSection({
   useEffect(() => {
     if (autoUpgradePlan && !autoUpgradeTriggered.current) {
       autoUpgradeTriggered.current = true;
-      handleUpgrade(autoUpgradePlan, autoUpgradeBilling ?? "annual");
+      handleUpgrade(autoUpgradePlan);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoUpgradePlan, autoUpgradeBilling]);
+  }, [autoUpgradePlan]);
 
   const handleManageBilling = async () => {
     setLoading("manage");
@@ -124,7 +119,7 @@ export function BillingSection({
         </div>
       )}
 
-      <div>
+      <div id="billing" className="scroll-mt-24">
         <h2 className="text-2xl font-bold tracking-tight">Billing & Usage</h2>
         <p className="text-muted-foreground">
           Manage your subscription and view your plan usage
@@ -188,33 +183,12 @@ export function BillingSection({
         </CardContent>
       </Card>
 
-      {/* Billing Period Toggle — show for free and season users (not unlimited) */}
-      {currentPlan !== "unlimited" && (
-        <div className="flex justify-center gap-2">
-          <Button
-            variant={billingPeriod === "annual" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setBillingPeriod("annual")}
-          >
-            Annual (Save 33%)
-          </Button>
-          <Button
-            variant={billingPeriod === "monthly" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setBillingPeriod("monthly")}
-          >
-            Monthly
-          </Button>
-        </div>
-      )}
-
       {/* Plan Cards */}
       <div className="grid md:grid-cols-3 gap-4">
         {(Object.keys(PLANS) as PlanKey[]).map((planKey) => {
           const plan = PLANS[planKey];
           const isCurrent = currentPlan === planKey;
-          const price =
-            billingPeriod === "annual" ? plan.annualPrice : plan.monthlyPrice;
+          const price = plan.annualPrice;
 
           // Determine if this plan is a downgrade
           const planOrder = { free: 0, season: 1, unlimited: 2 } as const;
@@ -228,9 +202,16 @@ export function BillingSection({
                 <div className="pt-2">
                   <span className="text-3xl font-bold">${price}</span>
                   <span className="text-muted-foreground">
-                    /{billingPeriod === "annual" ? "year" : "month"}
+                    {planKey === "free" ? "/forever" : "/year"}
                   </span>
                 </div>
+                {planKey !== "free" && getAnnualSavingsLabel(planKey) && (
+                  <div className="pt-2">
+                    <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-800 dark:bg-green-950/50 dark:text-green-400">
+                      {getAnnualSavingsLabel(planKey)}
+                    </span>
+                  </div>
+                )}
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">

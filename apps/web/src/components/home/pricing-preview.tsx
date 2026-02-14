@@ -14,8 +14,8 @@ export function PricingPreview() {
             A coach charges $150 for one race plan.
           </h2>
           <p className="text-lg text-muted-foreground">
-            Get unlimited AI-powered plans for less than the cost of a race
-            entry fee.
+            Get AI-powered race plans for your entire season — less than the
+            cost of a single race entry.
           </p>
         </div>
 
