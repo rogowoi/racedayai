@@ -16,7 +16,6 @@ This folder contains chronologically-numbered execution plans and work items for
 
 | Plan | Title | Priority | Status |
 |------|-------|----------|--------|
-| **11** | [Mobile UX Fixes](11-mobile-ux-fixes.md) | **P0** | 🚧 QA Complete, Fixes Pending |
 | **12** | [Email Verification](12-email-verification.md) | P1 | 📝 Planned |
 
 ### ⏸️ Planned (Phase 2: Statistical Engine)
@@ -49,6 +48,7 @@ Completed plans have been moved to [archive/completed/](../archive/completed/):
 
 - **01-billing-audit-completed.md** - Billing system audit (completed Feb 12)
 - **03-race-catalog-analysis-completed.md** - 195-venue catalog analysis (completed Feb 12)
+- **11-mobile-ux-fixes.md** - Mobile UX fixes completed (completed Feb 14)
 - **ds-implementation-ideas.md** - Data science implementation concepts (reference)
 
 ---

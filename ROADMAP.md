@@ -19,15 +19,9 @@ This roadmap outlines the technical evolution of RaceDayAI from current state th
 - [x] Strava OAuth integration
 - [x] SEO foundation (robots.txt, sitemap, schema)
 - [x] PostHog analytics integration
+- [x] Plan 11: Mobile UX fixes
 
 ### 🚧 In Progress
-
-**Plan 11: Mobile UX Fixes** ⚠️ **CRITICAL**
-- **Priority:** P0 (Blocking launch)
-- **Effort:** 2-3 days
-- **Issues:** 11 identified bugs (5 critical, 4 high, 2 medium)
-- **Link:** [plans/11-mobile-ux-fixes.md](plans/11-mobile-ux-fixes.md)
-- **Status:** QA complete, fixes pending
 
 **Plan 12: Email Verification**
 - **Priority:** P1 (Security & UX)
@@ -176,7 +170,7 @@ This roadmap outlines the technical evolution of RaceDayAI from current state th
 
 ## Notes
 
-- **Critical Path:** Plan 11 must complete before marketing launch
+- **Critical Path:** Plan 12 completion + launch QA before marketing launch
 - **Architecture Decision:** Plans 04-05 represent major system evolution
 - **Research Nature:** Plans 08-10 are experimental; timelines are estimates
 - **User Feedback Loop:** Phase 3 success depends on production data from Phase 2
