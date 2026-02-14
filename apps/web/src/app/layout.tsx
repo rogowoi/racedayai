@@ -4,6 +4,7 @@ import "./globals.css";
 import { generateOrganizationSchema, jsonLdScript } from "@/lib/schema";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
+import { PostHogProvider, PostHogPageView } from "@/providers/posthog-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -115,7 +116,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <PostHogProvider>
+          <PostHogPageView />
+          {children}
+        </PostHogProvider>
         <SpeedInsights />
         <Analytics />
       </body>

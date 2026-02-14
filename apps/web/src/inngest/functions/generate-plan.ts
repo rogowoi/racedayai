@@ -7,12 +7,14 @@ import {
   type GeneratePlanInput,
 } from "@/lib/engine/generate-plan-core";
 import { decrementPlanCount } from "@/lib/plan-limits";
+import { trackServerEvent } from "@/lib/posthog-server";
+import { AnalyticsEvent } from "@/lib/analytics";
 
 export const generatePlanFn = inngest.createFunction(
   {
     id: "generate-race-plan",
     retries: 1,
-    onFailure: async ({ event }) => {
+    onFailure: async ({ event, error }) => {
       const { planId, userId } = event.data.event.data as {
         planId: string;
         userId: string;
@@ -26,6 +28,12 @@ export const generatePlanFn = inngest.createFunction(
         },
       });
       await decrementPlanCount(userId);
+
+      // Track failure
+      trackServerEvent(userId, AnalyticsEvent.PLAN_GENERATION_FAILED, {
+        planId,
+        error: error.message || "Unknown error",
+      }).catch(() => {});
     },
   },
   { event: "plan/generate.requested" },
@@ -65,6 +73,14 @@ export const generatePlanFn = inngest.createFunction(
     // Step 3: Generate AI narrative + finalize
     await step.run("narrative", async () => {
       return await narrativeStep(input, prepareResult, computeResult);
+    });
+
+    // Track successful completion
+    await step.run("track-completion", async () => {
+      trackServerEvent(userId, AnalyticsEvent.PLAN_GENERATION_COMPLETED, {
+        planId,
+        distance: (input.raceData as { distanceCategory?: string }).distanceCategory,
+      }).catch(() => {});
     });
 
     return { planId, status: "completed" };

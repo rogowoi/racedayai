@@ -4,6 +4,8 @@ import { auth } from "@/auth";
 import { stripe, getStripePriceId } from "@/lib/stripe";
 import { PLANS, type PlanKey } from "@/lib/plans";
 import { prisma } from "@/lib/db";
+import { trackServerEvent } from "@/lib/posthog-server";
+import { AnalyticsEvent } from "@/lib/analytics";
 
 /**
  * Derive the app base URL from request headers instead of relying on
@@ -44,6 +46,16 @@ export async function POST(req: Request) {
     }
 
     const priceId = getStripePriceId(plan as "season" | "unlimited", billing);
+
+    // Get amount for tracking
+    const planPrice = PLANS[plan].price?.[billing];
+
+    // Track checkout started
+    trackServerEvent(session.user.id, AnalyticsEvent.CHECKOUT_STARTED, {
+      plan,
+      billing,
+      amount: planPrice,
+    }).catch(() => {});
 
     // Get or create Stripe customer
     const user = await prisma.user.findUnique({
@@ -104,6 +116,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ url: checkoutSession.url });
   } catch (error) {
     console.error("Checkout error:", error);
+
+    // Track checkout failure
+    if (session?.user?.id) {
+      trackServerEvent(session.user.id, AnalyticsEvent.CHECKOUT_FAILED, {
+        error: error instanceof Error ? error.message : "Unknown error",
+      }).catch(() => {});
+    }
+
     return NextResponse.json(
       { error: "Failed to create checkout session" },
       { status: 500 }

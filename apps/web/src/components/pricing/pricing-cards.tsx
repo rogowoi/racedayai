@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Check, X, ArrowRight } from "lucide-react";
+import { analytics, AnalyticsEvent } from "@/lib/analytics";
 
 interface PricingCardsProps {
   isLoggedIn?: boolean;
@@ -12,11 +13,25 @@ interface PricingCardsProps {
 export function PricingCards({ isLoggedIn = false }: PricingCardsProps) {
   const [billing, setBilling] = useState<"monthly" | "annual">("annual");
 
+  // Track pricing page viewed
+  useEffect(() => {
+    analytics.track(AnalyticsEvent.PRICING_PAGE_VIEWED, {
+      source: "direct",
+    });
+  }, []);
+
   // Logged-in users go straight to checkout via settings, new users go to signup
   const getUpgradeHref = (plan: string) =>
     isLoggedIn
       ? `/dashboard/settings?upgrade=${plan}&billing=${billing}`
       : `/signup?plan=${plan}&billing=${billing}`;
+
+  const handlePlanClick = (plan: "season" | "unlimited") => {
+    analytics.track(AnalyticsEvent.PRICING_PLAN_SELECTED, {
+      plan,
+      billing,
+    });
+  };
 
   return (
     <>
@@ -165,7 +180,7 @@ export function PricingCards({ isLoggedIn = false }: PricingCardsProps) {
               </ul>
 
               <Button className="w-full h-11 font-semibold shadow-lg shadow-primary/25" asChild>
-                <Link href={getUpgradeHref("season")}>
+                <Link href={getUpgradeHref("season")} onClick={() => handlePlanClick("season")}>
                   Get Season Pass
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -214,7 +229,7 @@ export function PricingCards({ isLoggedIn = false }: PricingCardsProps) {
               </ul>
 
               <Button variant="outline" className="w-full h-11" asChild>
-                <Link href={getUpgradeHref("unlimited")}>Get Pro</Link>
+                <Link href={getUpgradeHref("unlimited")} onClick={() => handlePlanClick("unlimited")}>Get Pro</Link>
               </Button>
             </div>
           </div>

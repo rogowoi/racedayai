@@ -6,6 +6,8 @@ import { hashPassword } from "@/lib/password";
 import { sendWelcomeEmail } from "@/lib/email";
 import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
+import { trackServerEvent } from "@/lib/posthog-server";
+import { AnalyticsEvent } from "@/lib/analytics";
 
 export async function loginWithStrava() {
   await signIn("strava", { redirectTo: "/wizard" });
@@ -28,6 +30,14 @@ export async function loginWithCredentials(
       password,
       redirect: false,
     });
+
+    // Track login (find user for tracking)
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (user) {
+      trackServerEvent(user.id, AnalyticsEvent.LOGIN_COMPLETED, {
+        method: "email",
+      }).catch(() => {});
+    }
   } catch (error) {
     if (error instanceof AuthError) {
       if (error.type === "CredentialsSignin") {
@@ -73,8 +83,9 @@ export async function signUp(
   const passwordHash = await hashPassword(password);
 
   // Create user and athlete profile in a transaction
+  let userId: string;
   try {
-    await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx) => {
       const user = await tx.user.create({
         data: {
           email,
@@ -89,7 +100,17 @@ export async function signUp(
           userId: user.id,
         },
       });
+
+      return user;
     });
+    userId = result.id;
+
+    // Track signup completion
+    trackServerEvent(userId, AnalyticsEvent.SIGNUP_COMPLETED, {
+      method: "email",
+      email,
+      name,
+    }).catch(() => {});
   } catch {
     return { error: "Could not create your account. Please try again." };
   }

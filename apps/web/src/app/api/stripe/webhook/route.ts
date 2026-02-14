@@ -4,6 +4,9 @@ import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/db";
 import { resetPlanCount } from "@/lib/plan-limits";
+import { trackServerEvent } from "@/lib/posthog-server";
+import { AnalyticsEvent } from "@/lib/analytics";
+import { PLANS } from "@/lib/plans";
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -53,6 +56,13 @@ export async function POST(req: Request) {
           // Reset plan count to start fresh season
           await resetPlanCount(userId);
 
+          // Track successful checkout
+          const planData = PLANS[plan as keyof typeof PLANS];
+          trackServerEvent(userId, AnalyticsEvent.CHECKOUT_COMPLETED, {
+            plan,
+            amount: session.amount_total ? session.amount_total / 100 : planData?.price?.annual || 0,
+          }).catch(() => {});
+
           console.log(`User ${userId} upgraded to ${plan}`);
         }
         break;
@@ -95,6 +105,11 @@ export async function POST(req: Request) {
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
 
+        const user = await prisma.user.findFirst({
+          where: { stripeCustomerId: customerId },
+          select: { id: true, plan: true },
+        });
+
         await prisma.user.updateMany({
           where: { stripeCustomerId: customerId },
           data: {
@@ -102,6 +117,13 @@ export async function POST(req: Request) {
             stripeSubscriptionId: null,
           },
         });
+
+        // Track subscription cancellation
+        if (user) {
+          trackServerEvent(user.id, AnalyticsEvent.SUBSCRIPTION_CANCELLED, {
+            plan: user.plan,
+          }).catch(() => {});
+        }
 
         console.log(`Subscription deleted for customer ${customerId}`);
         break;

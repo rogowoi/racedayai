@@ -4,6 +4,8 @@ import { prisma } from "@/lib/db";
 import { checkCanCreatePlan, incrementPlanCount, getPlanUsage } from "@/lib/plan-limits";
 import { inngest } from "@/inngest/client";
 import { parsePace } from "@/lib/engine/generate-plan-core";
+import { trackServerEvent } from "@/lib/posthog-server";
+import { AnalyticsEvent } from "@/lib/analytics";
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -20,6 +22,14 @@ export async function POST(req: Request) {
   const canCreate = await checkCanCreatePlan(userId);
   if (!canCreate) {
     const usage = await getPlanUsage(userId);
+
+    // Track paywall shown
+    trackServerEvent(userId, AnalyticsEvent.PAYWALL_SHOWN, {
+      plansUsed: usage?.plansUsed || 0,
+      plansLimit: usage?.plansLimit || 0,
+      triggerPoint: "wizard_submit",
+    }).catch(() => {});
+
     return NextResponse.json(
       {
         error: `Plan limit reached (${usage?.plansUsed}/${usage?.plansLimit} plans used). Upgrade to create more plans.`,
@@ -152,6 +162,14 @@ export async function POST(req: Request) {
     // Increment plan count optimistically
     await incrementPlanCount(userId);
 
+    // Track plan generation requested
+    trackServerEvent(userId, AnalyticsEvent.PLAN_GENERATION_REQUESTED, {
+      planId: plan.id,
+      distance: rd.distanceCategory,
+      hasGpx: !!gpxFileKey || !!rwgpsCourseData,
+      hasFtp: !!(fitnessData as Record<string, unknown>).ftp,
+    }).catch(() => {});
+
     // Send Inngest event to start background generation
     await inngest.send({
       name: "plan/generate.requested",
@@ -161,6 +179,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ planId: plan.id });
   } catch (err) {
     console.error("[generate-plan] Error:", err);
+
+    // Track generation failure
+    trackServerEvent(userId, AnalyticsEvent.PLAN_GENERATION_FAILED, {
+      error: err instanceof Error ? err.message : "Unknown error",
+    }).catch(() => {});
+
     return NextResponse.json(
       { error: "Something went wrong while creating your plan. Please try again." },
       { status: 500 },

@@ -4,6 +4,8 @@ import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/db";
 import { verifyPassword } from "@/lib/password";
+import { trackServerEvent } from "@/lib/posthog-server";
+import { AnalyticsEvent } from "@/lib/analytics";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -64,6 +66,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             where: { userId: user.id },
           });
 
+          const isNewConnection = athlete && !athlete.stravaConnected;
+
           if (athlete) {
             await prisma.athlete.update({
               where: { id: athlete.id },
@@ -77,6 +81,26 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 },
               },
             });
+
+            // Track Strava connection (signup or login)
+            if (isNewConnection) {
+              trackServerEvent(user.id, AnalyticsEvent.STRAVA_CONNECTED, {
+                method: "oauth",
+              }).catch(() => {});
+            }
+
+            // Track signup if this is first time seeing this user
+            const isFirstSignIn = account.type === "oauth" && !athlete.stravaConnected;
+            if (isFirstSignIn) {
+              trackServerEvent(user.id, AnalyticsEvent.SIGNUP_COMPLETED, {
+                method: "strava",
+                email: user.email,
+              }).catch(() => {});
+            } else {
+              trackServerEvent(user.id, AnalyticsEvent.LOGIN_COMPLETED, {
+                method: "strava",
+              }).catch(() => {});
+            }
           }
         } catch (error) {
           console.error("Error saving Strava token:", error);

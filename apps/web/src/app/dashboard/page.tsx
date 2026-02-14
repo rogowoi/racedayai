@@ -9,6 +9,8 @@ import { Plus, Calendar, TrendingUp, Settings } from "lucide-react";
 import { PLANS, getPlanLimits } from "@/lib/stripe";
 import { RenamePlanSheet } from "@/components/plan/rename-plan-sheet";
 import { DeletePlanButton } from "@/components/plan/delete-plan-button";
+import { TrackEvent } from "@/components/analytics/track-event";
+import { AnalyticsEvent } from "@/lib/analytics";
 
 export const metadata = {
   title: "Dashboard",
@@ -55,6 +57,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-muted/30">
+      <TrackEvent event={AnalyticsEvent.DASHBOARD_VIEWED} />
       <Navbar />
 
       <main className="flex-1 container mx-auto px-4 py-8">

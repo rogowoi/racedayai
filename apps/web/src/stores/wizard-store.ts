@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { analytics, AnalyticsEvent } from "@/lib/analytics";
 
 type FitnessData = {
   ftp: number | null;
@@ -153,7 +154,43 @@ export const useWizardStore = create<WizardState>()(
       raceData: { ...defaultRaceData },
       courseData: { ...defaultCourseData },
 
-      setStep: (step) => set({ step }),
+      setStep: (step) => {
+        const prevState = useWizardStore.getState();
+        const prevStep = prevState.step;
+
+        // Track wizard started when moving to step 1
+        if (step === 1 && prevStep !== 1) {
+          analytics.track(AnalyticsEvent.WIZARD_STARTED);
+        }
+
+        // Track step completion when moving forward
+        if (step > prevStep && prevStep >= 1 && prevStep <= 3) {
+          const hasData =
+            prevStep === 1
+              ? prevState.fitnessData.ftp !== null ||
+                prevState.fitnessData.thresholdPace !== null
+              : prevStep === 2
+                ? prevState.raceData.name !== ""
+                : prevState.courseData.gpxData !== null ||
+                  prevState.courseData.fileName !== null ||
+                  prevState.courseData.selectedRwgps !== null;
+
+          analytics.track(AnalyticsEvent.WIZARD_STEP_COMPLETED, {
+            step: prevStep,
+            hasData,
+          });
+        }
+
+        // Track going back
+        if (step < prevStep) {
+          analytics.track(AnalyticsEvent.WIZARD_STEP_BACK, {
+            fromStep: prevStep,
+            toStep: step,
+          });
+        }
+
+        set({ step });
+      },
       setFitnessData: (data) =>
         set((state) => ({
           fitnessData: { ...state.fitnessData, ...data },

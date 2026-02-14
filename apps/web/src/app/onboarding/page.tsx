@@ -4,8 +4,13 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Database, Target, Zap } from "lucide-react";
 import { StravaSyncButton } from "@/components/strava-sync-button";
+import { useEffect } from "react";
+import { analytics, AnalyticsEvent } from "@/lib/analytics";
 
 export default function OnboardingPage() {
+  useEffect(() => {
+    analytics.track(AnalyticsEvent.ONBOARDING_VIEWED);
+  }, []);
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-orange-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
       {/* Header */}
@@ -123,6 +128,7 @@ export default function OnboardingPage() {
               <Button
                 size="lg"
                 className="w-full bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white gap-2"
+                onClick={() => analytics.track(AnalyticsEvent.ONBOARDING_CTA_CLICKED, { action: "create_plan" })}
               >
                 Let's Build Your First Plan <ArrowRight className="w-5 h-5" />
               </Button>
