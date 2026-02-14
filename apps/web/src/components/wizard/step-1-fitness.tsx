@@ -28,6 +28,8 @@ import {
 import { Smartphone, AlertCircle, CheckCircle2, HelpCircle } from "lucide-react";
 import { loginWithStrava } from "@/app/actions/auth-actions";
 import { GarminConnectButton } from "@/components/garmin-connect-button";
+import { FtpEstimator } from "@/components/wizard/ftp-estimator";
+import { CssEstimator } from "@/components/wizard/css-estimator";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -157,21 +159,26 @@ export function Step1Fitness() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <div className="flex items-center gap-1.5">
-                    <Label htmlFor="ftp">Bike FTP (W)</Label>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button type="button" className="text-muted-foreground hover:text-foreground">
-                          <HelpCircle className="h-3.5 w-3.5" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-[250px]">
-                        <p>
-                          Functional Threshold Power: the highest power you can
-                          sustain for ~1 hour. Used to calculate your bike pacing.
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <Label htmlFor="ftp">Bike FTP (W)</Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button type="button" className="text-muted-foreground hover:text-foreground">
+                            <HelpCircle className="h-3.5 w-3.5" />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-[250px]">
+                          <p>
+                            Functional Threshold Power: the highest power you can
+                            sustain for ~1 hour. Used to calculate your bike pacing.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <FtpEstimator
+                      onEstimate={(ftp) => setFitnessData({ ftp })}
+                    />
                   </div>
                   <Input
                     id="ftp"
@@ -211,21 +218,26 @@ export function Step1Fitness() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <div className="flex items-center gap-1.5">
-                    <Label htmlFor="css">Swim CSS (min/100m)</Label>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button type="button" className="text-muted-foreground hover:text-foreground">
-                          <HelpCircle className="h-3.5 w-3.5" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-[250px]">
-                        <p>
-                          Critical Swim Speed: your sustainable swim pace per 100
-                          meters. Used to calculate your swim pacing strategy.
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <Label htmlFor="css">Swim CSS (min/100m)</Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button type="button" className="text-muted-foreground hover:text-foreground">
+                            <HelpCircle className="h-3.5 w-3.5" />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-[250px]">
+                          <p>
+                            Critical Swim Speed: your sustainable swim pace per 100
+                            meters. Used to calculate your swim pacing strategy.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <CssEstimator
+                      onEstimate={(css) => setFitnessData({ css })}
+                    />
                   </div>
                   <Input
                     id="css"
