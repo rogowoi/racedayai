@@ -14,6 +14,9 @@ importers:
       inngest-cli:
         specifier: ^1.17.0
         version: 1.17.0
+      posthog-node:
+        specifier: ^5.24.15
+        version: 5.24.15
     devDependencies:
       '@vercel/blob':
         specifier: ^2.2.0
