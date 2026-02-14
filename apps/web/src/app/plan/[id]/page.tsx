@@ -202,9 +202,11 @@ export default async function PlanPage({
                   </span>
                 </div>
                 <p className="text-xs text-amber-600 mt-1 font-medium">
-                  {(weather?.tempC ?? 0) > 25
-                    ? "Heat Adjustment Active"
-                    : "Optimal Conditions"}
+                  {weather?.isEstimated
+                    ? "Estimated (Historical Average)"
+                    : (weather?.tempC ?? 0) > 25
+                      ? "Heat Adjustment Active"
+                      : "Optimal Conditions"}
                 </p>
               </CardContent>
             </Card>
