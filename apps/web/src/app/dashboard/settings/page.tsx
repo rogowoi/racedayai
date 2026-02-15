@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
+import { ProfileSection } from "@/components/dashboard/profile-section";
 import { BillingSection } from "@/components/dashboard/billing-section";
 import { getPlanUsage, resetPlanCount } from "@/lib/plan-limits";
 import { ConnectedAccountsSection } from "@/components/dashboard/connected-accounts-section";
+import { DeleteAccountSection } from "@/components/dashboard/delete-account-section";
 import { Navbar } from "@/components/layout/navbar";
 import type { Metadata } from "next";
 
@@ -27,6 +29,9 @@ export default async function SettingsPage({
     prisma.user.findUnique({
       where: { id: session.user.id },
       select: {
+        name: true,
+        email: true,
+        passwordHash: true,
         plan: true,
         stripeCustomerId: true,
         plansCreatedThisSeason: true,
@@ -73,6 +78,12 @@ export default async function SettingsPage({
           </p>
         </div>
 
+        <ProfileSection
+          initialName={user.name}
+          initialEmail={user.email!}
+          hasPassword={!!user.passwordHash}
+        />
+
         <ConnectedAccountsSection
           garminConnected={athlete?.garminConnected ?? false}
           stravaConnected={athlete?.stravaConnected ?? false}
@@ -93,6 +104,8 @@ export default async function SettingsPage({
               : undefined
           }
         />
+
+        <DeleteAccountSection />
       </div>
     </>
   );

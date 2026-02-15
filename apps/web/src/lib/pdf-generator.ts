@@ -26,7 +26,17 @@ interface NutritionPlan {
   carbsPerHour: number;
   sodiumPerHour: number;
   fluidPerHour: number;
-  timeline?: Array<any>;
+  timeline?: Array<{
+    elapsedMinutes: number;
+    segment: string;
+    action: string;
+    carbsG: number;
+    fluidMl: number;
+    sodiumMg: number;
+  }>;
+  totalCarbs?: number;
+  totalFluid?: number;
+  totalSodium?: number;
 }
 
 interface TransitionPlan {
@@ -251,9 +261,9 @@ export async function generateRaceDayPdf(plan: RacePlan): Promise<Buffer> {
     },
   ]);
 
-  // ─── Nutrition Timeline ───
+  // ─── Nutrition Section ───
   if (nutrition) {
-    yPos = drawSection(doc, yPos, 'NUTRITION', [
+    const nutritionData: Array<{ label: string; value: string }> = [
       {
         label: 'Carbs/Hour',
         value: `${nutrition.carbsPerHour}g`,
@@ -266,7 +276,67 @@ export async function generateRaceDayPdf(plan: RacePlan): Promise<Buffer> {
         label: 'Fluid/Hour',
         value: `${nutrition.fluidPerHour}ml`,
       },
-    ]);
+    ];
+
+    if (nutrition.totalCarbs) {
+      nutritionData.push({
+        label: 'Total Carbs',
+        value: `${nutrition.totalCarbs}g`,
+      });
+    }
+
+    yPos = drawSection(doc, yPos, 'NUTRITION', nutritionData);
+
+    // Nutrition timeline entries (first 10)
+    if (nutrition.timeline && nutrition.timeline.length > 0) {
+      const maxEntries = 10;
+      const entries = nutrition.timeline.slice(0, maxEntries);
+
+      // Check for page break
+      if (yPos + 10 > pageHeight - margin) {
+        doc.addPage();
+        yPos = margin;
+      }
+
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(BRAND_RGB.r, BRAND_RGB.g, BRAND_RGB.b);
+      doc.text('NUTRITION TIMELINE', margin + 2, yPos);
+      yPos += 5;
+
+      entries.forEach((entry) => {
+        if (yPos + 5 > pageHeight - margin - 10) {
+          doc.addPage();
+          yPos = margin;
+        }
+
+        const h = Math.floor(entry.elapsedMinutes / 60);
+        const m = Math.round(entry.elapsedMinutes % 60);
+        const timeStr = `T+${h}:${m.toString().padStart(2, '0')}`;
+
+        doc.setFont('Helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(80, 80, 80);
+        doc.text(timeStr, margin + 2, yPos);
+
+        doc.setFont('Helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(100, 100, 100);
+        const actionLines = doc.splitTextToSize(entry.action, pageWidth - margin * 2 - 25);
+        doc.text(actionLines, margin + 20, yPos);
+        yPos += actionLines.length * 3.5 + 2;
+      });
+
+      if (nutrition.timeline.length > maxEntries) {
+        doc.setFont('Helvetica', 'italic');
+        doc.setFontSize(7);
+        doc.setTextColor(150, 150, 150);
+        doc.text(`... continues through run (${nutrition.timeline.length} total entries)`, margin + 2, yPos);
+        yPos += 5;
+      }
+
+      yPos += 4;
+    }
   }
 
   // ─── Transition Section ───

@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import type { WeatherData } from "@/lib/weather";
 import type { PacingOutput } from "@/lib/engine/pacing";
 import type { NutritionPlan } from "@/lib/engine/nutrition";
+import { NutritionTimeline } from "@/components/plan/nutrition-timeline";
 
 type SwimRunPlan = { targetPaceSec: number; estimatedTimeMin: number };
 
@@ -143,13 +144,13 @@ export default async function SharedPlanPage({
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold flex items-center gap-2">
-                  {isWeatherUnavailable ? "--" : `${weather?.tempC}°C`}
+                  {isWeatherUnavailable ? "~20°C" : `${weather?.tempC}°C`}
                   <span className="text-sm font-normal text-muted-foreground">
-                    {isWeatherUnavailable ? "--" : `${weather?.humidity}% Hum`}
+                    {isWeatherUnavailable ? "~50% Hum" : `${weather?.humidity}% Hum`}
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {isWeatherUnavailable ? "Weather unavailable" : weatherSource === "historical_estimate" ? "Historical estimate" : "Forecast"}
+                  {isWeatherUnavailable ? "Default estimate — live forecast available 10 days before race" : weatherSource === "historical_estimate" ? "Historical estimate" : "Forecast"}
                 </p>
               </CardContent>
             </Card>
@@ -243,6 +244,17 @@ export default async function SharedPlanPage({
               </CardContent>
             </Card>
           </div>
+
+          {/* Nutrition Timeline */}
+          {nutrition && (
+            <NutritionTimeline
+              nutrition={nutrition}
+              swimDurationMin={swim?.estimatedTimeMin}
+              bikeDurationMin={bike?.durationMinutes}
+              runDurationMin={run?.estimatedTimeMin}
+              distanceCategory={course.distanceCategory}
+            />
+          )}
 
           {/* Narrative */}
           {plan.narrativePlan && (

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CookiePreferencesButton } from "@/components/layout/cookie-preferences-button";
 
 export function Footer() {
   return (
@@ -57,6 +58,9 @@ export function Footer() {
                 <Link href="/terms" className="hover:text-primary inline-block py-2">
                   Terms of Service
                 </Link>
+              </li>
+              <li>
+                <CookiePreferencesButton />
               </li>
             </ul>
           </div>

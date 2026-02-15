@@ -18,6 +18,7 @@ import type { WeatherData } from "@/lib/weather";
 import type { PacingOutput } from "@/lib/engine/pacing";
 import type { NutritionPlan } from "@/lib/engine/nutrition";
 import type { FullStatisticalContext } from "@/lib/engine/statistics";
+import { NutritionTimeline } from "@/components/plan/nutrition-timeline";
 
 type SwimRunPlan = { targetPaceSec: number; estimatedTimeMin: number };
 
@@ -211,9 +212,9 @@ export default async function PlanPage({
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold flex items-center gap-2">
-                  {isWeatherUnavailable ? "--" : `${weather?.tempC ?? "--"}°C`}
+                  {isWeatherUnavailable ? "~20°C" : `${weather?.tempC ?? "--"}°C`}
                   <span className="text-sm font-normal text-muted-foreground">
-                    {isWeatherUnavailable ? "--" : `${weather?.humidity ?? "--"}% Hum`}
+                    {isWeatherUnavailable ? "~50% Hum" : `${weather?.humidity ?? "--"}% Hum`}
                   </span>
                 </div>
                 <p className={`text-xs mt-1 font-medium ${
@@ -226,7 +227,7 @@ export default async function PlanPage({
                         : "text-green-600 dark:text-green-400"
                 }`}>
                   {isWeatherUnavailable
-                    ? "Weather data will update closer to race day"
+                    ? "Default estimate — live forecast available 10 days before race"
                     : isWeatherEstimated
                       ? "Historical average (forecast available 10 days before race)"
                       : (weather?.tempC ?? 0) > 25
@@ -331,6 +332,17 @@ export default async function PlanPage({
               </CardContent>
             </Card>
           </div>
+
+          {/* Nutrition Timeline */}
+          {nutrition && (
+            <NutritionTimeline
+              nutrition={nutrition}
+              swimDurationMin={swim?.estimatedTimeMin}
+              bikeDurationMin={bike?.durationMinutes}
+              runDurationMin={run?.estimatedTimeMin}
+              distanceCategory={course.distanceCategory}
+            />
+          )}
 
           {/* Data-Driven Statistical Insights */}
           {statisticalContext?.available && (

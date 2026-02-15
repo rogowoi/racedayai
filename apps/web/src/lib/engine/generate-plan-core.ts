@@ -5,7 +5,10 @@ import {
   calculateRunPacing,
   calculateSwimPacing,
 } from "@/lib/engine/pacing";
-import { calculateNutrition } from "@/lib/engine/nutrition";
+import {
+  calculateNutrition,
+  calculateSegmentedNutrition,
+} from "@/lib/engine/nutrition";
 import { parseGpx, type CourseData } from "@/lib/engine/gpx";
 import { getRaceWeather } from "@/lib/weather";
 import { generateRaceNarrative } from "@/lib/engine/narrative";
@@ -216,11 +219,25 @@ export async function computeStep(
       bikePacing.durationMinutes +
       runPacing.estimatedTimeMin) /
     60;
-  const nutrition = calculateNutrition(
+  const baseNutrition = calculateNutrition(
     Number(athlete.weightKg) || 75,
     totalDurationHours,
     weather.tempC,
   );
+
+  // Segmented nutrition timeline
+  const segmented = calculateSegmentedNutrition({
+    swimDurationMin: swimPacing.estimatedTimeMin,
+    bikeDurationMin: bikePacing.durationMinutes,
+    runDurationMin: runPacing.estimatedTimeMin,
+    temperatureC: weather.tempC,
+    carbsPerHour: baseNutrition.carbsPerHour,
+    sodiumPerHour: baseNutrition.sodiumPerHour,
+    fluidPerHour: baseNutrition.fluidPerHour,
+    distanceCategory: raceData.distanceCategory,
+  });
+
+  const nutrition = { ...baseNutrition, ...segmented };
 
   // Predicted finish
   const predictedFinishSec =

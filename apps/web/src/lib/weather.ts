@@ -97,7 +97,7 @@ export async function getRaceWeather(
       windDir: 0,
       precipitationProb: 0,
       weatherCode: 0,
-      isEstimated: false,
+      isEstimated: true,
       source: "unavailable",
       sourceReason: "historical_fetch_failed",
     };
@@ -136,7 +136,7 @@ export async function getRaceWeather(
       windDir: 0,
       precipitationProb: 0,
       weatherCode: 0,
-      isEstimated: false,
+      isEstimated: true,
       source: "unavailable",
       sourceReason: "forecast_fetch_failed",
     };

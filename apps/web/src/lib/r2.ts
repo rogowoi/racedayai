@@ -2,6 +2,7 @@ import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
+  DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
@@ -47,5 +48,18 @@ export async function downloadGpx(key: string): Promise<string> {
     }),
   );
   return (await response.Body?.transformToString()) ?? "";
+}
+
+export async function deleteGpxFiles(keys: string[]): Promise<void> {
+  await Promise.allSettled(
+    keys.map((key) =>
+      s3.send(
+        new DeleteObjectCommand({
+          Bucket: R2_BUCKET_NAME,
+          Key: `gpx/${key}`,
+        })
+      )
+    )
+  );
 }
 
