@@ -373,9 +373,11 @@ export function Step3Course() {
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold tracking-tight">Course Profile</h1>
         <p className="text-muted-foreground">
-          {hasKnownRace
+          {hasKnownRace && gpxStatus === "loaded"
             ? "We have course data for your race. You can also search RideWithGPS or upload your own."
-            : "Search RideWithGPS for your course or upload a GPX file."}
+            : hasKnownRace && gpxStatus === "loading"
+              ? "Checking course data for your race..."
+              : "Search RideWithGPS for your course or upload a GPX file."}
         </p>
       </div>
 

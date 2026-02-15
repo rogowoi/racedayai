@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -342,131 +343,7 @@ export default function FeaturesPage() {
         </section>
       </main>
 
-      <footer className="border-t py-12 md:py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-            {/* Product */}
-            <div>
-              <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                Product
-              </h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link
-                    href="/wizard"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Create Plan
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/pricing"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Pricing
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/features"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Features
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Company */}
-            <div>
-              <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                Company
-              </h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link
-                    href="/about"
-                    className="hover:text-primary transition-colors"
-                  >
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/faq"
-                    className="hover:text-primary transition-colors"
-                  >
-                    FAQ
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Legal */}
-            <div>
-              <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                Legal
-              </h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link
-                    href="/privacy"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Privacy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/terms"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Terms
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Connect */}
-            <div>
-              <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                Connect
-              </h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link
-                    href="/login"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Login
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/signup"
-                    className="hover:text-primary transition-colors"
-                  >
-                    Sign Up
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t pt-8 text-center text-sm text-muted-foreground">
-            <p>© {new Date().getFullYear()} RaceDayAI. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

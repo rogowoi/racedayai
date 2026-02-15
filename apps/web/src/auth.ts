@@ -11,8 +11,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     Strava({
-      clientId: process.env.STRAVA_CLIENT_ID,
-      clientSecret: process.env.STRAVA_CLIENT_SECRET,
+      clientId: process.env.STRAVA_CLIENT_ID?.trim(),
+      clientSecret: process.env.STRAVA_CLIENT_SECRET?.trim(),
       authorization: {
         params: {
           scope: "read,activity:read_all",

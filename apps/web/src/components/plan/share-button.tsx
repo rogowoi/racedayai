@@ -35,21 +35,35 @@ export function ShareButton({ planId, existingShareToken }: ShareButtonProps) {
   };
 
   const copyToClipboard = async (value: string): Promise<boolean> => {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(value);
-      return true;
+    // Try modern clipboard API first
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+        return true;
+      }
+    } catch {
+      // Clipboard API can throw in insecure contexts — fall through
     }
 
-    const textarea = document.createElement("textarea");
-    textarea.value = value;
-    textarea.setAttribute("readonly", "");
-    textarea.style.position = "absolute";
-    textarea.style.left = "-9999px";
-    document.body.appendChild(textarea);
-    textarea.select();
-    const copied = document.execCommand("copy");
-    document.body.removeChild(textarea);
-    return copied;
+    // Fallback: textarea + execCommand
+    try {
+      const textarea = document.createElement("textarea");
+      textarea.value = value;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "absolute";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(textarea);
+      if (ok) return true;
+    } catch {
+      // execCommand can also fail
+    }
+
+    // Last resort: prompt so user can manually copy
+    window.prompt("Copy this share link:", value);
+    return true;
   };
 
   const handleShare = async () => {

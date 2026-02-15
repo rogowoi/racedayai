@@ -86,9 +86,38 @@ export async function POST(req: Request) {
     const successUrl = `${baseUrl}/dashboard/settings?billing=success`;
     const cancelUrl = `${baseUrl}/dashboard/settings?billing=cancelled`;
 
-    console.log("[checkout] baseUrl:", baseUrl, "successUrl:", successUrl);
+    // Check for existing active subscription to handle upgrades via proration
+    if (customerId) {
+      const subscriptions = await stripe.subscriptions.list({
+        customer: customerId,
+        status: "active",
+        limit: 1,
+      });
 
-    // Create checkout session
+      if (subscriptions.data.length > 0) {
+        const existingSub = subscriptions.data[0];
+        const existingItem = existingSub.items.data[0];
+
+        // Update the subscription with the new price (prorate automatically)
+        await stripe.subscriptions.update(existingSub.id, {
+          items: [
+            {
+              id: existingItem.id,
+              price: priceId,
+            },
+          ],
+          proration_behavior: "create_prorations",
+          metadata: {
+            userId: session.user.id,
+            plan,
+          },
+        });
+
+        return NextResponse.json({ url: successUrl });
+      }
+    }
+
+    // No existing subscription — create a new checkout session
     const checkoutSession = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [

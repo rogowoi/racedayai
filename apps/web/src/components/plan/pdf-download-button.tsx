@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Download, Loader2 } from "lucide-react";
 
@@ -12,58 +13,85 @@ interface PdfDownloadButtonProps {
 
 export function PdfDownloadButton({ planId, variant = "outline", size = "sm" }: PdfDownloadButtonProps) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleDownload = async () => {
     setIsGenerating(true);
+    setError(null);
 
     try {
-      // Trigger the download
       const response = await fetch(`/api/plans/${planId}/pdf`);
 
-      if (!response.ok) {
-        throw new Error("Failed to generate PDF");
+      if (response.status === 403) {
+        setError("upgrade");
+        return;
       }
 
-      // Get the blob from the response
-      const blob = await response.blob();
+      if (!response.ok) {
+        setError("Failed to generate PDF. Please try again.");
+        return;
+      }
 
-      // Create a download link
+      const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
+
       const a = document.createElement("a");
       a.href = url;
       a.download = `race-plan-${planId}.pdf`;
       document.body.appendChild(a);
       a.click();
-
-      // Cleanup
-      window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-    } catch (error) {
-      console.error("PDF download failed:", error);
+
+      // Delay cleanup so download can start
+      setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+    } catch {
+      setError("Download failed. Check your connection and try again.");
     } finally {
-      // Keep loading state for a moment so user sees feedback
       setTimeout(() => setIsGenerating(false), 500);
     }
   };
 
   return (
-    <Button
-      variant={variant}
-      size={size}
-      onClick={handleDownload}
-      disabled={isGenerating}
-    >
-      {isGenerating ? (
-        <>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Generating...
-        </>
-      ) : (
-        <>
-          <Download className="mr-2 h-4 w-4" />
-          PDF
-        </>
+    <div className="relative">
+      <Button
+        variant={variant}
+        size={size}
+        onClick={handleDownload}
+        disabled={isGenerating}
+      >
+        {isGenerating ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Generating...
+          </>
+        ) : (
+          <>
+            <Download className="mr-2 h-4 w-4" />
+            PDF
+          </>
+        )}
+      </Button>
+      {error && (
+        <div className="absolute top-full right-0 mt-2 z-50 max-w-xs rounded-md border border-destructive/20 bg-destructive/10 px-3 py-2 text-xs text-destructive shadow-lg">
+          {error === "upgrade" ? (
+            <span>
+              PDF download requires a paid plan.{" "}
+              <Link href="/pricing" className="underline font-semibold">
+                Upgrade
+              </Link>
+            </span>
+          ) : (
+            error
+          )}
+          <button
+            type="button"
+            className="ml-2 text-destructive/60 hover:text-destructive"
+            onClick={() => setError(null)}
+          >
+            &times;
+          </button>
+        </div>
       )}
-    </Button>
+    </div>
   );
 }

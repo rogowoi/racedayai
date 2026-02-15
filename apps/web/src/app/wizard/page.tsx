@@ -37,7 +37,7 @@ export default function WizardPage() {
 
         if (res.status === 401 && data.needsAuth) {
           // Not authenticated - redirect to login
-          router.push("/login?callbackUrl=" + encodeURIComponent("/wizard"));
+          router.push("/signup?callbackUrl=" + encodeURIComponent("/wizard"));
           return;
         }
 
@@ -94,7 +94,7 @@ export default function WizardPage() {
               <Button asChild className="flex-1">
                 <Link href="/pricing">
                   <TrendingUp className="mr-2 h-4 w-4" />
-                  View Plans
+                  See Pricing
                 </Link>
               </Button>
               <Button variant="outline" asChild className="flex-1">

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db";
-import { getPlanLimits } from "@/lib/stripe";
+import { getPlanLimits } from "@/lib/plans";
 
 const SEASON_DURATION_DAYS = 365;
 

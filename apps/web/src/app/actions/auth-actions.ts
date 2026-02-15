@@ -66,8 +66,17 @@ export async function signUp(
     return { error: "Email and password are required." };
   }
 
+  // Email format validation
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { error: "Please enter a valid email address." };
+  }
+
   if (password.length < 8) {
     return { error: "Password must be at least 8 characters." };
+  }
+
+  if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
+    return { error: "Password must contain an uppercase letter, a lowercase letter, and a number." };
   }
 
   // Check if user already exists

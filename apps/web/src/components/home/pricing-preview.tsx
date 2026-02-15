@@ -33,6 +33,7 @@ export function PricingPreview() {
               <h3 className="text-xl font-bold mb-1">Starter</h3>
               <div className="flex items-baseline gap-1 mb-3">
                 <span className="text-4xl font-extrabold">$0</span>
+                <span className="text-sm text-muted-foreground">/forever</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Try one race plan &mdash; see your predicted finish time

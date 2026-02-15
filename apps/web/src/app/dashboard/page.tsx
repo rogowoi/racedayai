@@ -74,7 +74,7 @@ export default async function DashboardPage() {
               <Button asChild size="lg" variant="default">
                 <Link href="/pricing">
                   <Plus className="mr-2 h-4 w-4" />
-                  Upgrade to Create Plans
+                  Upgrade for More Plans
                 </Link>
               </Button>
             ) : (

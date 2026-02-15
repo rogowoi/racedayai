@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -219,12 +220,7 @@ export default function AboutPage() {
         </section>
       </main>
 
-      <footer className="border-t py-6 md:py-8">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p className="mb-2">Last updated: February 11, 2026</p>
-          <p>© {new Date().getFullYear()} RaceDayAI. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

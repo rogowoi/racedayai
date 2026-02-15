@@ -210,7 +210,7 @@ function SignUpForm() {
               <Button
                 type="submit"
                 className="w-full font-semibold"
-                disabled={isPending}
+                disabled={isPending || (password.length > 0 && strengthScore < 4)}
               >
                 {isPending ? (
                   <>

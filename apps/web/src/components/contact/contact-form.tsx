@@ -67,7 +67,7 @@ export function ContactForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} method="POST" action="" className="space-y-6">
         {/* Name */}
         <div>
           <label htmlFor="name" className="block text-sm font-medium mb-2">

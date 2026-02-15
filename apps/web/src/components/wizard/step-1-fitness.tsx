@@ -20,11 +20,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Smartphone, AlertCircle, CheckCircle2, HelpCircle } from "lucide-react";
 import { loginWithStrava } from "@/app/actions/auth-actions";
 import { GarminConnectButton } from "@/components/garmin-connect-button";
@@ -39,12 +38,14 @@ export function Step1Fitness() {
   const garminError = searchParams.get("garmin_error");
   const garminConnected = searchParams.get("garmin_connected");
   const [weightUnit, setWeightUnit] = useState<"kg" | "lb">("kg");
+  const [genderError, setGenderError] = useState(false);
 
   const handleNext = () => {
-    // Basic validation
-    if (!fitnessData.ftp && !fitnessData.thresholdPace) {
-      // Allow proceeding but maybe warn? For MVP just proceed.
+    if (!fitnessData.gender) {
+      setGenderError(true);
+      return;
     }
+    setGenderError(false);
     setStep(2);
   };
 
@@ -67,7 +68,6 @@ export function Step1Fitness() {
   };
 
   return (
-    <TooltipProvider>
       <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-bold tracking-tight">
@@ -100,11 +100,12 @@ export function Step1Fitness() {
                   <Label htmlFor="gender">Gender</Label>
                   <Select
                     value={fitnessData.gender || ""}
-                    onValueChange={(val: any) =>
-                      setFitnessData({ gender: val })
-                    }
+                    onValueChange={(val: any) => {
+                      setFitnessData({ gender: val });
+                      setGenderError(false);
+                    }}
                   >
-                    <SelectTrigger id="gender">
+                    <SelectTrigger id="gender" className={genderError ? "border-red-500 ring-red-500/20 ring-2" : ""}>
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
@@ -112,6 +113,9 @@ export function Step1Fitness() {
                       <SelectItem value="F">Female</SelectItem>
                     </SelectContent>
                   </Select>
+                  {genderError && (
+                    <p className="text-xs text-red-500">Please select your gender for accurate pacing.</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="age">Age</Label>
@@ -162,19 +166,19 @@ export function Step1Fitness() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
                       <Label htmlFor="ftp">Bike FTP (W)</Label>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
+                      <Popover>
+                        <PopoverTrigger asChild>
                           <button type="button" className="text-muted-foreground hover:text-foreground">
                             <HelpCircle className="h-3.5 w-3.5" />
                           </button>
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-[250px]">
+                        </PopoverTrigger>
+                        <PopoverContent className="max-w-[250px] text-sm">
                           <p>
                             Functional Threshold Power: the highest power you can
                             sustain for ~1 hour. Used to calculate your bike pacing.
                           </p>
-                        </TooltipContent>
-                      </Tooltip>
+                        </PopoverContent>
+                      </Popover>
                     </div>
                     <FtpEstimator
                       onEstimate={(ftp) => setFitnessData({ ftp })}
@@ -193,19 +197,19 @@ export function Step1Fitness() {
                 <div className="space-y-2">
                   <div className="flex items-center gap-1.5">
                     <Label htmlFor="pace">Run Threshold (min/km)</Label>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
+                    <Popover>
+                      <PopoverTrigger asChild>
                         <button type="button" className="text-muted-foreground hover:text-foreground">
                           <HelpCircle className="h-3.5 w-3.5" />
                         </button>
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-[250px]">
+                      </PopoverTrigger>
+                      <PopoverContent className="max-w-[250px] text-sm">
                         <p>
                           Your threshold pace: the fastest pace you can hold for
                           ~1 hour of running. Used to calculate your run pacing.
                         </p>
-                      </TooltipContent>
-                    </Tooltip>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                   <Input
                     id="pace"
@@ -221,19 +225,19 @@ export function Step1Fitness() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
                       <Label htmlFor="css">Swim CSS (min/100m)</Label>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
+                      <Popover>
+                        <PopoverTrigger asChild>
                           <button type="button" className="text-muted-foreground hover:text-foreground">
                             <HelpCircle className="h-3.5 w-3.5" />
                           </button>
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-[250px]">
+                        </PopoverTrigger>
+                        <PopoverContent className="max-w-[250px] text-sm">
                           <p>
                             Critical Swim Speed: your sustainable swim pace per 100
                             meters. Used to calculate your swim pacing strategy.
                           </p>
-                        </TooltipContent>
-                      </Tooltip>
+                        </PopoverContent>
+                      </Popover>
                     </div>
                     <CssEstimator
                       onEstimate={(css) => setFitnessData({ css })}
@@ -327,6 +331,5 @@ export function Step1Fitness() {
           </Button>
         </div>
       </div>
-    </TooltipProvider>
   );
 }

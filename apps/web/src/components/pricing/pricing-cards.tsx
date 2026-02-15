@@ -117,7 +117,7 @@ export function PricingCards({ isLoggedIn = false }: PricingCardsProps) {
                   </span>
                 </div>
                 <p className="text-sm font-medium text-primary">
-                  Just $6.50 per race \u00B7 6 races per season
+                  Just $6.50 per race &middot; 6 races per season
                 </p>
               </div>
 
