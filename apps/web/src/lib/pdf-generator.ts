@@ -40,9 +40,14 @@ interface NutritionPlan {
 }
 
 interface TransitionPlan {
+  t1Sec?: number;
+  t2Sec?: number;
+  totalTransitionSec?: number;
+  source?: string;
+  venueName?: string | null;
+  // Legacy fields
   t1_target?: number;
   t2_target?: number;
-  checklists?: any;
 }
 
 interface WeatherData {
@@ -342,16 +347,35 @@ export async function generateRaceDayPdf(plan: RacePlan): Promise<Buffer> {
   // ─── Transition Section ───
   if (transition) {
     const transitionData = [];
-    if (transition.t1_target) {
+    // New format (t1Sec/t2Sec)
+    if (transition.t1Sec) {
+      const t1Min = (transition.t1Sec / 60).toFixed(1);
+      transitionData.push({
+        label: 'T1 (Swim → Bike)',
+        value: `${t1Min} min`,
+      });
+    } else if (transition.t1_target) {
       transitionData.push({
         label: 'T1 Target',
         value: `${transition.t1_target} min`,
       });
     }
-    if (transition.t2_target) {
+    if (transition.t2Sec) {
+      const t2Min = (transition.t2Sec / 60).toFixed(1);
+      transitionData.push({
+        label: 'T2 (Bike → Run)',
+        value: `${t2Min} min`,
+      });
+    } else if (transition.t2_target) {
       transitionData.push({
         label: 'T2 Target',
         value: `${transition.t2_target} min`,
+      });
+    }
+    if (transition.source === 'venue' && transition.venueName) {
+      transitionData.push({
+        label: 'Based on',
+        value: `${transition.venueName} historical data`,
       });
     }
     if (transitionData.length > 0) {

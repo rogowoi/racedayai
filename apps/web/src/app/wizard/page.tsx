@@ -10,12 +10,16 @@ import { Button } from "@/components/ui/button";
 import { AlertCircle, Loader2, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { getAthleteMetrics } from "@/app/actions/athlete-actions";
 
 export default function WizardPage() {
   const step = useWizardStore((state) => state.step);
   const setStep = useWizardStore((state) => state.setStep);
+  const fitnessData = useWizardStore((state) => state.fitnessData);
+  const setFitnessData = useWizardStore((state) => state.setFitnessData);
   const [mounted, setMounted] = useState(false);
   const [checking, setChecking] = useState(true);
+  const [stravaPreFilled, setStravaPreFilled] = useState(false);
   const [planLimit, setPlanLimit] = useState<{
     canCreate: boolean;
     needsAuth?: boolean;
@@ -36,7 +40,6 @@ export default function WizardPage() {
         const data = await res.json();
 
         if (res.status === 401 && data.needsAuth) {
-          // Not authenticated - redirect to login
           router.push("/signup?callbackUrl=" + encodeURIComponent("/wizard"));
           return;
         }
@@ -52,6 +55,37 @@ export default function WizardPage() {
 
     checkLimits();
   }, [router]);
+
+  // Auto-populate wizard from Strava-synced athlete metrics
+  useEffect(() => {
+    if (!mounted || stravaPreFilled) return;
+
+    async function loadAthleteMetrics() {
+      try {
+        const metrics = await getAthleteMetrics();
+        if (!metrics || !metrics.hasSyncedMetrics) return;
+
+        // Only pre-fill fields that are currently empty (don't overwrite manual edits)
+        const updates: Record<string, any> = {};
+        if (metrics.ftp && !fitnessData.ftp) updates.ftp = metrics.ftp;
+        if (metrics.thresholdPace && !fitnessData.thresholdPace)
+          updates.thresholdPace = metrics.thresholdPace;
+        if (metrics.css && !fitnessData.css) updates.css = metrics.css;
+        if (metrics.weight && !fitnessData.weight) updates.weight = metrics.weight;
+        if (metrics.maxHr && !fitnessData.maxHr) updates.maxHr = metrics.maxHr;
+        if (metrics.gender && !fitnessData.gender) updates.gender = metrics.gender;
+
+        if (Object.keys(updates).length > 0) {
+          setFitnessData(updates);
+          setStravaPreFilled(true);
+        }
+      } catch {
+        // Non-critical — wizard works without pre-fill
+      }
+    }
+
+    loadAthleteMetrics();
+  }, [mounted, stravaPreFilled, fitnessData, setFitnessData]);
 
   useEffect(() => {
     if (planLimit && !planLimit.canCreate && step !== 1) {
@@ -109,7 +143,7 @@ export default function WizardPage() {
 
   return (
     <>
-      {step === 1 && <Step1Fitness />}
+      {step === 1 && <Step1Fitness stravaPreFilled={stravaPreFilled} />}
       {step === 2 && <Step2Race />}
       {step === 3 && <Step3Course />}
     </>

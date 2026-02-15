@@ -118,6 +118,7 @@ export default async function PlanPage({
     runPlan,
     swimPlan,
     nutritionPlan,
+    transitionPlan: rawTransition,
     statisticalContext: rawStats,
   } = plan;
   const weather = weatherData as WeatherData | null;
@@ -125,6 +126,13 @@ export default async function PlanPage({
   const run = runPlan as SwimRunPlan | null;
   const swim = swimPlan as SwimRunPlan | null;
   const nutrition = nutritionPlan as NutritionPlan | null;
+  const transition = rawTransition as {
+    t1Sec?: number;
+    t2Sec?: number;
+    totalTransitionSec?: number;
+    source?: string;
+    venueName?: string | null;
+  } | null;
   const statisticalContext = rawStats as FullStatisticalContext | null;
   const weatherSource = weather?.source ?? "unavailable";
   const isWeatherUnavailable = weatherSource === "unavailable";
@@ -281,6 +289,25 @@ export default async function PlanPage({
               </CardContent>
             </Card>
 
+            {/* T1 */}
+            {transition?.t1Sec && (
+              <Card className="border-l-4 border-l-gray-400">
+                <CardHeader className="py-3">
+                  <CardTitle className="flex justify-between text-base">
+                    <span className="text-muted-foreground">T1 — Swim to Bike</span>
+                    <span>{formatTime(transition.t1Sec)}</span>
+                  </CardTitle>
+                </CardHeader>
+                {transition.source === "venue" && transition.venueName && (
+                  <CardContent className="pt-0 pb-3">
+                    <p className="text-xs text-muted-foreground">
+                      Based on {transition.venueName} historical data
+                    </p>
+                  </CardContent>
+                )}
+              </Card>
+            )}
+
             {/* Bike */}
             <Card className="border-l-4 border-l-orange-500">
               <CardHeader>
@@ -308,6 +335,25 @@ export default async function PlanPage({
                 <TssWithTooltip tss={bike?.tss} />
               </CardContent>
             </Card>
+
+            {/* T2 */}
+            {transition?.t2Sec && (
+              <Card className="border-l-4 border-l-gray-400">
+                <CardHeader className="py-3">
+                  <CardTitle className="flex justify-between text-base">
+                    <span className="text-muted-foreground">T2 — Bike to Run</span>
+                    <span>{formatTime(transition.t2Sec)}</span>
+                  </CardTitle>
+                </CardHeader>
+                {transition.source === "venue" && transition.venueName && (
+                  <CardContent className="pt-0 pb-3">
+                    <p className="text-xs text-muted-foreground">
+                      Based on {transition.venueName} historical data
+                    </p>
+                  </CardContent>
+                )}
+              </Card>
+            )}
 
             {/* Run */}
             <Card className="border-l-4 border-l-green-500">

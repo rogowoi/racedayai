@@ -6,6 +6,12 @@ import { prisma } from "@/lib/db";
 import { verifyPassword } from "@/lib/password";
 import { trackServerEvent } from "@/lib/posthog-server";
 import { AnalyticsEvent } from "@/lib/analytics";
+import {
+  getStravaActivities,
+  getStravaProfile,
+  getStravaZones,
+  extractFitnessMetrics,
+} from "@/lib/strava";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -100,6 +106,34 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               trackServerEvent(user.id, AnalyticsEvent.LOGIN_COMPLETED, {
                 method: "strava",
               }).catch(() => {});
+            }
+
+            // Auto-sync fitness metrics from Strava on sign-in
+            // Uses math-only estimation (no LLM) to keep sign-in fast
+            try {
+              const token = account.access_token as string;
+              const [profile, zones, activities] = await Promise.all([
+                getStravaProfile(token).catch(() => null),
+                getStravaZones(token).catch(() => ({})),
+                getStravaActivities(token).catch(() => []),
+              ]);
+
+              if (activities.length > 0) {
+                const mathMetrics = extractFitnessMetrics(activities, zones, profile);
+
+                await prisma.athlete.update({
+                  where: { id: athlete.id },
+                  data: {
+                    ftpWatts: mathMetrics.ftpWatts,
+                    thresholdPaceSec: mathMetrics.thresholdPaceSec,
+                    cssPer100mSec: mathMetrics.cssPer100mSec,
+                    maxHr: mathMetrics.maxHr,
+                    ...(mathMetrics.weightKg != null && { weightKg: mathMetrics.weightKg }),
+                  },
+                });
+              }
+            } catch (syncError) {
+              console.error("Auto-sync on sign-in failed:", syncError);
             }
           }
         } catch (error) {

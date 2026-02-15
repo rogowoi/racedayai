@@ -8,10 +8,18 @@ interface SyncResponse {
   success: boolean;
   metrics?: {
     ftpWatts: number | null;
+    ftpSource: string | null;
+    ftpConfidence: string;
     thresholdPaceSec: number | null;
+    paceConfidence: string;
     cssPer100mSec: number | null;
+    cssConfidence: string;
     maxHr: number | null;
+    weightKg: number | null;
+    gender: string | null;
+    hasPowerMeter: boolean;
   };
+  coachingInsight?: string;
   activitiesProcessed?: number;
   error?: string;
 }
@@ -20,12 +28,14 @@ interface StravaSyncButtonProps {
   variant?: "default" | "outline" | "ghost";
   size?: "default" | "sm" | "lg";
   showIcon?: boolean;
+  onSyncComplete?: (data: SyncResponse) => void;
 }
 
 export function StravaSyncButton({
   variant = "default",
   size = "default",
   showIcon = true,
+  onSyncComplete,
 }: StravaSyncButtonProps) {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -49,12 +59,13 @@ export function StravaSyncButton({
         return;
       }
 
-      // Format success message with metrics
+      // Format success message with metrics and confidence
       let metricsText = "";
       if (data.metrics) {
         const parts = [];
         if (data.metrics.ftpWatts) {
-          parts.push(`FTP: ${data.metrics.ftpWatts}W`);
+          const source = data.metrics.ftpSource === "zones" ? "from zones" : "estimated";
+          parts.push(`FTP: ${data.metrics.ftpWatts}W (${source})`);
         }
         if (data.metrics.thresholdPaceSec) {
           const minutes = Math.floor(data.metrics.thresholdPaceSec / 60);
@@ -76,11 +87,14 @@ export function StravaSyncButton({
         `Synced ${data.activitiesProcessed} activities${metricsText}`
       );
 
-      // Clear success message after 5 seconds
+      // Notify parent component
+      onSyncComplete?.(data);
+
+      // Clear success message after 8 seconds
       setTimeout(() => {
         setStatus("idle");
         setMessage("");
-      }, 5000);
+      }, 8000);
     } catch (error) {
       setStatus("error");
       setMessage(

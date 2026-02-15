@@ -2,20 +2,22 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import {
   getStravaActivities,
+  getStravaProfile,
+  getStravaZones,
+  getValidStravaToken,
   extractFitnessMetrics,
   StravaTokenData,
 } from "@/lib/strava";
+import { refineMetricsWithLLM } from "@/lib/strava-insights";
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
-    // Check authentication
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get athlete record with Strava token
     const athlete = await prisma.athlete.findUnique({
       where: { userId: session.user.id },
     });
@@ -27,7 +29,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Parse the stored token data
     const tokenData = athlete.stravaToken as unknown as StravaTokenData;
     if (!tokenData.access_token) {
       return NextResponse.json(
@@ -36,31 +37,50 @@ export async function POST(request: Request) {
       );
     }
 
-    // Fetch recent activities from Strava
-    const activities = await getStravaActivities(tokenData.access_token, 20);
+    // Refresh token if needed
+    const accessToken = await getValidStravaToken(athlete.id, tokenData);
 
-    // Extract fitness metrics from activities
-    const metrics = extractFitnessMetrics(activities);
+    // Fetch profile, zones, and activities in parallel
+    const [profile, zones, activities] = await Promise.all([
+      getStravaProfile(accessToken).catch(() => null),
+      getStravaZones(accessToken).catch(() => ({})),
+      getStravaActivities(accessToken),
+    ]);
 
-    // Update athlete record with new metrics
-    const updatedAthlete = await prisma.athlete.update({
+    // Math-based estimation
+    const mathMetrics = extractFitnessMetrics(activities, zones, profile);
+
+    // LLM refinement (graceful fallback if unavailable)
+    const refined = await refineMetricsWithLLM(activities, mathMetrics);
+
+    // Update athlete record with refined metrics
+    await prisma.athlete.update({
       where: { id: athlete.id },
       data: {
-        ftpWatts: metrics.ftpWatts,
-        thresholdPaceSec: metrics.thresholdPaceSec,
-        cssPer100mSec: metrics.cssPer100mSec,
-        maxHr: metrics.maxHr,
+        ftpWatts: refined.ftpWatts,
+        thresholdPaceSec: refined.thresholdPaceSec,
+        cssPer100mSec: refined.cssPer100mSec,
+        maxHr: refined.maxHr,
+        ...(mathMetrics.weightKg != null && { weightKg: mathMetrics.weightKg }),
       },
     });
 
     return NextResponse.json({
       success: true,
       metrics: {
-        ftpWatts: updatedAthlete.ftpWatts,
-        thresholdPaceSec: updatedAthlete.thresholdPaceSec,
-        cssPer100mSec: updatedAthlete.cssPer100mSec,
-        maxHr: updatedAthlete.maxHr,
+        ftpWatts: refined.ftpWatts,
+        ftpSource: mathMetrics.ftpSource,
+        ftpConfidence: refined.ftpConfidence,
+        thresholdPaceSec: refined.thresholdPaceSec,
+        paceConfidence: refined.paceConfidence,
+        cssPer100mSec: refined.cssPer100mSec,
+        cssConfidence: refined.cssConfidence,
+        maxHr: refined.maxHr,
+        weightKg: mathMetrics.weightKg,
+        gender: mathMetrics.gender,
+        hasPowerMeter: mathMetrics.hasPowerMeter,
       },
+      coachingInsight: refined.coachingInsight,
       activitiesProcessed: activities.length,
     });
   } catch (error) {

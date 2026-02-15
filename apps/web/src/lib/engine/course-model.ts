@@ -348,6 +348,98 @@ export async function getCourseBenchmarks(
   };
 }
 
+// ── Transition Time Estimation ────────────────────────────────
+
+export interface TransitionEstimate {
+  t1Sec: number;
+  t2Sec: number;
+  totalTransitionSec: number;
+  source: "venue" | "default";
+  venueName?: string;
+}
+
+/** Distance-category defaults when no venue data is available (in seconds). */
+const DEFAULT_TRANSITIONS: Record<string, { t1: number; t2: number }> = {
+  sprint: { t1: 90, t2: 60 },    // 1.5 + 1 min
+  olympic: { t1: 120, t2: 90 },  // 2 + 1.5 min
+  "70.3": { t1: 180, t2: 120 },  // 3 + 2 min
+  "140.6": { t1: 240, t2: 180 }, // 4 + 3 min
+};
+
+/**
+ * Estimate T1 and T2 transition times for a race venue.
+ *
+ * Derives total transition from race-catalog.json:
+ *   total_median - swim_median - bike_median - run_median = implied transition
+ * Then splits T1/T2 at ~55/45 (T1 is typically longer: wetsuit removal, racking).
+ *
+ * Falls back to distance-category defaults if no venue data is available.
+ */
+export async function getTransitionEstimate(
+  courseKey: string | null,
+  distanceCategory: string,
+): Promise<TransitionEstimate> {
+  const fallback = DEFAULT_TRANSITIONS[distanceCategory] ?? DEFAULT_TRANSITIONS["70.3"];
+
+  if (!courseKey) {
+    return {
+      t1Sec: fallback.t1,
+      t2Sec: fallback.t2,
+      totalTransitionSec: fallback.t1 + fallback.t2,
+      source: "default",
+    };
+  }
+
+  const catalog = await loadRaceCatalog();
+  if (!catalog) {
+    return {
+      t1Sec: fallback.t1,
+      t2Sec: fallback.t2,
+      totalTransitionSec: fallback.t1 + fallback.t2,
+      source: "default",
+    };
+  }
+
+  const entry = catalog.find((e) => e.event_location === courseKey);
+  if (!entry) {
+    return {
+      t1Sec: fallback.t1,
+      t2Sec: fallback.t2,
+      totalTransitionSec: fallback.t1 + fallback.t2,
+      source: "default",
+    };
+  }
+
+  const { finish_time, segments } = entry.stats;
+  const impliedTransitionSec =
+    finish_time.median_sec -
+    segments.swim.median_sec -
+    segments.bike.median_sec -
+    segments.run.median_sec;
+
+  // Sanity check: transitions should be 1-30 min total. If data is weird, use defaults.
+  if (impliedTransitionSec < 60 || impliedTransitionSec > 1800) {
+    return {
+      t1Sec: fallback.t1,
+      t2Sec: fallback.t2,
+      totalTransitionSec: fallback.t1 + fallback.t2,
+      source: "default",
+    };
+  }
+
+  // Split T1/T2 at 55/45 — T1 is longer (wetsuit, longer run to bike)
+  const t1Sec = Math.round(impliedTransitionSec * 0.55);
+  const t2Sec = impliedTransitionSec - t1Sec;
+
+  return {
+    t1Sec,
+    t2Sec,
+    totalTransitionSec: impliedTransitionSec,
+    source: "venue",
+    venueName: entry.event_location,
+  };
+}
+
 /**
  * Build full course context for a race.
  *

@@ -24,21 +24,27 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Smartphone, AlertCircle, CheckCircle2, HelpCircle } from "lucide-react";
+import { Smartphone, AlertCircle, CheckCircle2, HelpCircle, Zap } from "lucide-react";
 import { loginWithStrava } from "@/app/actions/auth-actions";
 import { GarminConnectButton } from "@/components/garmin-connect-button";
 import { FtpEstimator } from "@/components/wizard/ftp-estimator";
 import { CssEstimator } from "@/components/wizard/css-estimator";
+import { StravaSyncButton } from "@/components/strava-sync-button";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-export function Step1Fitness() {
+interface Step1FitnessProps {
+  stravaPreFilled?: boolean;
+}
+
+export function Step1Fitness({ stravaPreFilled = false }: Step1FitnessProps) {
   const { fitnessData, setFitnessData, setStep } = useWizardStore();
   const searchParams = useSearchParams();
   const garminError = searchParams.get("garmin_error");
   const garminConnected = searchParams.get("garmin_connected");
   const [weightUnit, setWeightUnit] = useState<"kg" | "lb">("kg");
   const [genderError, setGenderError] = useState(false);
+  const [syncInsight, setSyncInsight] = useState<string | null>(null);
 
   const handleNext = () => {
     if (!fitnessData.gender) {
@@ -67,6 +73,35 @@ export function Step1Fitness() {
     setWeightUnit((prev) => (prev === "kg" ? "lb" : "kg"));
   };
 
+  // Handle sync completion — update wizard fields with synced metrics
+  const handleSyncComplete = (data: any) => {
+    if (!data?.metrics) return;
+
+    const updates: Record<string, any> = {};
+    if (data.metrics.ftpWatts) updates.ftp = data.metrics.ftpWatts;
+    if (data.metrics.thresholdPaceSec) {
+      const min = Math.floor(data.metrics.thresholdPaceSec / 60);
+      const sec = data.metrics.thresholdPaceSec % 60;
+      updates.thresholdPace = `${min}:${sec.toString().padStart(2, "0")}`;
+    }
+    if (data.metrics.cssPer100mSec) {
+      const min = Math.floor(data.metrics.cssPer100mSec / 60);
+      const sec = data.metrics.cssPer100mSec % 60;
+      updates.css = `${min}:${sec.toString().padStart(2, "0")}`;
+    }
+    if (data.metrics.weightKg) updates.weight = data.metrics.weightKg;
+    if (data.metrics.maxHr) updates.maxHr = data.metrics.maxHr;
+    if (data.metrics.gender) updates.gender = data.metrics.gender;
+
+    if (Object.keys(updates).length > 0) {
+      setFitnessData(updates);
+    }
+
+    if (data.coachingInsight) {
+      setSyncInsight(data.coachingInsight);
+    }
+  };
+
   return (
       <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div className="text-center space-y-2">
@@ -78,6 +113,26 @@ export function Step1Fitness() {
             targets.
           </p>
         </div>
+
+        {/* Strava pre-fill banner */}
+        {stravaPreFilled && (
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800">
+            <Zap className="h-4 w-4 text-orange-600 dark:text-orange-400 shrink-0" />
+            <p className="text-sm text-orange-700 dark:text-orange-300">
+              Pre-filled from your Strava data. You can edit any value.
+            </p>
+          </div>
+        )}
+
+        {/* Coaching insight from LLM */}
+        {syncInsight && (
+          <div className="flex items-start gap-2 p-3 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
+            <Zap className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+            <p className="text-sm text-blue-700 dark:text-blue-300">
+              {syncInsight}
+            </p>
+          </div>
+        )}
 
       <Tabs defaultValue="manual" className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-6">
@@ -340,6 +395,11 @@ export function Step1Fitness() {
                   Connect Strava
                 </Button>
               </form>
+              <StravaSyncButton
+                variant="outline"
+                size="default"
+                onSyncComplete={handleSyncComplete}
+              />
               <div className="text-center text-xs text-muted-foreground mt-4">
                 We will only read your activity data. We never post to your
                 feed.

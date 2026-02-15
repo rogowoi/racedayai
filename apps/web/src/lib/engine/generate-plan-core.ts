@@ -20,6 +20,10 @@ import {
 import { getRaceById } from "@/lib/race-registry";
 import { isPaidPlan } from "@/lib/plans";
 import { downloadGpx } from "@/lib/r2";
+import {
+  findMatchingCourse,
+  getTransitionEstimate,
+} from "@/lib/engine/course-model";
 
 // ── Types ───────────────────────────────────────────────────
 
@@ -213,10 +217,22 @@ export async function computeStep(
     bikePacing.tss,
   );
 
+  // Transition time estimate (venue-specific or defaults)
+  const courseKey = await findMatchingCourse(raceData.name);
+  const transitionEstimate = await getTransitionEstimate(
+    courseKey,
+    raceData.distanceCategory,
+  );
+
+  const t1Min = transitionEstimate.t1Sec / 60;
+  const t2Min = transitionEstimate.t2Sec / 60;
+
   // Nutrition
   const totalDurationHours =
     (swimPacing.estimatedTimeMin +
+      t1Min +
       bikePacing.durationMinutes +
+      t2Min +
       runPacing.estimatedTimeMin) /
     60;
   const baseNutrition = calculateNutrition(
@@ -235,16 +251,19 @@ export async function computeStep(
     sodiumPerHour: baseNutrition.sodiumPerHour,
     fluidPerHour: baseNutrition.fluidPerHour,
     distanceCategory: raceData.distanceCategory,
+    t1DurationMin: t1Min,
+    t2DurationMin: t2Min,
   });
 
   const nutrition = { ...baseNutrition, ...segmented };
 
-  // Predicted finish
+  // Predicted finish (swim + T1 + bike + T2 + run)
   const predictedFinishSec =
     (swimPacing.estimatedTimeMin +
       bikePacing.durationMinutes +
       runPacing.estimatedTimeMin) *
-    60;
+      60 +
+    transitionEstimate.totalTransitionSec;
 
   // Statistical context
   const statisticalContext = await buildFullContext({
@@ -261,6 +280,15 @@ export async function computeStep(
     weatherHumidityPct: weather.humidity,
   });
 
+  // Build transition plan
+  const transitionPlan = {
+    t1Sec: transitionEstimate.t1Sec,
+    t2Sec: transitionEstimate.t2Sec,
+    totalTransitionSec: transitionEstimate.totalTransitionSec,
+    source: transitionEstimate.source,
+    venueName: transitionEstimate.venueName ?? null,
+  };
+
   // Save all computed data to plan
   await prisma.racePlan.update({
     where: { id: planId },
@@ -269,6 +297,7 @@ export async function computeStep(
       bikePlan: bikePacing,
       runPlan: runPacing,
       nutritionPlan: nutrition,
+      transitionPlan,
       statisticalContext: JSON.parse(JSON.stringify(statisticalContext)),
       predictedFinishSec,
     },
@@ -279,6 +308,7 @@ export async function computeStep(
     bikePacing,
     runPacing,
     nutrition,
+    transitionPlan,
     statisticalContext,
     predictedFinishSec,
   };

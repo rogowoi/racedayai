@@ -97,6 +97,8 @@ export function calculateSegmentedNutrition(params: {
   sodiumPerHour: number;
   fluidPerHour: number;
   distanceCategory: string; // "sprint" | "olympic" | "70.3" | "140.6"
+  t1DurationMin?: number;
+  t2DurationMin?: number;
 }): {
   segments: SegmentNutrition[];
   timeline: NutritionTimelineEntry[];
@@ -113,14 +115,16 @@ export function calculateSegmentedNutrition(params: {
     sodiumPerHour,
     fluidPerHour,
     distanceCategory,
+    t1DurationMin,
+    t2DurationMin,
   } = params;
 
   const totalDurationMin = swimDurationMin + bikeDurationMin + runDurationMin;
   const isShortRace =
     distanceCategory === "sprint" || totalDurationMin < 90;
 
-  const T1_DURATION = 3;
-  const T2_DURATION = 2;
+  const T1_DURATION = t1DurationMin ?? 3;
+  const T2_DURATION = t2DurationMin ?? 2;
 
   const segments: SegmentNutrition[] = [];
   const timeline: NutritionTimelineEntry[] = [];
