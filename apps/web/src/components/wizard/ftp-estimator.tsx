@@ -49,8 +49,8 @@ export function FtpEstimator({ onEstimate }: FtpEstimatorProps) {
           size="sm"
           className="h-7 px-2 text-xs"
         >
-          <Calculator className="h-3.5 w-3.5 mr-1" />
-          Estimate
+          <Calculator className="h-3.5 w-3.5" />
+          <span className="sr-only">Estimate</span>
         </Button>
       </SheetTrigger>
       <SheetContent>

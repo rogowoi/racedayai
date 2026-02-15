@@ -161,11 +161,53 @@ export function Step1Fitness() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-muted-foreground">Performance Thresholds</span>
+                  <span className="text-xs text-muted-foreground/70 bg-muted px-2 py-0.5 rounded-full">Optional</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <Label htmlFor="ftp">Bike FTP</Label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <button type="button" className="text-muted-foreground hover:text-foreground">
+                              <HelpCircle className="h-3.5 w-3.5" />
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent className="max-w-[250px] text-sm">
+                            <p>
+                              Functional Threshold Power: the highest power you can
+                              sustain for ~1 hour. Used to calculate your bike pacing.
+                            </p>
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                      <FtpEstimator
+                        onEstimate={(ftp) => setFitnessData({ ftp })}
+                      />
+                    </div>
+                    <div className="relative">
+                      <Input
+                        id="ftp"
+                        type="number"
+                        className="pr-10"
+                        placeholder="250"
+                        value={fitnessData.ftp || ""}
+                        onChange={(e) =>
+                          setFitnessData({ ftp: Number(e.target.value) })
+                        }
+                      />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                        W
+                      </span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
                     <div className="flex items-center gap-1.5">
-                      <Label htmlFor="ftp">Bike FTP (W)</Label>
+                      <Label htmlFor="pace">Run Threshold</Label>
                       <Popover>
                         <PopoverTrigger asChild>
                           <button type="button" className="text-muted-foreground hover:text-foreground">
@@ -174,82 +216,64 @@ export function Step1Fitness() {
                         </PopoverTrigger>
                         <PopoverContent className="max-w-[250px] text-sm">
                           <p>
-                            Functional Threshold Power: the highest power you can
-                            sustain for ~1 hour. Used to calculate your bike pacing.
+                            Your threshold pace: the fastest pace you can hold for
+                            ~1 hour of running. Used to calculate your run pacing.
                           </p>
                         </PopoverContent>
                       </Popover>
                     </div>
-                    <FtpEstimator
-                      onEstimate={(ftp) => setFitnessData({ ftp })}
-                    />
-                  </div>
-                  <Input
-                    id="ftp"
-                    type="number"
-                    placeholder="250 (optional)"
-                    value={fitnessData.ftp || ""}
-                    onChange={(e) =>
-                      setFitnessData({ ftp: Number(e.target.value) })
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-1.5">
-                    <Label htmlFor="pace">Run Threshold (min/km)</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <button type="button" className="text-muted-foreground hover:text-foreground">
-                          <HelpCircle className="h-3.5 w-3.5" />
-                        </button>
-                      </PopoverTrigger>
-                      <PopoverContent className="max-w-[250px] text-sm">
-                        <p>
-                          Your threshold pace: the fastest pace you can hold for
-                          ~1 hour of running. Used to calculate your run pacing.
-                        </p>
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                  <Input
-                    id="pace"
-                    type="text"
-                    placeholder="4:45 (optional)"
-                    value={fitnessData.thresholdPace || ""}
-                    onChange={(e) =>
-                      setFitnessData({ thresholdPace: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <Label htmlFor="css">Swim CSS (min/100m)</Label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <button type="button" className="text-muted-foreground hover:text-foreground">
-                            <HelpCircle className="h-3.5 w-3.5" />
-                          </button>
-                        </PopoverTrigger>
-                        <PopoverContent className="max-w-[250px] text-sm">
-                          <p>
-                            Critical Swim Speed: your sustainable swim pace per 100
-                            meters. Used to calculate your swim pacing strategy.
-                          </p>
-                        </PopoverContent>
-                      </Popover>
+                    <div className="relative">
+                      <Input
+                        id="pace"
+                        type="text"
+                        className="pr-16"
+                        placeholder="4:45"
+                        value={fitnessData.thresholdPace || ""}
+                        onChange={(e) =>
+                          setFitnessData({ thresholdPace: e.target.value })
+                        }
+                      />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                        min/km
+                      </span>
                     </div>
-                    <CssEstimator
-                      onEstimate={(css) => setFitnessData({ css })}
-                    />
                   </div>
-                  <Input
-                    id="css"
-                    type="text"
-                    placeholder="1:45 (optional)"
-                    value={fitnessData.css || ""}
-                    onChange={(e) => setFitnessData({ css: e.target.value })}
-                  />
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <Label htmlFor="css">Swim CSS</Label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <button type="button" className="text-muted-foreground hover:text-foreground">
+                              <HelpCircle className="h-3.5 w-3.5" />
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent className="max-w-[250px] text-sm">
+                            <p>
+                              Critical Swim Speed: your sustainable swim pace per 100
+                              meters. Used to calculate your swim pacing strategy.
+                            </p>
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                      <CssEstimator
+                        onEstimate={(css) => setFitnessData({ css })}
+                      />
+                    </div>
+                    <div className="relative">
+                      <Input
+                        id="css"
+                        type="text"
+                        className="pr-14"
+                        placeholder="1:45"
+                        value={fitnessData.css || ""}
+                        onChange={(e) => setFitnessData({ css: e.target.value })}
+                      />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                        /100m
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
