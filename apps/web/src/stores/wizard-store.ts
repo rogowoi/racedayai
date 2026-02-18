@@ -105,11 +105,16 @@ type WizardState = {
   raceData: Omit<RaceData, "gpxFile">;
   courseData: CourseData;
 
+  // Pending generation (for anonymous users who complete wizard before signing up)
+  pendingGeneration: boolean;
+  pendingGpxFileKey: string | null;
+
   // Actions
   setStep: (step: number) => void;
   setFitnessData: (data: Partial<FitnessData>) => void;
   setRaceData: (data: Partial<Omit<RaceData, "gpxFile">>) => void;
   setCourseData: (data: Partial<CourseData>) => void;
+  setPendingGeneration: (pending: boolean, gpxFileKey?: string | null) => void;
   reset: () => void;
 };
 
@@ -153,6 +158,8 @@ export const useWizardStore = create<WizardState>()(
       },
       raceData: { ...defaultRaceData },
       courseData: { ...defaultCourseData },
+      pendingGeneration: false,
+      pendingGpxFileKey: null,
 
       setStep: (step) => {
         const prevState = useWizardStore.getState();
@@ -203,6 +210,11 @@ export const useWizardStore = create<WizardState>()(
         set((state) => ({
           courseData: { ...state.courseData, ...data },
         })),
+      setPendingGeneration: (pending, gpxFileKey) =>
+        set({
+          pendingGeneration: pending,
+          pendingGpxFileKey: gpxFileKey ?? null,
+        }),
       reset: () =>
         set({
           step: 1,
@@ -219,6 +231,8 @@ export const useWizardStore = create<WizardState>()(
           },
           raceData: { ...defaultRaceData },
           courseData: { ...defaultCourseData },
+          pendingGeneration: false,
+          pendingGpxFileKey: null,
         }),
     }),
     {
@@ -228,6 +242,8 @@ export const useWizardStore = create<WizardState>()(
         fitnessData: state.fitnessData,
         raceData: state.raceData,
         courseData: state.courseData,
+        pendingGeneration: state.pendingGeneration,
+        pendingGpxFileKey: state.pendingGpxFileKey,
       }),
     },
   ),

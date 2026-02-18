@@ -32,6 +32,7 @@ import { CssEstimator } from "@/components/wizard/css-estimator";
 import { StravaSyncButton } from "@/components/strava-sync-button";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { ttqTrack } from "@/components/tiktok-pixel";
 
 interface Step1FitnessProps {
   stravaPreFilled?: boolean;
@@ -52,6 +53,7 @@ export function Step1Fitness({ stravaPreFilled = false }: Step1FitnessProps) {
       return;
     }
     setGenderError(false);
+    ttqTrack("ViewContent", { content_name: "wizard_step1_complete" });
     setStep(2);
   };
 

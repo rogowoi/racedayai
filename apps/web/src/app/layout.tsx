@@ -7,7 +7,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { PostHogProvider, PostHogPageView } from "@/providers/posthog-provider";
 import { Suspense } from "react";
 import { HashScrollHandler } from "@/components/layout/hash-scroll-handler";
-import { CookieConsentBanner } from "@/components/cookie-consent-banner";
+import { TikTokPixel } from "@/components/tiktok-pixel";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -125,8 +125,8 @@ export default function RootLayout({
           </Suspense>
           <HashScrollHandler />
           {children}
-          <CookieConsentBanner />
         </PostHogProvider>
+        <TikTokPixel />
         <SpeedInsights />
         <Analytics />
       </body>

@@ -13,9 +13,10 @@ import { Label } from "@/components/ui/label";
 import { signUp, loginWithStrava } from "@/app/actions/auth-actions";
 import { Zap, Loader2, AlertCircle, Activity, Check, X } from "lucide-react";
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useActionState, useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { ttqTrack } from "@/components/tiktok-pixel";
 
 function SignUpForm() {
   const searchParams = useSearchParams();
@@ -26,6 +27,15 @@ function SignUpForm() {
   });
 
   const [password, setPassword] = useState("");
+  const wasPendingRef = useRef(false);
+
+  // Track CompleteRegistration when signup succeeds
+  useEffect(() => {
+    if (wasPendingRef.current && !isPending && !state.error) {
+      ttqTrack("CompleteRegistration");
+    }
+    wasPendingRef.current = isPending;
+  }, [isPending, state.error]);
 
   const planLabel =
     plan === "season"

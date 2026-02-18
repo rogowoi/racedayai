@@ -20,6 +20,7 @@ import {
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ttqTrack } from "@/components/tiktok-pixel";
 
 /* ─── Types ──────────────────────────────────────────────── */
 
@@ -92,11 +93,20 @@ const EXPECTED_BIKE_M: Record<string, number> = {
 /* ─── Component ──────────────────────────────────────────── */
 
 export function Step3Course() {
-  const { fitnessData, raceData, courseData, setStep, setCourseData } =
-    useWizardStore();
+  const {
+    fitnessData,
+    raceData,
+    courseData,
+    setStep,
+    setCourseData,
+    pendingGeneration,
+    pendingGpxFileKey,
+    setPendingGeneration,
+  } = useWizardStore();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [showSignupModal, setShowSignupModal] = useState(false);
   const [duplicateWarning, setDuplicateWarning] = useState<{
     message: string;
     existingPlanId: string;
@@ -138,6 +148,74 @@ export function Step3Course() {
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const hasKnownRace = !!raceData.selectedRaceId;
+
+  // Auto-generate plan after signup when pendingGeneration is set
+  useEffect(() => {
+    if (!pendingGeneration) return;
+
+    async function autoGenerate() {
+      setIsSubmitting(true);
+      setSubmitError(null);
+
+      try {
+        // Rebuild RWGPS course data from persisted store state
+        const rwgpsCourseData =
+          rwgpsGpxData?.available && rwgpsGpxData?.courseData
+            ? {
+                source: "ridewithgps",
+                rwgpsId: rwgpsGpxData.rwgpsId,
+                rwgpsType: rwgpsGpxData.rwgpsType,
+                ...rwgpsGpxData.courseData,
+              }
+            : selectedRwgps
+              ? {
+                  source: "ridewithgps",
+                  rwgpsId: selectedRwgps.id,
+                  rwgpsType: selectedRwgps.type,
+                  totalDistanceM: selectedRwgps.distanceM,
+                  elevationGainM: selectedRwgps.elevationGainM,
+                }
+              : null;
+
+        const res = await fetch("/api/plans/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fitnessData,
+            raceData,
+            rwgpsCourseData,
+            gpxFileKey: pendingGpxFileKey,
+            ignoreDuplicate: true,
+          }),
+        });
+
+        if (res.status === 401) {
+          // Still not authenticated — show signup modal again
+          setIsSubmitting(false);
+          setShowSignupModal(true);
+          return;
+        }
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || "Failed to generate plan");
+        }
+
+        setPendingGeneration(false);
+        const { planId } = await res.json();
+        router.push(`/plan/${planId}`);
+      } catch (err) {
+        setPendingGeneration(false);
+        setSubmitError(
+          err instanceof Error ? err.message : "Something went wrong",
+        );
+        setIsSubmitting(false);
+      }
+    }
+
+    autoGenerate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingGeneration]);
 
   // Auto-fetch GPX when a known race with GPX is selected
   useEffect(() => {
@@ -288,6 +366,8 @@ export function Step3Course() {
     setSubmitError(null);
     setDuplicateWarning(null);
 
+    ttqTrack("AddToCart", { content_name: "wizard_step3_generate" });
+
     try {
       // Upload GPX to R2 if user selected a file
       let gpxFileKey: string | null = null;
@@ -339,11 +419,11 @@ export function Step3Course() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        // Redirect to login if not authenticated
+        // Not authenticated — save state and show signup modal
         if (res.status === 401) {
-          router.push(
-            `/login?callbackUrl=${encodeURIComponent("/wizard")}`,
-          );
+          setPendingGeneration(true, gpxFileKey);
+          setShowSignupModal(true);
+          setIsSubmitting(false);
           return;
         }
         // Handle duplicate detection
@@ -835,6 +915,37 @@ export function Step3Course() {
           </Button>
         </div>
       </form>
+
+      {showSignupModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-background rounded-xl p-6 max-w-md w-full space-y-4 shadow-2xl">
+            <h2 className="text-xl font-bold">Create your free account</h2>
+            <p className="text-muted-foreground">
+              Your race plan is being prepared. Sign up to see your personalized
+              results — it takes 30 seconds.
+            </p>
+            <div className="space-y-3">
+              <Button asChild className="w-full" size="lg">
+                <Link
+                  href={`/signup?callbackUrl=${encodeURIComponent("/wizard")}`}
+                >
+                  Sign Up — Free
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="w-full" size="lg">
+                <Link
+                  href={`/login?callbackUrl=${encodeURIComponent("/wizard")}`}
+                >
+                  I already have an account
+                </Link>
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground text-center">
+              Free for your first race plan · No credit card required
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

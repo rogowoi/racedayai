@@ -39,8 +39,12 @@ export default function WizardPage() {
         const res = await fetch("/api/plans/check-limit");
         const data = await res.json();
 
-        if (res.status === 401 && data.needsAuth) {
-          router.push("/signup?callbackUrl=" + encodeURIComponent("/wizard"));
+        if (res.status === 401) {
+          // Anonymous user — let them use the wizard freely
+          // Auth check happens at plan generation (Step 3)
+          setPlanLimit({ canCreate: true });
+          setChecking(false);
+          setMounted(true);
           return;
         }
 
@@ -48,6 +52,8 @@ export default function WizardPage() {
         setChecking(false);
         setMounted(true);
       } catch {
+        // On error, still let them use the wizard
+        setPlanLimit({ canCreate: true });
         setChecking(false);
         setMounted(true);
       }
