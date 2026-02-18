@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import WizardLayoutClient from "./wizard-layout";
 
 export const metadata: Metadata = {
@@ -38,11 +36,7 @@ export default async function WizardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect("/login?callbackUrl=/wizard");
-  }
-
+  // No auth check here — anonymous users can use the wizard.
+  // Auth is enforced at plan generation (step 3) via the API.
   return <WizardLayoutClient>{children}</WizardLayoutClient>;
 }
