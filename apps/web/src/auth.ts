@@ -138,6 +138,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     cssPer100mSec: mathMetrics.cssPer100mSec,
                     maxHr: mathMetrics.maxHr,
                     ...(mathMetrics.weightKg != null && { weightKg: mathMetrics.weightKg }),
+                    ...(mathMetrics.gender != null && { gender: mathMetrics.gender }),
                   },
                 });
               }

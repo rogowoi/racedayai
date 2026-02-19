@@ -53,7 +53,7 @@ export async function getAthleteMetrics(): Promise<AthleteMetricsData | null> {
       : null,
     weight: athlete.weightKg ? Number(athlete.weightKg) : null,
     maxHr: athlete.maxHr,
-    gender: null, // Gender not stored on Athlete model
+    gender: (athlete.gender === "M" || athlete.gender === "F") ? athlete.gender : null,
     stravaConnected: athlete.stravaConnected,
     hasSyncedMetrics,
   };

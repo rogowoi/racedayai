@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useWizardStore } from "@/stores/wizard-store";
 import { Step1Fitness } from "@/components/wizard/step-1-fitness";
 import { Step2Race } from "@/components/wizard/step-2-race";
@@ -9,10 +9,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Loader2, TrendingUp } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getAthleteMetrics } from "@/app/actions/athlete-actions";
+import { toast } from "sonner";
 
-export default function WizardPage() {
+function WizardContent() {
   const step = useWizardStore((state) => state.step);
   const setStep = useWizardStore((state) => state.setStep);
   const fitnessData = useWizardStore((state) => state.fitnessData);
@@ -31,6 +32,7 @@ export default function WizardPage() {
     };
   } | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Check plan limits on mount
   useEffect(() => {
@@ -66,10 +68,20 @@ export default function WizardPage() {
   useEffect(() => {
     if (!mounted || stravaPreFilled) return;
 
+    const fromStrava = searchParams.get("from") === "strava";
+
     async function loadAthleteMetrics() {
       try {
         const metrics = await getAthleteMetrics();
-        if (!metrics || !metrics.hasSyncedMetrics) return;
+        if (!metrics || !metrics.hasSyncedMetrics) {
+          if (fromStrava) {
+            toast.success("Strava connected", {
+              description: "Enter your fitness metrics below to get started.",
+            });
+            router.replace("/wizard", { scroll: false });
+          }
+          return;
+        }
 
         // Only pre-fill fields that are currently empty (don't overwrite manual edits)
         const updates: Record<string, any> = {};
@@ -85,13 +97,43 @@ export default function WizardPage() {
           setFitnessData(updates);
           setStravaPreFilled(true);
         }
+
+        // Show toast and optionally auto-advance if coming from Strava OAuth
+        if (fromStrava) {
+          const imported: string[] = [];
+          if (updates.ftp) imported.push(`FTP ${updates.ftp}W`);
+          if (updates.thresholdPace) imported.push(`Run ${updates.thresholdPace}/km`);
+          if (updates.css) imported.push(`Swim ${updates.css}/100m`);
+          if (updates.weight) imported.push(`${updates.weight}kg`);
+          if (updates.maxHr) imported.push(`Max HR ${updates.maxHr}`);
+
+          const description = imported.length > 0
+            ? `Imported ${imported.join(", ")}`
+            : "Profile connected successfully";
+
+          toast.success("Strava connected", { description });
+
+          // Auto-advance to Step 2 if gender is available (the only required field)
+          const hasGender = updates.gender || fitnessData.gender;
+          if (hasGender && step === 1) {
+            setTimeout(() => setStep(2), 400);
+          }
+
+          router.replace("/wizard", { scroll: false });
+        }
       } catch {
         // Non-critical — wizard works without pre-fill
+        if (fromStrava) {
+          toast.success("Strava connected", {
+            description: "You can enter your metrics manually below.",
+          });
+          router.replace("/wizard", { scroll: false });
+        }
       }
     }
 
     loadAthleteMetrics();
-  }, [mounted, stravaPreFilled, fitnessData, setFitnessData]);
+  }, [mounted, stravaPreFilled, fitnessData, setFitnessData, searchParams, router, step, setStep]);
 
   useEffect(() => {
     if (planLimit && !planLimit.canCreate && step !== 1) {
@@ -153,5 +195,22 @@ export default function WizardPage() {
       {step === 2 && <Step2Race />}
       {step === 3 && <Step3Course />}
     </>
+  );
+}
+
+export default function WizardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+            <p className="text-muted-foreground">Loading wizard...</p>
+          </div>
+        </div>
+      }
+    >
+      <WizardContent />
+    </Suspense>
   );
 }

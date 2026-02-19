@@ -8,6 +8,7 @@ import { PostHogProvider, PostHogPageView } from "@/providers/posthog-provider";
 import { Suspense } from "react";
 import { HashScrollHandler } from "@/components/layout/hash-scroll-handler";
 import { TikTokPixel } from "@/components/tiktok-pixel";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -127,6 +128,7 @@ export default function RootLayout({
           {children}
         </PostHogProvider>
         <TikTokPixel />
+        <Toaster position="top-center" richColors closeButton duration={6000} />
         <SpeedInsights />
         <Analytics />
       </body>

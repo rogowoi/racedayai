@@ -10,7 +10,7 @@ import { trackServerEvent } from "@/lib/posthog-server";
 import { AnalyticsEvent } from "@/lib/analytics";
 
 export async function loginWithStrava() {
-  await signIn("strava", { redirectTo: "/wizard" });
+  await signIn("strava", { redirectTo: "/wizard?from=strava" });
 }
 
 export async function loginWithCredentials(

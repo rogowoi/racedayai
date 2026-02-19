@@ -62,6 +62,7 @@ export async function POST() {
         cssPer100mSec: refined.cssPer100mSec,
         maxHr: refined.maxHr,
         ...(mathMetrics.weightKg != null && { weightKg: mathMetrics.weightKg }),
+        ...(mathMetrics.gender != null && { gender: mathMetrics.gender }),
       },
     });
 
