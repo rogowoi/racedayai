@@ -25,6 +25,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         },
       },
       checks: ["state"], // Strava doesn't support PKCE
+      profile(profile) {
+        return {
+          id: String(profile.id),
+          name: `${profile.firstname} ${profile.lastname}`,
+          email: profile.email ?? `strava_${profile.id}@athletes.racedayai.com`,
+          image: profile.profile,
+        };
+      },
     }),
     Credentials({
       name: "credentials",
