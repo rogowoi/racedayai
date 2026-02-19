@@ -77,25 +77,33 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (account?.provider === "strava" && user?.id && account.access_token) {
         try {
           // Save Strava token to athlete profile
-          const athlete = await prisma.athlete.findUnique({
+          // Create athlete record if it doesn't exist (Strava-only signup)
+          const athlete = await prisma.athlete.upsert({
             where: { userId: user.id },
+            create: {
+              userId: user.id,
+              stravaConnected: true,
+              stravaToken: {
+                access_token: account.access_token,
+                refresh_token: account.refresh_token,
+                expires_at: account.expires_at,
+                token_type: account.token_type,
+              },
+            },
+            update: {
+              stravaConnected: true,
+              stravaToken: {
+                access_token: account.access_token,
+                refresh_token: account.refresh_token,
+                expires_at: account.expires_at,
+                token_type: account.token_type,
+              },
+            },
           });
 
-          const isNewConnection = athlete && !athlete.stravaConnected;
+          const isNewConnection = !athlete.stravaConnected;
 
-          if (athlete) {
-            await prisma.athlete.update({
-              where: { id: athlete.id },
-              data: {
-                stravaConnected: true,
-                stravaToken: {
-                  access_token: account.access_token,
-                  refresh_token: account.refresh_token,
-                  expires_at: account.expires_at,
-                  token_type: account.token_type,
-                },
-              },
-            });
+          {
 
             // Track Strava connection (signup or login)
             if (isNewConnection) {
@@ -127,9 +135,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 getStravaActivities(token).catch(() => []),
               ]);
 
-              if (activities.length > 0) {
-                const mathMetrics = extractFitnessMetrics(activities, zones, profile);
+              const mathMetrics = extractFitnessMetrics(activities, zones, profile);
 
+              const hasAnyData =
+                mathMetrics.ftpWatts != null ||
+                mathMetrics.thresholdPaceSec != null ||
+                mathMetrics.cssPer100mSec != null ||
+                mathMetrics.maxHr != null ||
+                mathMetrics.weightKg != null ||
+                mathMetrics.gender != null;
+
+              if (hasAnyData) {
                 await prisma.athlete.update({
                   where: { id: athlete.id },
                   data: {

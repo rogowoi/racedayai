@@ -40,7 +40,10 @@ export async function getAthleteMetrics(): Promise<AthleteMetricsData | null> {
   const hasSyncedMetrics = !!(
     athlete.ftpWatts ||
     athlete.thresholdPaceSec ||
-    athlete.cssPer100mSec
+    athlete.cssPer100mSec ||
+    athlete.weightKg ||
+    athlete.maxHr ||
+    athlete.gender
   );
 
   return {

@@ -421,6 +421,16 @@ export function extractFitnessMetrics(
     hasPowerMeter: false,
   };
 
+  // Weight and gender from profile (available even with zero activities)
+  if (profile) {
+    if (profile.weight && profile.weight > 0) {
+      metrics.weightKg = Math.round(profile.weight * 10) / 10;
+    }
+    if (profile.sex === "M" || profile.sex === "F") {
+      metrics.gender = profile.sex;
+    }
+  }
+
   if (!activities || activities.length === 0) {
     return metrics;
   }
@@ -452,16 +462,6 @@ export function extractFitnessMetrics(
 
   // CSS
   metrics.cssPer100mSec = estimateCss(activities);
-
-  // Weight and gender from profile
-  if (profile) {
-    if (profile.weight && profile.weight > 0) {
-      metrics.weightKg = Math.round(profile.weight * 10) / 10;
-    }
-    if (profile.sex === "M" || profile.sex === "F") {
-      metrics.gender = profile.sex;
-    }
-  }
 
   return metrics;
 }
