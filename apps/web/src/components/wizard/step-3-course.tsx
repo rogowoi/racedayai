@@ -3,7 +3,6 @@
 import { useWizardStore } from "@/stores/wizard-store";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import {
   UploadCloud,
   FileText,
@@ -12,12 +11,9 @@ import {
   Mountain,
   Route,
   AlertCircle,
-  Search,
   ExternalLink,
-  MapPin,
-  ArrowRight,
 } from "lucide-react";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ttqTrack } from "@/components/tiktok-pixel";
@@ -138,14 +134,9 @@ export function Step3Course() {
   const setRwgpsGpxData = (rwgpsGpxData: RwgpsGpxResponse | null) =>
     setCourseData({ rwgpsGpxData });
 
-  // RideWithGPS search state (transient, doesn't need persistence)
-  const [rwgpsQuery, setRwgpsQuery] = useState("");
-  const [rwgpsResults, setRwgpsResults] = useState<RwgpsRoute[]>([]);
-  const [rwgpsSearching, setRwgpsSearching] = useState(false);
-  const [rwgpsSearched, setRwgpsSearched] = useState(false);
-  const [rwgpsTotal, setRwgpsTotal] = useState(0);
-
-  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  // Auto-search state
+  const [rwgpsAutoSearching, setRwgpsAutoSearching] = useState(false);
+  const rwgpsAutoSearchedForRef = useRef<string | null>(null);
 
   const hasKnownRace = !!raceData.selectedRaceId;
 
@@ -243,67 +234,58 @@ export function Step3Course() {
     fetchGpx();
   }, [hasKnownRace, raceData.selectedRaceId]);
 
-  // Pre-populate RWGPS search when a race is selected
+  // Auto-search RWGPS and select best match when registry GPX is unavailable
   useEffect(() => {
-    if (raceData.name && !rwgpsQuery) {
-      // Build a search-friendly query: race name + "bike course"
-      const q = `${raceData.name} bike course`.trim();
-      setRwgpsQuery(q);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [raceData.name]);
+    // Skip if we already have course data from registry or RWGPS
+    if (gpxStatus === "loaded" || selectedRwgps) return;
+    // Skip if registry GPX is still loading
+    if (hasKnownRace && gpxStatus === "loading") return;
+    // Skip if no race name to search with
+    if (!raceData.name) return;
+    // Skip if already searched for this race
+    if (rwgpsAutoSearchedForRef.current === raceData.name) return;
+    rwgpsAutoSearchedForRef.current = raceData.name;
 
-  // Debounced RideWithGPS search
-  const searchRwgps = useCallback(async (query: string) => {
-    if (!query.trim()) {
-      setRwgpsResults([]);
-      setRwgpsSearched(false);
-      setRwgpsTotal(0);
-      return;
-    }
+    async function autoSearchAndSelect() {
+      setRwgpsAutoSearching(true);
+      const query = `${raceData.name} bike course`.trim();
 
-    setRwgpsSearching(true);
-    try {
-      const res = await fetch(
-        `/api/ridewithgps/search?q=${encodeURIComponent(query)}&limit=10`,
-      );
-      const data = await res.json();
-      setRwgpsResults(data.results || []);
-      setRwgpsTotal(data.total || 0);
-      setRwgpsSearched(true);
-    } catch {
-      setRwgpsResults([]);
-      setRwgpsSearched(true);
-    } finally {
-      setRwgpsSearching(false);
-    }
-  }, []);
+      try {
+        const res = await fetch(
+          `/api/ridewithgps/search?q=${encodeURIComponent(query)}&limit=10`,
+        );
+        const data = await res.json();
+        const results: RwgpsRoute[] = data.results || [];
+        if (results.length === 0) return;
 
-  const handleRwgpsSearch = () => {
-    searchRwgps(rwgpsQuery);
-  };
+        // Find best match by distance to expected bike distance
+        const expectedM = EXPECTED_BIKE_M[raceData.distanceCategory];
+        let bestRoute = results[0];
+        if (expectedM) {
+          bestRoute = results.reduce((best, route) =>
+            Math.abs(route.distanceM - expectedM) < Math.abs(best.distanceM - expectedM)
+              ? route
+              : best,
+          );
+        }
 
-  const handleRwgpsQueryChange = (value: string) => {
-    setRwgpsQuery(value);
-    // Debounce auto-search on typing
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
-    searchTimeoutRef.current = setTimeout(() => {
-      if (value.trim().length >= 3) {
-        searchRwgps(value);
+        // Auto-select the best match (fetches GPX)
+        handleSelectRwgpsRoute(bestRoute);
+      } catch {
+        // Silent fail — user still has manual GPX upload
+      } finally {
+        setRwgpsAutoSearching(false);
       }
-    }, 500);
-  };
+    }
+
+    autoSearchAndSelect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gpxStatus, hasKnownRace, raceData.name, raceData.distanceCategory, selectedRwgps]);
 
   // Fetch GPX from selected RideWithGPS route
   const handleSelectRwgpsRoute = async (route: RwgpsRoute) => {
     setSelectedRwgps(route);
     setRwgpsGpxStatus("loading");
-
-    // Clear search results after selection
-    setRwgpsResults([]);
-    setRwgpsSearched(false);
 
     try {
       const res = await fetch(
@@ -540,40 +522,37 @@ export function Step3Course() {
             </div>
           )}
 
-          {/* ───── Section 2: RideWithGPS Search ───── */}
+          {/* ───── Section 2: Auto-fetched RideWithGPS course ───── */}
           <div className="space-y-3">
-            <Label className="flex items-center gap-2">
-              <Search className="h-4 w-4" />
-              Search RideWithGPS for Course
-            </Label>
+            {/* Auto-searching RWGPS */}
+            {(rwgpsAutoSearching || rwgpsGpxStatus === "loading") && !selectedRwgps && (
+              <div className="flex items-center gap-3 p-4 rounded-lg border bg-muted/30 animate-pulse">
+                <Loader2 className="h-5 w-5 text-primary animate-spin" />
+                <div>
+                  <p className="text-sm font-medium">
+                    Finding course data...
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Searching RideWithGPS for {raceData.name}
+                  </p>
+                </div>
+              </div>
+            )}
 
-            <div className="flex gap-2">
-              <Input
-                value={rwgpsQuery}
-                onChange={(e) => handleRwgpsQueryChange(e.target.value)}
-                placeholder="e.g. IRONMAN Nice bike course"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleRwgpsSearch();
-                  }
-                }}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleRwgpsSearch}
-                disabled={rwgpsSearching || !rwgpsQuery.trim()}
-                className="shrink-0"
-              >
-                {rwgpsSearching ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Search className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
+            {/* RWGPS GPX loading for selected route */}
+            {rwgpsGpxStatus === "loading" && selectedRwgps && (
+              <div className="flex items-center gap-3 p-4 rounded-lg border bg-muted/30 animate-pulse">
+                <Loader2 className="h-5 w-5 text-primary animate-spin" />
+                <div>
+                  <p className="text-sm font-medium">
+                    Loading course data...
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {selectedRwgps.name}
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* RWGPS Selected Route — GPX loaded */}
             {rwgpsGpxStatus === "loaded" &&
@@ -605,36 +584,10 @@ export function Step3Course() {
                       </span>
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    className="mt-2 text-xs text-muted-foreground underline hover:text-foreground"
-                    onClick={() => {
-                      setSelectedRwgps(null);
-                      setRwgpsGpxStatus("idle");
-                      setRwgpsGpxData(null);
-                    }}
-                  >
-                    Clear selection
-                  </button>
                 </div>
               )}
 
-            {/* RWGPS GPX loading */}
-            {rwgpsGpxStatus === "loading" && (
-              <div className="flex items-center gap-3 p-4 rounded-lg border bg-muted/30 animate-pulse">
-                <Loader2 className="h-5 w-5 text-primary animate-spin" />
-                <div>
-                  <p className="text-sm font-medium">
-                    Fetching course from RideWithGPS...
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {selectedRwgps?.name}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* RWGPS GPX info/error */}
+            {/* RWGPS GPX metadata fallback (auth required) */}
             {rwgpsGpxStatus === "error" && rwgpsGpxData && (
               <div
                 className={`p-3 rounded-lg border ${
@@ -677,105 +630,6 @@ export function Step3Course() {
                 )}
               </div>
             )}
-
-            {/* RWGPS Search Results */}
-            {rwgpsSearched &&
-              rwgpsGpxStatus !== "loaded" &&
-              rwgpsGpxStatus !== "loading" && (
-                <div className="space-y-1">
-                  {rwgpsResults.length === 0 ? (
-                    <p className="text-sm text-muted-foreground py-2">
-                      No routes found. Try different keywords.
-                    </p>
-                  ) : (
-                    <>
-                      <p className="text-xs text-muted-foreground">
-                        {rwgpsTotal.toLocaleString()} results — showing top{" "}
-                        {rwgpsResults.length}
-                        {raceData.distanceCategory && (
-                          <span>, sorted by distance match</span>
-                        )}
-                      </p>
-                      <div className="max-h-64 overflow-y-auto rounded-lg border divide-y">
-                        {(() => {
-                          const expectedM =
-                            EXPECTED_BIKE_M[raceData.distanceCategory];
-                          const sorted = expectedM
-                            ? [...rwgpsResults].sort(
-                                (a, b) =>
-                                  Math.abs(a.distanceM - expectedM) -
-                                  Math.abs(b.distanceM - expectedM),
-                              )
-                            : rwgpsResults;
-
-                          return sorted.map((route, idx) => {
-                            const isCloseMatch =
-                              expectedM &&
-                              Math.abs(route.distanceM - expectedM) /
-                                expectedM <
-                                0.15;
-
-                            return (
-                              <button
-                                key={`${route.type}-${route.id}`}
-                                type="button"
-                                onClick={() => handleSelectRwgpsRoute(route)}
-                                className="w-full text-left p-3 hover:bg-muted/50 transition-colors focus:bg-muted/50 focus:outline-none"
-                              >
-                                <div className="flex items-start justify-between gap-2">
-                                  <div className="min-w-0 flex-1">
-                                    <div className="flex items-center gap-2">
-                                      <p className="text-sm font-medium truncate">
-                                        {route.name}
-                                      </p>
-                                      {isCloseMatch && idx === 0 && (
-                                        <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                                          Best match
-                                        </span>
-                                      )}
-                                    </div>
-                                    <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                                      <span
-                                        className={`flex items-center gap-1 ${isCloseMatch ? "text-green-600 dark:text-green-400 font-medium" : ""}`}
-                                      >
-                                        <Route className="h-3 w-3" />
-                                        {formatDist(route.distanceM)}
-                                      </span>
-                                      <span className="flex items-center gap-1">
-                                        <Mountain className="h-3 w-3" />
-                                        {route.elevationGainM}m
-                                      </span>
-                                      {route.locality && (
-                                        <span className="flex items-center gap-1 truncate">
-                                          <MapPin className="h-3 w-3 shrink-0" />
-                                          {route.locality}
-                                          {route.region &&
-                                            `, ${route.region}`}
-                                        </span>
-                                      )}
-                                    </div>
-                                    {route.userName && (
-                                      <p className="text-xs text-muted-foreground mt-0.5">
-                                        by {route.userName}
-                                      </p>
-                                    )}
-                                  </div>
-                                  <div className="flex items-center gap-1 shrink-0">
-                                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground px-1.5 py-0.5 rounded bg-muted">
-                                      {route.type}
-                                    </span>
-                                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
-                                  </div>
-                                </div>
-                              </button>
-                            );
-                          });
-                        })()}
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
           </div>
 
           {/* ───── Section 3: Manual GPX Upload ───── */}

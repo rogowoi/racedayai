@@ -113,12 +113,6 @@ function WizardContent() {
 
           toast.success("Strava connected", { description });
 
-          // Auto-advance to Step 2 if gender is available (the only required field)
-          const hasGender = updates.gender || fitnessData.gender;
-          if (hasGender && step === 1) {
-            setTimeout(() => setStep(2), 400);
-          }
-
           router.replace("/wizard", { scroll: false });
         }
       } catch {
