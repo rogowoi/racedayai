@@ -11,7 +11,6 @@ import {
   Mountain,
   Route,
   AlertCircle,
-  ExternalLink,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -587,47 +586,28 @@ export function Step3Course() {
                 </div>
               )}
 
-            {/* RWGPS GPX metadata fallback (auth required) */}
-            {rwgpsGpxStatus === "error" && rwgpsGpxData && (
-              <div
-                className={`p-3 rounded-lg border ${
-                  rwgpsGpxData.error === "auth_required"
-                    ? "border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/20"
-                    : "border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/20"
-                }`}
-              >
-                <p
-                  className={`text-sm ${
-                    rwgpsGpxData.error === "auth_required"
-                      ? "text-blue-700 dark:text-blue-300"
-                      : "text-amber-700 dark:text-amber-300"
-                  }`}
-                >
-                  {rwgpsGpxData.error === "auth_required"
-                    ? "✓ Using course metadata (detailed GPX requires RideWithGPS login)"
-                    : rwgpsGpxData.message ||
-                      "Could not fetch GPX from this route."}
+            {/* RWGPS metadata fallback — show as success card */}
+            {rwgpsGpxStatus === "error" && selectedRwgps && rwgpsGpxData?.error === "auth_required" && (
+              <div className="p-4 rounded-lg border border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-950/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+                  <span className="text-sm font-medium text-green-700 dark:text-green-300">
+                    Course data found
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground mb-2 truncate">
+                  {selectedRwgps.name}
                 </p>
-                {selectedRwgps && rwgpsGpxData.error === "auth_required" && (
-                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                    Your plan will be generated using {formatDist(selectedRwgps.distanceM)} distance and {selectedRwgps.elevationGainM}m elevation from this route.
-                  </p>
-                )}
-                {rwgpsGpxData.viewUrl && (
-                  <a
-                    href={rwgpsGpxData.viewUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`text-xs underline mt-1 inline-flex items-center gap-1 ${
-                      rwgpsGpxData.error === "auth_required"
-                        ? "text-blue-600 dark:text-blue-400"
-                        : "text-amber-600 dark:text-amber-400"
-                    }`}
-                  >
-                    View on RideWithGPS
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                )}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Route className="h-4 w-4 text-muted-foreground" />
+                    <span>{formatDist(selectedRwgps.distanceM)}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Mountain className="h-4 w-4 text-muted-foreground" />
+                    <span>{selectedRwgps.elevationGainM}m elevation</span>
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -635,11 +615,9 @@ export function Step3Course() {
           {/* ───── Section 3: Manual GPX Upload ───── */}
           <div className="space-y-2">
             <Label>
-              {activeGpxSource === "rwgps-metadata"
-                ? "Upload GPX for Detailed Elevation (Optional)"
-                : activeGpxSource !== "none"
-                  ? "Upload Custom GPX (Override)"
-                  : "Course GPX File (Optional)"}
+              {activeGpxSource !== "none"
+                ? "Upload Custom GPX (Override)"
+                : "Course GPX File (Optional)"}
             </Label>
             <div className="grid w-full items-center gap-1.5">
               <label
