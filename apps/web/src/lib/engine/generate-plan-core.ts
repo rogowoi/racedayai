@@ -7,11 +7,11 @@ import {
 } from "@/lib/engine/pacing";
 import {
   calculateNutrition,
-  calculateSegmentedNutrition,
+  buildNutritionStrategy,
 } from "@/lib/engine/nutrition";
 import { parseGpx, type CourseData } from "@/lib/engine/gpx";
 import { getRaceWeather } from "@/lib/weather";
-import { generateRaceNarrative } from "@/lib/engine/narrative";
+import { generateRaceNarrative, generateNutritionCoaching } from "@/lib/engine/narrative";
 import {
   buildFullContext,
   type Gender,
@@ -241,8 +241,8 @@ export async function computeStep(
     weather.tempC,
   );
 
-  // Segmented nutrition timeline
-  const segmented = calculateSegmentedNutrition({
+  // Full nutrition strategy with products, bike setup, tips, etc.
+  const nutrition = buildNutritionStrategy({
     swimDurationMin: swimPacing.estimatedTimeMin,
     bikeDurationMin: bikePacing.durationMinutes,
     runDurationMin: runPacing.estimatedTimeMin,
@@ -253,9 +253,9 @@ export async function computeStep(
     distanceCategory: raceData.distanceCategory,
     t1DurationMin: t1Min,
     t2DurationMin: t2Min,
+    athleteWeightKg: Number(athlete.weightKg) || 75,
+    experienceLevel: fitnessData.experienceLevel || "intermediate",
   });
-
-  const nutrition = { ...baseNutrition, ...segmented };
 
   // Predicted finish (swim + T1 + bike + T2 + run)
   const predictedFinishSec =
@@ -371,6 +371,74 @@ export async function narrativeStep(
         where: { id: planId },
         data: { narrativePlan: narrative },
       });
+    }
+
+    // Generate nutrition coaching notes (paid plans only)
+    const nutritionData = computeResult.nutrition as Record<string, unknown>;
+    const bikeSetupData = nutritionData.bikeSetup as { totalGelsOnBike?: number } | undefined;
+    const selectedProductsData = nutritionData.selectedProducts as {
+      primaryGelId?: string;
+      caffeinatedGelId?: string;
+      drinkMixId?: string;
+    } | undefined;
+
+    if (selectedProductsData) {
+      const { getProductById } = await import("@/lib/engine/nutrition-products");
+      const pGel = getProductById(selectedProductsData.primaryGelId ?? "");
+      const cGel = getProductById(selectedProductsData.caffeinatedGelId ?? "");
+      const dMix = selectedProductsData.drinkMixId
+        ? getProductById(selectedProductsData.drinkMixId)
+        : undefined;
+
+      const timelineArr = (nutritionData.timeline as { segment: string; carbsG: number }[] | undefined) ?? [];
+      const runGelCount = timelineArr.filter((e) => e.segment === "run" && e.carbsG > 0).length;
+
+      if (pGel && cGel) {
+        const coaching = await generateNutritionCoaching({
+          raceName: raceData.name,
+          distanceCategory: raceData.distanceCategory,
+          weatherTempC: weather.tempC,
+          primaryGelName: pGel.displayName,
+          caffeinatedGelName: cGel.displayName,
+          drinkMixName: dMix?.displayName,
+          bikeDurationMin: computeResult.bikePacing.durationMinutes,
+          runDurationMin: computeResult.runPacing.estimatedTimeMin,
+          carbsPerHour: computeResult.nutrition.carbsPerHour,
+          bikeGelCount: bikeSetupData?.totalGelsOnBike ?? 6,
+          runGelCount,
+        });
+
+        if (coaching) {
+          const segments = (nutritionData.segments as { segment: string; keyMoments?: { coachNote?: string }[] }[] | undefined) ?? [];
+
+          const bikeSeg = segments.find((s) => s.segment === "bike");
+          if (bikeSeg?.keyMoments) {
+            bikeSeg.keyMoments.forEach((km, i) => {
+              if (coaching.bikeKeyMomentNotes[i]) km.coachNote = coaching.bikeKeyMomentNotes[i];
+            });
+          }
+
+          const runSeg = segments.find((s) => s.segment === "run");
+          if (runSeg?.keyMoments) {
+            runSeg.keyMoments.forEach((km, i) => {
+              if (coaching.runKeyMomentNotes[i]) km.coachNote = coaching.runKeyMomentNotes[i];
+            });
+          }
+
+          if (nutritionData.bikeSetup && typeof nutritionData.bikeSetup === "object") {
+            (nutritionData.bikeSetup as Record<string, unknown>).prose = coaching.bikeSetupProse;
+          }
+
+          if (coaching.proTips?.length > 0) {
+            nutritionData.proTips = coaching.proTips;
+          }
+
+          await prisma.racePlan.update({
+            where: { id: planId },
+            data: { nutritionPlan: nutritionData as Prisma.InputJsonValue },
+          });
+        }
+      }
     }
   }
 

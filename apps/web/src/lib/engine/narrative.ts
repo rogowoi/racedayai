@@ -120,3 +120,91 @@ Be specific with the numbers provided. Write in second person ("you"). Be motiva
     return null;
   }
 }
+
+// ── Nutrition Coaching (Structured Output) ───────────────────
+
+interface NutritionCoachingInput {
+  raceName: string;
+  distanceCategory: string;
+  weatherTempC: number;
+  primaryGelName: string;
+  caffeinatedGelName: string;
+  drinkMixName?: string;
+  bikeDurationMin: number;
+  runDurationMin: number;
+  carbsPerHour: number;
+  bikeGelCount: number;
+  runGelCount: number;
+}
+
+export interface NutritionCoachingOutput {
+  bikeKeyMomentNotes: string[];
+  runKeyMomentNotes: string[];
+  bikeSetupProse: string;
+  proTips: { title: string; description: string }[];
+  raceDayMantra: string;
+}
+
+export async function generateNutritionCoaching(
+  input: NutritionCoachingInput,
+): Promise<NutritionCoachingOutput | null> {
+  if (!xai) return null;
+
+  const prompt = `You are an experienced triathlon coach giving race-day nutrition advice to a friend. Write like you're texting them the morning before their race — casual, practical, no BS.
+
+Race: ${input.raceName} (${input.distanceCategory.toUpperCase()})
+Weather: ${input.weatherTempC}°C
+Bike: ${input.bikeDurationMin} min, ${input.bikeGelCount} gels planned
+Run: ${input.runDurationMin} min, ${input.runGelCount} gels planned
+Nutrition: ${input.carbsPerHour}g carbs/hr
+Products: ${input.primaryGelName} (main gel), ${input.caffeinatedGelName} (caffeine gel)${input.drinkMixName ? `, ${input.drinkMixName} (in bottle)` : ""}
+
+Return a JSON object with exactly this structure:
+{
+  "bikeKeyMomentNotes": [
+    "coach note for first gel on bike (casual, ~20 words)",
+    "coach note for caffeine gel moment (casual, ~20 words)",
+    "coach note for last gel before T2 (casual, ~20 words)"
+  ],
+  "runKeyMomentNotes": [
+    "coach note for first run gel (casual, ~20 words)",
+    "coach note for run midpoint (casual, ~20 words)",
+    "coach note for late run option (casual, ~20 words)"
+  ],
+  "bikeSetupProse": "One paragraph (under 80 words) about how to set up the bike with nutrition — mention specific product names, where to tape gels, bottle placement",
+  "proTips": [
+    { "title": "short title (3-5 words)", "description": "practical tip in 1-2 sentences" },
+    { "title": "short title", "description": "practical tip in 1-2 sentences" },
+    { "title": "short title", "description": "practical tip in 1-2 sentences" }
+  ],
+  "raceDayMantra": "A short motivational one-liner to remember during the race"
+}
+
+Guidelines:
+- Reference specific product names (${input.primaryGelName}, ${input.caffeinatedGelName})
+- Be specific about timing
+- Include practical lifehacks
+- Write in second person ("you")
+- Keep it casual and human`;
+
+  try {
+    const completion = await xai.chat.completions.create({
+      model: "grok-3-mini",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 600,
+      temperature: 0.7,
+      response_format: { type: "json_object" },
+    });
+
+    const content = completion.choices[0]?.message?.content;
+    if (!content) return null;
+
+    const parsed = JSON.parse(content) as NutritionCoachingOutput;
+    if (!parsed.bikeKeyMomentNotes || !parsed.runKeyMomentNotes || !parsed.bikeSetupProse) {
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}

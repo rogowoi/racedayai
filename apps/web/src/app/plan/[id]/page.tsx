@@ -387,6 +387,7 @@ export default async function PlanPage({
               bikeDurationMin={bike?.durationMinutes}
               runDurationMin={run?.estimatedTimeMin}
               distanceCategory={course.distanceCategory}
+              planId={id}
             />
           )}
 
