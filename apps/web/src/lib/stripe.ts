@@ -26,7 +26,7 @@ if (missingVars.length > 0) {
   );
 }
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!.trim(), {
   apiVersion: "2026-01-28.clover",
 });
 
@@ -37,8 +37,8 @@ export function getStripePriceId(
   plan: "season" | "unlimited",
 ): string {
   const map: Record<string, string | undefined> = {
-    season: process.env.STRIPE_SEASON_ANNUAL_PRICE_ID,
-    unlimited: process.env.STRIPE_UNLIMITED_ANNUAL_PRICE_ID,
+    season: process.env.STRIPE_SEASON_ANNUAL_PRICE_ID?.trim(),
+    unlimited: process.env.STRIPE_UNLIMITED_ANNUAL_PRICE_ID?.trim(),
   };
 
   const priceId = map[plan];
