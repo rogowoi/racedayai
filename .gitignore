@@ -76,3 +76,7 @@ apps/web/src/data/ml-models/*.json
 !apps/web/src/data/ml-models/imputation_tables.json
 !apps/web/src/data/ml-models/feature_config.json
 !apps/web/src/data/ml-models/model_metadata.json
+
+# video renders (large files)
+video/assets/rendered*/
+video/node_modules/

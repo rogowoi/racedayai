@@ -1,0 +1,24 @@
+{
+  "name": "racedayai-video",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render",
+    "render:all": "node scripts/render-all.mjs"
+  },
+  "dependencies": {
+    "remotion": "^4",
+    "@remotion/cli": "^4",
+    "@remotion/media": "^4",
+    "@remotion/transitions": "^4",
+    "@remotion/tailwind": "^4",
+    "react": "^19",
+    "react-dom": "^19",
+    "tailwindcss": "^4"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "typescript": "^5"
+  }
+}
