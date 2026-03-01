@@ -19,6 +19,8 @@ import type { PacingOutput } from "@/lib/engine/pacing";
 import type { NutritionPlan } from "@/lib/engine/nutrition";
 import type { FullStatisticalContext } from "@/lib/engine/statistics";
 import { NutritionTimeline } from "@/components/plan/nutrition-timeline";
+import { EngagementHook } from "@/components/plan/engagement-hook";
+import { CohortComparison } from "@/components/plan/cohort-comparison";
 
 type SwimRunPlan = { targetPaceSec: number; estimatedTimeMin: number };
 
@@ -411,6 +413,27 @@ export default async function PlanPage({
                 </div>
               </CardContent>
             </Card>
+          )}
+
+          {/* Cohort Comparison */}
+          {plan.predictedFinishSec && plan.athlete && (
+            <CohortComparison
+              predictedFinishSec={plan.predictedFinishSec}
+              distanceCategory={course.distanceCategory}
+              gender={plan.athlete.gender}
+              age={(plan.generationInput as any)?.fitnessData?.age ?? null}
+              experienceLevel={plan.athlete.experienceLevel}
+            />
+          )}
+
+          {/* Engagement Hook */}
+          {plan.athlete && (
+            <EngagementHook
+              hasStrava={plan.athlete.stravaConnected}
+              hasGarmin={plan.athlete.garminConnected}
+              hasFtp={!!plan.athlete.ftpWatts}
+              hasThresholdPace={!!plan.athlete.thresholdPaceSec}
+            />
           )}
 
           <div className="flex justify-center pt-8">

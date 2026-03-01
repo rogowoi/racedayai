@@ -99,8 +99,18 @@ type CourseData = {
   fileName: string | null;
 };
 
+type QuizData = {
+  distance: "sprint" | "olympic" | "70.3" | "140.6" | null;
+  goal: "finish-strong" | "time-target" | "pr" | "just-finish" | null;
+  goalTargetTime: string | null; // HH:MM:SS format for "time-target"
+  experience: "multiple" | "once" | "first" | null;
+};
+
 type WizardState = {
   step: number;
+  quizData: QuizData;
+  quizStep: number; // 0-2 for the 3 quiz screens
+  quizCompleted: boolean;
   fitnessData: FitnessData;
   raceData: Omit<RaceData, "gpxFile">;
   courseData: CourseData;
@@ -111,6 +121,9 @@ type WizardState = {
 
   // Actions
   setStep: (step: number) => void;
+  setQuizData: (data: Partial<QuizData>) => void;
+  setQuizStep: (step: number) => void;
+  setQuizCompleted: (completed: boolean) => void;
   setFitnessData: (data: Partial<FitnessData>) => void;
   setRaceData: (data: Partial<Omit<RaceData, "gpxFile">>) => void;
   setCourseData: (data: Partial<CourseData>) => void;
@@ -141,10 +154,20 @@ const defaultCourseData: CourseData = {
   fileName: null,
 };
 
+const defaultQuizData: QuizData = {
+  distance: null,
+  goal: null,
+  goalTargetTime: null,
+  experience: null,
+};
+
 export const useWizardStore = create<WizardState>()(
   persist(
     (set) => ({
       step: 1,
+      quizData: { ...defaultQuizData },
+      quizStep: 0,
+      quizCompleted: false,
       fitnessData: {
         ftp: null,
         thresholdPace: null,
@@ -198,6 +221,12 @@ export const useWizardStore = create<WizardState>()(
 
         set({ step });
       },
+      setQuizData: (data) =>
+        set((state) => ({
+          quizData: { ...state.quizData, ...data },
+        })),
+      setQuizStep: (quizStep) => set({ quizStep }),
+      setQuizCompleted: (quizCompleted) => set({ quizCompleted }),
       setFitnessData: (data) =>
         set((state) => ({
           fitnessData: { ...state.fitnessData, ...data },
@@ -218,6 +247,9 @@ export const useWizardStore = create<WizardState>()(
       reset: () =>
         set({
           step: 1,
+          quizData: { ...defaultQuizData },
+          quizStep: 0,
+          quizCompleted: false,
           fitnessData: {
             ftp: null,
             thresholdPace: null,
@@ -239,6 +271,9 @@ export const useWizardStore = create<WizardState>()(
       name: "raceday-wizard-storage",
       partialize: (state) => ({
         step: state.step,
+        quizData: state.quizData,
+        quizStep: state.quizStep,
+        quizCompleted: state.quizCompleted,
         fitnessData: state.fitnessData,
         raceData: state.raceData,
         courseData: state.courseData,

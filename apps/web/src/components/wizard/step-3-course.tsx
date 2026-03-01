@@ -92,6 +92,7 @@ export function Step3Course() {
     fitnessData,
     raceData,
     courseData,
+    quizData,
     setStep,
     setCourseData,
     pendingGeneration,
@@ -173,6 +174,7 @@ export function Step3Course() {
           body: JSON.stringify({
             fitnessData,
             raceData,
+            quizData,
             rwgpsCourseData,
             gpxFileKey: pendingGpxFileKey,
             ignoreDuplicate: true,
@@ -392,6 +394,7 @@ export function Step3Course() {
         body: JSON.stringify({
           fitnessData,
           raceData,
+          quizData,
           rwgpsCourseData,
           gpxFileKey,
           ignoreDuplicate,

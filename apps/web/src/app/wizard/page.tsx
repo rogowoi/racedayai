@@ -5,6 +5,9 @@ import { useWizardStore } from "@/stores/wizard-store";
 import { Step1Fitness } from "@/components/wizard/step-1-fitness";
 import { Step2Race } from "@/components/wizard/step-2-race";
 import { Step3Course } from "@/components/wizard/step-3-course";
+import { QuizFlow } from "@/components/wizard/quiz-flow";
+import { SocialProofStrip } from "@/components/wizard/social-proof-strip";
+import { StravaCelebration } from "@/components/wizard/strava-celebration";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Loader2, TrendingUp } from "lucide-react";
@@ -18,9 +21,12 @@ function WizardContent() {
   const setStep = useWizardStore((state) => state.setStep);
   const fitnessData = useWizardStore((state) => state.fitnessData);
   const setFitnessData = useWizardStore((state) => state.setFitnessData);
+  const quizCompleted = useWizardStore((state) => state.quizCompleted);
   const [mounted, setMounted] = useState(false);
   const [checking, setChecking] = useState(true);
   const [stravaPreFilled, setStravaPreFilled] = useState(false);
+  const [showStravaCelebration, setShowStravaCelebration] = useState(false);
+  const [stravaMetrics, setStravaMetrics] = useState<Record<string, any>>({});
   const [planLimit, setPlanLimit] = useState<{
     canCreate: boolean;
     needsAuth?: boolean;
@@ -96,23 +102,20 @@ function WizardContent() {
         if (Object.keys(updates).length > 0) {
           setFitnessData(updates);
           setStravaPreFilled(true);
+
+          // Show celebration card instead of just a toast
+          if (fromStrava) {
+            setStravaMetrics(updates);
+            setShowStravaCelebration(true);
+          }
         }
 
-        // Show toast and optionally auto-advance if coming from Strava OAuth
         if (fromStrava) {
-          const imported: string[] = [];
-          if (updates.ftp) imported.push(`FTP ${updates.ftp}W`);
-          if (updates.thresholdPace) imported.push(`Run ${updates.thresholdPace}/km`);
-          if (updates.css) imported.push(`Swim ${updates.css}/100m`);
-          if (updates.weight) imported.push(`${updates.weight}kg`);
-          if (updates.maxHr) imported.push(`Max HR ${updates.maxHr}`);
-
-          const description = imported.length > 0
-            ? `Imported ${imported.join(", ")}`
-            : "Profile connected successfully";
-
-          toast.success("Strava connected", { description });
-
+          if (Object.keys(updates).length === 0) {
+            toast.success("Strava connected", {
+              description: "Profile connected successfully",
+            });
+          }
           router.replace("/wizard", { scroll: false });
         }
       } catch {
@@ -183,11 +186,23 @@ function WizardContent() {
     );
   }
 
+  // Show quiz flow if not completed yet
+  if (!quizCompleted) {
+    return <QuizFlow onComplete={() => {}} />;
+  }
+
   return (
     <>
+      {showStravaCelebration && (
+        <StravaCelebration
+          metrics={stravaMetrics}
+          onDismiss={() => setShowStravaCelebration(false)}
+        />
+      )}
       {step === 1 && <Step1Fitness stravaPreFilled={stravaPreFilled} />}
       {step === 2 && <Step2Race />}
       {step === 3 && <Step3Course />}
+      <SocialProofStrip step={step} />
     </>
   );
 }

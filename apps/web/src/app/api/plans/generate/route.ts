@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const { fitnessData, raceData, rwgpsCourseData, gpxFileKey, ignoreDuplicate } = body;
+  const { fitnessData, raceData, quizData, rwgpsCourseData, gpxFileKey, ignoreDuplicate } = body;
 
   if (!fitnessData || !raceData) {
     return NextResponse.json(
@@ -140,6 +140,7 @@ export async function POST(req: Request) {
           planId: "", // will be set below
           fitnessData,
           raceData,
+          quizData: quizData || null,
           rwgpsCourseData: rwgpsCourseData || null,
         },
       },
@@ -154,6 +155,7 @@ export async function POST(req: Request) {
           planId: plan.id,
           fitnessData,
           raceData,
+          quizData: quizData || null,
           rwgpsCourseData: rwgpsCourseData || null,
         },
       },
