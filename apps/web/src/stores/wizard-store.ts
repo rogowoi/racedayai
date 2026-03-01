@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { analytics, AnalyticsEvent } from "@/lib/analytics";
+import { trackFunnelEvent } from "@/lib/funnel-tracking";
 
 type FitnessData = {
   ftp: number | null;
@@ -115,6 +116,9 @@ type WizardState = {
   raceData: Omit<RaceData, "gpxFile">;
   courseData: CourseData;
 
+  // Funnel tracking
+  funnelSessionId: string;
+
   // Pending generation (for anonymous users who complete wizard before signing up)
   pendingGeneration: boolean;
   pendingGpxFileKey: string | null;
@@ -181,6 +185,7 @@ export const useWizardStore = create<WizardState>()(
       },
       raceData: { ...defaultRaceData },
       courseData: { ...defaultCourseData },
+      funnelSessionId: crypto.randomUUID(),
       pendingGeneration: false,
       pendingGpxFileKey: null,
 
@@ -191,6 +196,7 @@ export const useWizardStore = create<WizardState>()(
         // Track wizard started when moving to step 1
         if (step === 1 && prevStep !== 1) {
           analytics.track(AnalyticsEvent.WIZARD_STARTED);
+          trackFunnelEvent("wizard_1", "viewed");
         }
 
         // Track step completion when moving forward
@@ -209,6 +215,16 @@ export const useWizardStore = create<WizardState>()(
             step: prevStep,
             hasData,
           });
+          trackFunnelEvent(
+            `wizard_${prevStep}` as "wizard_1" | "wizard_2" | "wizard_3",
+            "completed"
+          );
+          if (step >= 1 && step <= 3) {
+            trackFunnelEvent(
+              `wizard_${step}` as "wizard_1" | "wizard_2" | "wizard_3",
+              "viewed"
+            );
+          }
         }
 
         // Track going back
@@ -263,6 +279,7 @@ export const useWizardStore = create<WizardState>()(
           },
           raceData: { ...defaultRaceData },
           courseData: { ...defaultCourseData },
+          funnelSessionId: crypto.randomUUID(),
           pendingGeneration: false,
           pendingGpxFileKey: null,
         }),
@@ -277,6 +294,7 @@ export const useWizardStore = create<WizardState>()(
         fitnessData: state.fitnessData,
         raceData: state.raceData,
         courseData: state.courseData,
+        funnelSessionId: state.funnelSessionId,
         pendingGeneration: state.pendingGeneration,
         pendingGpxFileKey: state.pendingGpxFileKey,
       }),

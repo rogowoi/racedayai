@@ -16,6 +16,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ttqTrack } from "@/components/tiktok-pixel";
+import { trackFunnelEvent } from "@/lib/funnel-tracking";
 
 /* ─── Types ──────────────────────────────────────────────── */
 
@@ -194,6 +195,7 @@ export function Step3Course() {
         }
 
         setPendingGeneration(false);
+        trackFunnelEvent("plan_generated", "completed");
         const { planId } = await res.json();
         router.push(`/plan/${planId}`);
       } catch (err) {
@@ -422,6 +424,7 @@ export function Step3Course() {
         throw new Error(data.error || "Failed to generate plan");
       }
 
+      trackFunnelEvent("plan_generated", "completed");
       const { planId } = await res.json();
       router.push(`/plan/${planId}`);
     } catch (err) {

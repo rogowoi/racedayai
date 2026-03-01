@@ -1,10 +1,12 @@
 "use client";
 
 import { useWizardStore } from "@/stores/wizard-store";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ttqTrack } from "@/components/tiktok-pixel";
+import { analytics, AnalyticsEvent } from "@/lib/analytics";
+import { trackFunnelEvent } from "@/lib/funnel-tracking";
 
 const distanceOptions = [
   {
@@ -100,6 +102,8 @@ function QuizCard({
   );
 }
 
+const QUIZ_STEP_NAMES = ["distance", "goal", "experience"] as const;
+
 export function QuizFlow({ onComplete }: { onComplete: () => void }) {
   const { quizData, quizStep, setQuizData, setQuizStep, setQuizCompleted, setRaceData, setFitnessData } =
     useWizardStore();
@@ -107,7 +111,38 @@ export function QuizFlow({ onComplete }: { onComplete: () => void }) {
   const [direction, setDirection] = useState<"forward" | "back">("forward");
   const [targetTimeInput, setTargetTimeInput] = useState(quizData.goalTargetTime || "");
 
+  // Track quiz step views
+  useEffect(() => {
+    const stepName = QUIZ_STEP_NAMES[quizStep];
+    analytics.track(AnalyticsEvent.QUIZ_STEP_VIEWED, {
+      step: quizStep,
+      stepName,
+    });
+    trackFunnelEvent(
+      `quiz_${quizStep}` as "quiz_0" | "quiz_1" | "quiz_2",
+      "viewed"
+    );
+  }, [quizStep]);
+
   const advanceToNext = useCallback(() => {
+    // Track quiz step completion
+    const stepValues = [quizData.distance, quizData.goal, quizData.experience];
+    const currentValue = stepValues[quizStep];
+    const wasSkipped = currentValue === null || currentValue === undefined;
+    const stepName = QUIZ_STEP_NAMES[quizStep];
+
+    analytics.track(AnalyticsEvent.QUIZ_STEP_COMPLETED, {
+      step: quizStep,
+      stepName,
+      value: currentValue ?? undefined,
+      wasSkipped,
+    });
+    trackFunnelEvent(
+      `quiz_${quizStep}` as "quiz_0" | "quiz_1" | "quiz_2",
+      wasSkipped ? "skipped" : "completed",
+      currentValue ?? undefined
+    );
+
     if (quizStep < 2) {
       setDirection("forward");
       setTransitioning(true);
@@ -129,6 +164,12 @@ export function QuizFlow({ onComplete }: { onComplete: () => void }) {
         setFitnessData({ experienceLevel: levelMap[quizData.experience] });
       }
       setQuizCompleted(true);
+
+      analytics.track(AnalyticsEvent.QUIZ_COMPLETED, {
+        distance: quizData.distance,
+        goal: quizData.goal,
+        experience: quizData.experience,
+      });
       ttqTrack("ViewContent", { content_name: "quiz_completed" });
       onComplete();
     }

@@ -13,6 +13,11 @@ export const AnalyticsEvent = {
   ONBOARDING_VIEWED: "onboarding_viewed",
   ONBOARDING_CTA_CLICKED: "onboarding_cta_clicked",
 
+  // Quiz Flow (pre-wizard)
+  QUIZ_STEP_VIEWED: "quiz_step_viewed",
+  QUIZ_STEP_COMPLETED: "quiz_step_completed",
+  QUIZ_COMPLETED: "quiz_completed",
+
   // Wizard Flow
   WIZARD_STARTED: "wizard_started",
   WIZARD_STEP_COMPLETED: "wizard_step_completed",

@@ -233,3 +233,17 @@ model AthleteTrainingFeature {
 
   @@index([athleteId, periodStart(sort: Desc)])
 }
+
+model FunnelEvent {
+  id        String   @id @default(cuid())
+  sessionId String
+  userId    String?
+  step      String
+  action    String
+  value     String?
+  createdAt DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([step, action])
+  @@index([createdAt])
+}
