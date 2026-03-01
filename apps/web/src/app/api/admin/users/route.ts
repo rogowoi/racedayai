@@ -8,18 +8,21 @@ export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q")?.trim();
+  const all = searchParams.get("all") === "1";
 
-  if (!q || q.length < 2) {
+  if (!all && (!q || q.length < 2)) {
     return NextResponse.json({ users: [] });
   }
 
   const users = await prisma.user.findMany({
-    where: {
-      OR: [
-        { email: { contains: q, mode: "insensitive" } },
-        { name: { contains: q, mode: "insensitive" } },
-      ],
-    },
+    where: q
+      ? {
+          OR: [
+            { email: { contains: q, mode: "insensitive" } },
+            { name: { contains: q, mode: "insensitive" } },
+          ],
+        }
+      : undefined,
     select: {
       id: true,
       email: true,
@@ -29,7 +32,7 @@ export async function GET(req: Request) {
       seasonStartDate: true,
       createdAt: true,
     },
-    take: 20,
+    take: 100,
     orderBy: { createdAt: "desc" },
   });
 
