@@ -34,6 +34,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "fast-xml-parser": "^5.3.5",
+    "framer-motion": "^12.34.3",
     "inngest": "^3.52.0",
     "jspdf": "^2.5.1",
     "lucide-react": "^0.563.0",
