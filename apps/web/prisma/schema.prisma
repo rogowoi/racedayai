@@ -21,6 +21,7 @@ model User {
   seasonStartDate        DateTime?
   stripeCustomerId       String?
   stripeSubscriptionId   String?
+  isAdmin                Boolean   @default(false)
   accounts               Account[]
   athletes               Athlete?
   sessions               Session[]

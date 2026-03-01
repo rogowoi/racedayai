@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { type DefaultSession } from "next-auth";
 import Strava from "next-auth/providers/strava";
 import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
@@ -12,6 +12,14 @@ import {
   getStravaZones,
   extractFitnessMetrics,
 } from "@/lib/strava";
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      isAdmin?: boolean;
+    } & DefaultSession["user"];
+  }
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -169,6 +177,26 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return true;
     },
+    async jwt({ token, user, trigger }) {
+      // On initial sign-in, ensure token.sub is set from user object
+      if (user) {
+        token.sub = user.id;
+      }
+      // On sign-in or update, fetch isAdmin from DB
+      if (token.sub && (trigger === "signIn" || trigger === "update" || token.isAdmin === undefined)) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.sub },
+            select: { isAdmin: true },
+          });
+          token.isAdmin = dbUser?.isAdmin ?? false;
+        } catch {
+          // DB unreachable — default to non-admin so login still works
+          token.isAdmin = token.isAdmin ?? false;
+        }
+      }
+      return token;
+    },
     async session({ session, user, token }) {
       // For OAuth (database sessions), attach user ID from user object
       if (user) {
@@ -177,6 +205,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // For credentials (JWT sessions), attach user ID from token
       if (token) {
         session.user.id = token.sub as string;
+        session.user.isAdmin = token.isAdmin as boolean;
       }
       return session;
     },

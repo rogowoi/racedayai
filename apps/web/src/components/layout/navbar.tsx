@@ -13,6 +13,7 @@ import {
   Settings,
   CreditCard,
   LogOut,
+  Shield,
 } from "lucide-react";
 import { auth } from "@/auth";
 import {
@@ -118,6 +119,14 @@ export async function Navbar() {
                       Billing
                     </Link>
                   </DropdownMenuItem>
+                  {session.user?.isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin/users" className="cursor-pointer">
+                        <Shield className="mr-2 h-4 w-4" />
+                        Admin
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <form action={logout} className="w-full">
@@ -212,6 +221,17 @@ export async function Navbar() {
                         Billing
                       </Link>
                     </SheetClose>
+                    {session.user?.isAdmin && (
+                      <SheetClose asChild>
+                        <Link
+                          href="/admin/users"
+                          className="flex items-center gap-3 py-2 hover:text-primary transition-colors"
+                        >
+                          <Shield className="h-5 w-5 text-muted-foreground" />
+                          Admin
+                        </Link>
+                      </SheetClose>
+                    )}
                     <div className="h-px bg-border my-2" />
                   </>
                 )}
