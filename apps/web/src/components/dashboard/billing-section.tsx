@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { PLANS, getAnnualSavingsLabel, type PlanKey } from "@/lib/plans";
 import { Check, Loader2, ArrowRight, LayoutDashboard } from "lucide-react";
+import { fbqTrack } from "@/components/meta-pixel";
 
 interface BillingSectionProps {
   currentPlan: string;
@@ -39,6 +40,7 @@ export function BillingSection({
 
   const handleUpgrade = async (planKey: PlanKey) => {
     setLoading(planKey);
+    fbqTrack("InitiateCheckout");
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
@@ -56,6 +58,13 @@ export function BillingSection({
       setLoading(null);
     }
   };
+
+  // Track Purchase conversion when returning from successful Stripe checkout
+  useEffect(() => {
+    if (showSuccess) {
+      fbqTrack("Purchase", { currency: "USD" });
+    }
+  }, [showSuccess]);
 
   // Auto-trigger checkout when redirected from signup with a plan selection
   useEffect(() => {

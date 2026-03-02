@@ -17,6 +17,7 @@ import { useActionState, useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { ttqTrack } from "@/components/tiktok-pixel";
+import { fbqTrack } from "@/components/meta-pixel";
 
 function SignUpForm() {
   const searchParams = useSearchParams();
@@ -33,6 +34,7 @@ function SignUpForm() {
   useEffect(() => {
     if (wasPendingRef.current && !isPending && !state.error) {
       ttqTrack("CompleteRegistration");
+      fbqTrack("CompleteRegistration");
     }
     wasPendingRef.current = isPending;
   }, [isPending, state.error]);
