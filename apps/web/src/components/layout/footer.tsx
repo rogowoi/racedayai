@@ -24,6 +24,11 @@ export function Footer() {
                   Features
                 </Link>
               </li>
+              <li>
+                <Link href="/resources" className="hover:text-primary inline-block py-2">
+                  Resources
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
