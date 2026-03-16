@@ -51,6 +51,10 @@ const ARTICLES: Record<string, RegistryEntry> = {
     file: "04-cluster-70.3-common-mistakes.md",
     routePrefix: "resources",
   },
+  "70-3-weather-adjustments": {
+    file: "07-cluster-70.3-weather-adjustments.md",
+    routePrefix: "resources",
+  },
   "ironman-70-3-dubai": {
     file: "05-race-specific-ironman-703-dubai.md",
     routePrefix: "races",
