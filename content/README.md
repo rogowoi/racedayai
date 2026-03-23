@@ -24,8 +24,9 @@ Created March 13, 2026. Ready to publish.
 |------|---------------|------------|----------|
 | `05-race-specific-ironman-703-dubai.md` | IRONMAN 70.3 Dubai race plan | ~1,200 | /races/ironman-70-3-dubai |
 | `06-race-specific-ironman-703-boulder.md` | IRONMAN 70.3 Boulder race plan | ~1,100 | /races/ironman-70-3-boulder |
+| `08-race-specific-ironman-kona.md` | IRONMAN Kona race plan | ~2,400 | /races/ironman-kona |
 
-**Total SEO content: ~14,200 words across 7 pages**
+**Total SEO content: ~16,600 words across 8 pages**
 
 ### SEO Architecture
 ```
@@ -37,6 +38,7 @@ Created March 13, 2026. Ready to publish.
 
 /races/ironman-70-3-dubai (RACE PAGE)
 /races/ironman-70-3-boulder (RACE PAGE)
+/races/ironman-kona (RACE PAGE)
 ```
 
 Each article includes:
@@ -70,7 +72,7 @@ Each article includes:
 ## Next Content to Write
 
 - [x] Cluster: 70.3 Weather Adjustments (07-cluster-70.3-weather-adjustments.md)
-- [ ] Race page: IRONMAN Kona (highest search volume IRONMAN race)
+- [x] Race page: IRONMAN Kona (08-race-specific-ironman-kona.md)
 - [ ] Race page: Challenge Roth (massive European audience)
 - [ ] Pillar #2: Full IRONMAN 140.6 Race Execution Guide
 - [ ] Blog post: "We Analyzed 840K Race Results — Here's What We Found"
