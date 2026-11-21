@@ -21,13 +21,6 @@ export function generateOrganizationSchema() {
       priceValidUntil: '2026-12-31',
       description: 'Per race plan',
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      ratingCount: '127',
-      bestRating: '5',
-      worstRating: '1',
-    },
     author: {
       '@type': 'Organization',
       name: 'RaceDayAI',
@@ -163,11 +156,6 @@ export function generateProductSchema(product: ProductSchemaProps) {
       price: product.price,
       priceCurrency: product.currency,
       availability: 'https://schema.org/InStock',
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      ratingCount: '127',
     },
   };
 }

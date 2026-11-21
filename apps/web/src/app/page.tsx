@@ -7,7 +7,6 @@ import { BeforeAfter } from "@/components/home/before-after";
 import { Demo } from "@/components/home/demo";
 import { Features } from "@/components/home/features";
 import { HowItWorks } from "@/components/home/how-it-works";
-import { Testimonials } from "@/components/home/testimonials";
 import { PricingPreview } from "@/components/home/pricing-preview";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -34,9 +33,6 @@ export default function Home() {
 
         {/* 6. Easy: How it works — remove friction */}
         <HowItWorks />
-
-        {/* 7. Social Proof: Testimonials — build trust */}
-        <Testimonials />
 
         {/* 8. Close: Pricing — anchor value and convert */}
         <PricingPreview />

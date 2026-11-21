@@ -1,9 +1,8 @@
 "use client";
 
-import { Users, Database, MapPin, Zap } from "lucide-react";
+import { Database, MapPin, Zap } from "lucide-react";
 
 const proofByStep: Record<number, { icon: React.ElementType; text: string }> = {
-  1: { icon: Users, text: "Join 2,000+ triathletes who race smarter" },
   2: { icon: Database, text: "Based on data from 15,000+ race performances" },
   3: { icon: MapPin, text: "500+ races in our database with verified course data" },
 };
