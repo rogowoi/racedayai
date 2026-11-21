@@ -103,8 +103,8 @@ importers:
         specifier: ^12.34.3
         version: 12.34.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       inngest:
-        specifier: ^3.52.0
-        version: 3.52.0(@opentelemetry/core@2.5.1(@opentelemetry/api@1.9.0))(express@5.2.1)(hono@4.11.9)(next@16.1.6(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)(zod@4.3.6)
+        specifier: ^3.54.0
+        version: 3.54.2(@opentelemetry/core@2.5.1(@opentelemetry/api@1.9.0))(express@5.2.1)(hono@4.11.9)(next@16.1.6(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)(zod@4.3.6)
       jspdf:
         specifier: ^2.5.1
         version: 2.5.2
@@ -4024,8 +4024,8 @@ packages:
     resolution: {integrity: sha512-5z15z3c0EO4YIkw0RVjlDiKhD10uqWHOc1nkAI4ZR5nU9VuApHxzxsjRxaCwPbdYJXrbzS6iW6z/0J1yqOFlAQ==}
     hasBin: true
 
-  inngest@3.52.0:
-    resolution: {integrity: sha512-itQFS75x5/1D5w0fWRBZNOEOVhlol23QUfufpymKmKHAbaxW4UGqlipDgk07pQVfRRTwyD2GXlXK8+VzOLtT+w==}
+  inngest@3.54.2:
+    resolution: {integrity: sha512-SAAc52c7n34E9dBEapy99g0vO5MPJP2yttoZpCu3LcYy1d8tz6CrkdoEQ4FBBgzMNnQxNpeAH5lvNeFCGNXbtA==}
     engines: {node: '>=20'}
     peerDependencies:
       '@sveltejs/kit': '>=1.27.3'
@@ -10335,7 +10335,7 @@ snapshots:
       - encoding
       - supports-color
 
-  inngest@3.52.0(@opentelemetry/core@2.5.1(@opentelemetry/api@1.9.0))(express@5.2.1)(hono@4.11.9)(next@16.1.6(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)(zod@4.3.6):
+  inngest@3.54.2(@opentelemetry/core@2.5.1(@opentelemetry/api@1.9.0))(express@5.2.1)(hono@4.11.9)(next@16.1.6(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)(zod@4.3.6):
     dependencies:
       '@bufbuild/protobuf': 2.11.0
       '@inngest/ai': 0.1.7
